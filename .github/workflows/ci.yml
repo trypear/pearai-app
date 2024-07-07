@@ -204,22 +204,8 @@ jobs:
       # - name: Run Unit Tests (Electron)
       #   run: DISPLAY=:10 ./scripts/test.sh
 
-      # This will run into errors every pull request since it is comparing
-      # the current branch with main which will contain changes therefore
-      # running into conflicts
-      # - name: Setup Environment
-      #   run: |
-      #     ./scripts/pearai/setup-environment.sh
-
-      # Part of the VSCode Scripts
-      # Disabling since it isn't relevant to PearAI
-      # - name: Run Unit Tests (node.js)
-      #   run: yarn test-node
-
-      - name: Setup Browser Integration
-        run: |
-          yarn --cwd test/integration/browser
-          yarn --cwd test/integration/browser compile
+      - name: Run Unit Tests (node.js)
+        run: yarn test-node
 
       - name: Run Unit Tests (Browser, Chromium)
         run: |
