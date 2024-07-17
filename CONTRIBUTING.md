@@ -1,5 +1,17 @@
 # 🎉 Contributing to PearAI
 
+## Table of Contents
+- [🎉 Contributing to PearAI](#-contributing-to-pearai)
+- [🚀 Getting Started](#-getting-started)
+- [🛠 Prerequisites](#-prerequisites)
+- [🌟 Contributing Workflow](#-contributing-workflow)
+- [💻 Automated Testing](#-automated-testing)
+- [🔍 Linting](#-linting)
+- [🌿 Work Branches](#-work-branches)
+- [📜 Pull Requests](#-pull-requests)
+- [🐛 Creating Issues](#-creating-issues)
+- [⚙️ Packaging](#-packaging)
+
 Welcome to the PearAI app! PearAI is a fork of VSCode (and Continue), with most of the functionality in `extension/pearai-submodule`. Follow the guide below to contribute effectively and have fun while doing it! 😄
 
 ## 🚀 Getting Started
