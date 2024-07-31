@@ -187,6 +187,9 @@ jobs:
           yarn add --dev npm-run-all
 
       - name: Compile and Download
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ELECTRON_VERSION: v31.3.1
         run: yarn npm-run-all --max-old-space-size=4095 -lp compile "electron x64" playwright-install download-builtin-extensions
 
       - name: Compile Integration Tests
