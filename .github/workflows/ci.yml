@@ -233,77 +233,63 @@ jobs:
       #   run: DISPLAY=:10 ./scripts/test-remote-integration.sh
 
   hygiene:
-    name: Hygiene and Layering
     runs-on: ubuntu-latest
     timeout-minutes: 40
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+      ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
 
-      - name: Installing Dependencies...
-        run: sudo apt-get update && sudo apt-get install -y libkrb5-dev
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libkrb5-dev
 
-      - name: Compute node modules cache key
-        id: nodeModulesCacheKey
-        run: echo "value=$(node build/azure-pipelines/common/computeNodeModulesCacheKey.js)" >> $GITHUB_OUTPUT
+      - name: Compute cache keys
+        id: cache-keys
+        run: |
+          echo "node_modules_key=$(node build/azure-pipelines/common/computeNodeModulesCacheKey.js)" >> $GITHUB_OUTPUT
+          echo "yarn_cache_dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
 
-      - name: Cache node modules
-        id: cacheNodeModules
+      - name: Cache node_modules
         uses: actions/cache@v4
+        id: cache-node-modules
         with:
           path: "**/node_modules"
-          key: ${{ runner.os }}-cacheNodeModulesLinux-${{ steps.nodeModulesCacheKey.outputs.value }}
-        continue-on-error: true
+          key: ${{ runner.os }}-node-modules-${{ steps.cache-keys.outputs.node_modules_key }}
 
-      - name: Get yarn cache directory path
-        id: yarnCacheDirPath
-        if: ${{ steps.cacheNodeModules.outputs.cache-hit != 'true' }}
-        run: echo "dir=$(yarn cache dir)" >> $GITHUB_OUTPUT
-        continue-on-error: true
-
-      - name: Cache yarn directory
-        if: ${{ steps.cacheNodeModules.outputs.cache-hit != 'true' }}
+      - name: Cache Yarn directory
         uses: actions/cache@v4
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         with:
-          path: ${{ steps.yarnCacheDirPath.outputs.dir }}
-          key: ${{ runner.os }}-yarnCacheDir-${{ steps.nodeModulesCacheKey.outputs.value }}
-          restore-keys: ${{ runner.os }}-yarnCacheDir-
-        continue-on-error: true
+          path: ${{ steps.cache-keys.outputs.yarn_cache_dir }}
+          key: ${{ runner.os }}-yarn-${{ steps.cache-keys.outputs.node_modules_key }}
+          restore-keys: ${{ runner.os }}-yarn-
 
-      - name: Execute yarn
-        if: ${{ steps.cacheNodeModules.outputs.cache-hit != 'true' }}
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
-          ELECTRON_SKIP_BINARY_DOWNLOAD: 1
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: yarn --frozen-lockfile --network-timeout 180000
-        continue-on-error: true
 
       - name: Download Playwright
         run: yarn playwright-install
 
-      # Gulp has been having issues on Linux/Debian devices
-      # When issue is solved, uncomment this task
+      - name: Run checks
+        run: |
+          yarn valid-layers-check
+          yarn --cwd build compile
+          yarn eslint
+          yarn vscode-dts-compile-check
+          yarn tsec-compile-check
+
+      # Uncomment when issues are resolved
       # - name: Run Hygiene Checks
       #   run: yarn gulp hygiene
 
-      - name: Run Valid Layers Checks
-        run: yarn valid-layers-check
-
-      - name: Compile /build/
-        run: yarn --cwd build compile
-
       # - name: Check clean git state
       #   run: ./.github/workflows/check-clean-git-state.sh
-
-      - name: Run eslint
-        run: yarn eslint
-
-      - name: Run vscode-dts Compile Checks
-        run: yarn vscode-dts-compile-check
-
-      - name: Run Trusted Types Checks
-        run: yarn tsec-compile-check
