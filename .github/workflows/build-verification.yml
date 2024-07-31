@@ -33,7 +33,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile --network-timeout 180000
+        run: yarn install --network-timeout 180000
 
       - name: Create node_modules archive
         run: |
@@ -122,7 +122,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: |
-          yarn --frozen-lockfile --network-timeout 180000
+          yarn --network-timeout 180000
           yarn playwright install
 
       - name: Compile and Download
@@ -186,14 +186,12 @@ jobs:
           yarn install
           yarn add --dev npm-run-all
 
-      - name: Get latest Electron version
-        run: echo "ELECTRON_VERSION=$(npm view electron version)" >> $GITHUB_ENV
 
       - name: Compile and Download
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          yarn npm-run-all --max-old-space-size=4095 -lp compile "electron x64" playwright-install download-builtin-extensions
+          ELECTRON_VERSION: v31.1.1  # or whatever the latest version is
+        run: yarn npm-run-all --max-old-space-size=4095 -lp compile "electron x64" playwright-install download-builtin-extensions
 
       - name: Compile Integration Tests
         run: yarn --cwd test/integration/browser compile
@@ -277,7 +275,7 @@ jobs:
 
       - name: Install dependencies
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: yarn --frozen-lockfile --network-timeout 180000
+        run: yarn --network-timeout 180000
 
       - name: Download Playwright
         run: yarn playwright-install
