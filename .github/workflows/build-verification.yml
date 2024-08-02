@@ -231,7 +231,6 @@ jobs:
       # due to Electron issues.
       - name: Run Integration Tests (Electron)
         run: DISPLAY=:10 ./scripts/test-integration.sh
-        continue-on-error: true
 
       # Passed Locally
       - name: Run Integration Tests (Browser, Webkit)
@@ -241,10 +240,10 @@ jobs:
 
       # Part of the VSCode Scripts, currently not working
       # due to Electron issues.
-      - name: Run Integration Tests (Remote)
-        timeout-minutes: 15
-        run: DISPLAY=:10 ./scripts/test-remote-integration.sh
-        continue-on-error: true
+      # - name: Run Integration Tests (Remote)
+      #   timeout-minutes: 15
+      #   run: DISPLAY=:10 ./scripts/test-remote-integration.sh
+      #   continue-on-error: true
 
   hygiene:
     runs-on: ubuntu-latest
