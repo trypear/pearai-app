@@ -10,8 +10,8 @@ import { Codicon } from 'vs/base/common/codicons';
 import { ThemeIcon } from 'vs/base/common/themables';
 import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
 
+// Todo: Replace this with PearAI logo (https://github.com/trypear/pearai-app/issues/235)
 const setupIcon = registerIcon('getting-started-setup', Codicon.zap, localize('getting-started-setup-icon', "Icon used for the setup category of welcome page"));
-
 
 export type BuiltinGettingStartedStep = {
 	id: string;
