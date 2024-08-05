@@ -170,8 +170,8 @@ const Button = (title: string, href: string) => `[${title}](${href})`;
 export const walkthroughs: GettingStartedWalkthroughContent = [
 	{
 		id: 'Setup',
-		title: localize('gettingStarted.setup.title', "Get Started with the PearAI Editor"),
-		description: localize('gettingStarted.setup.description', "Customize your editor, learn the basics, and start coding"),
+		title: localize('gettingStarted.setup.title', "Get Started With PearAI"),
+		description: localize('gettingStarted.setup.description', "Welcome to PearAI, your AI-powered coding editor! Let's personalize your editor and get you coding in no time. Ready to supercharge your development experience?"),
 		isFeatured: true,
 		icon: setupIcon,
 		when: '!isWeb',
@@ -259,227 +259,39 @@ export const walkthroughs: GettingStartedWalkthroughContent = [
 					}
 				},
 				{
-					id: 'videoTutorial',
-					title: localize('gettingStarted.videoTutorial.title', "Watch video tutorials"),
-					description: localize('gettingStarted.videoTutorial.description.interpolated', "Watch the first in a series of short & practical video tutorials for VS Code's key features.\n{0}", Button(localize('watch', "Watch Tutorial"), 'https://aka.ms/vscode-getting-started-video')),
-					media: { type: 'svg', altText: 'VS Code Settings', path: 'learn.svg' },
+					id: 'edit',
+					title: "Use AI To Edit in Natural Language",
+					description: "Highlight a section of code and instruct PearAI to refactor it (e.g. `/edit rewrite this function to be async`)",
+					media: {
+						type: "image",
+						path: "media/edit.png",
+					  altText: "Empty image"
+					},
+					completionEvents: []
+				},
+				{
+				id: 'explain',
+				title: "Use AI To Explain Code",
+				description: "Ask PearAI about a part of your code to get another perspective (e.g. `where in the page should I be making this request to the backend?`)",
+				media: {
+					type: "image",
+  					path: "media/explain.png",
+					altText: "Empty image"
+				},
+				completionEvents: []
+				},
+				{
+				id: 'generate',
+				title: "Generate files from scratch",
+				description: "Let PearAI build the scaffolding of Python scripts, React components, and more (e.g. `/edit here is a connector for postgres, now write one for kafka`)",
+				media: {
+					type: "image",
+  					path: "media/generate.png",
+					altText: "Empty image"
+				},
+				completionEvents: []
 				}
 			]
 		}
 	},
-
-	{
-		id: 'SetupWeb',
-		title: localize('gettingStarted.setupWeb.title', "Get Started with VS Code for the Web"),
-		description: localize('gettingStarted.setupWeb.description', "Customize your editor, learn the basics, and start coding"),
-		isFeatured: true,
-		icon: setupIcon,
-		when: 'isWeb',
-		next: 'Beginner',
-		content: {
-			type: 'steps',
-			steps: [
-				{
-					id: 'pickColorThemeWeb',
-					title: localize('gettingStarted.pickColor.title', "Choose your theme"),
-					description: localize('gettingStarted.pickColor.description.interpolated', "The right theme helps you focus on your code, is easy on your eyes, and is simply more fun to use.\n{0}", Button(localize('titleID', "Browse Color Themes"), 'command:workbench.action.selectTheme')),
-					completionEvents: [
-						'onSettingChanged:workbench.colorTheme',
-						'onCommand:workbench.action.selectTheme'
-					],
-					media: { type: 'markdown', path: 'theme_picker', }
-				},
-				{
-					id: 'menuBarWeb',
-					title: localize('gettingStarted.menuBar.title', "Just the right amount of UI"),
-					description: localize('gettingStarted.menuBar.description.interpolated', "The full menu bar is available in the dropdown menu to make room for your code. Toggle its appearance for faster access. \n{0}", Button(localize('toggleMenuBar', "Toggle Menu Bar"), 'command:workbench.action.toggleMenuBar')),
-					when: 'isWeb',
-					media: {
-						type: 'svg', altText: 'Comparing menu dropdown with the visible menu bar.', path: 'menuBar.svg'
-					},
-				},
-				{
-					id: 'extensionsWebWeb',
-					title: localize('gettingStarted.extensions.title', "Code with extensions"),
-					description: localize('gettingStarted.extensionsWeb.description.interpolated', "Extensions are VS Code's power-ups. A growing number are becoming available in the web.\n{0}", Button(localize('browsePopularWeb', "Browse Popular Web Extensions"), 'command:workbench.extensions.action.showPopularExtensions')),
-					when: 'workspacePlatform == \'webworker\'',
-					media: {
-						type: 'svg', altText: 'VS Code extension marketplace with featured language extensions', path: 'extensions-web.svg'
-					},
-				},
-				{
-					id: 'findLanguageExtensionsWeb',
-					title: localize('gettingStarted.findLanguageExts.title', "Rich support for all your languages"),
-					description: localize('gettingStarted.findLanguageExts.description.interpolated', "Code smarter with syntax highlighting, code completion, linting and debugging. While many languages are built-in, many more can be added as extensions.\n{0}", Button(localize('browseLangExts', "Browse Language Extensions"), 'command:workbench.extensions.action.showLanguageExtensions')),
-					when: 'workspacePlatform != \'webworker\'',
-					media: {
-						type: 'svg', altText: 'Language extensions', path: 'languages.svg'
-					},
-				},
-				{
-					id: 'settingsSyncWeb',
-					title: localize('gettingStarted.settingsSync.title', "Sync settings across devices"),
-					description: localize('gettingStarted.settingsSync.description.interpolated', "Keep your essential customizations backed up and updated across all your devices.\n{0}", Button(localize('enableSync', "Backup and Sync Settings"), 'command:workbench.userDataSync.actions.turnOn')),
-					when: 'syncStatus != uninitialized',
-					completionEvents: ['onEvent:sync-enabled'],
-					media: {
-						type: 'svg', altText: 'The "Turn on Sync" entry in the settings gear menu.', path: 'settingsSync.svg'
-					},
-				},
-				{
-					id: 'commandPaletteTaskWeb',
-					title: localize('gettingStarted.commandPalette.title', "Unlock productivity with the Command Palette "),
-					description: localize('gettingStarted.commandPalette.description.interpolated', "Run commands without reaching for your mouse to accomplish any task in VS Code.\n{0}", Button(localize('commandPalette', "Open Command Palette"), 'command:workbench.action.showCommands')),
-					media: { type: 'svg', altText: 'Command Palette overlay for searching and executing commands.', path: 'commandPalette.svg' },
-				},
-				{
-					id: 'pickAFolderTask-WebWeb',
-					title: localize('gettingStarted.setup.OpenFolder.title', "Open up your code"),
-					description: localize('gettingStarted.setup.OpenFolderWeb.description.interpolated', "You're all set to start coding. You can open a local project or a remote repository to get your files into VS Code.\n{0}\n{1}", Button(localize('openFolder', "Open Folder"), 'command:workbench.action.addRootFolder'), Button(localize('openRepository', "Open Repository"), 'command:remoteHub.openRepository')),
-					when: 'workspaceFolderCount == 0',
-					media: {
-						type: 'svg', altText: 'Explorer view showing buttons for opening folder and cloning repository.', path: 'openFolder.svg'
-					}
-				},
-				{
-					id: 'quickOpenWeb',
-					title: localize('gettingStarted.quickOpen.title', "Quickly navigate between your files"),
-					description: localize('gettingStarted.quickOpen.description.interpolated', "Navigate between files in an instant with one keystroke. Tip: Open multiple files by pressing the right arrow key.\n{0}", Button(localize('quickOpen', "Quick Open a File"), 'command:toSide:workbench.action.quickOpen')),
-					when: 'workspaceFolderCount != 0',
-					media: {
-						type: 'svg', altText: 'Go to file in quick search.', path: 'search.svg'
-					}
-				}
-			]
-		}
-	},
-
-	{
-		id: 'Beginner',
-		isFeatured: false,
-		title: localize('gettingStarted.beginner.title', "Learn the Fundamentals"),
-		icon: beginnerIcon,
-		description: localize('gettingStarted.beginner.description', "Get an overview of the most essential features"),
-		content: {
-			type: 'steps',
-			steps: [
-				{
-					id: 'extensions',
-					title: localize('gettingStarted.extensions.title', "Code with extensions"),
-					description: localize('gettingStarted.extensions.description.interpolated', "Extensions are VS Code's power-ups. They range from handy productivity hacks, expanding out-of-the-box features, to adding completely new capabilities.\n{0}", Button(localize('browsePopular', "Browse Popular Extensions"), 'command:workbench.extensions.action.showPopularExtensions')),
-					when: 'workspacePlatform != \'webworker\'',
-					media: {
-						type: 'svg', altText: 'VS Code extension marketplace with featured language extensions', path: 'extensions.svg'
-					},
-				},
-				{
-					id: 'terminal',
-					title: localize('gettingStarted.terminal.title', "Built-in terminal"),
-					description: localize('gettingStarted.terminal.description.interpolated', "Quickly run shell commands and monitor build output, right next to your code.\n{0}", Button(localize('showTerminal', "Open Terminal"), 'command:workbench.action.terminal.toggleTerminal')),
-					when: 'workspacePlatform != \'webworker\' && remoteName != codespaces && !terminalIsOpen',
-					media: {
-						type: 'svg', altText: 'Integrated terminal running a few npm commands', path: 'terminal.svg'
-					},
-				},
-				{
-					id: 'debugging',
-					title: localize('gettingStarted.debug.title', "Watch your code in action"),
-					description: localize('gettingStarted.debug.description.interpolated', "Accelerate your edit, build, test, and debug loop by setting up a launch configuration.\n{0}", Button(localize('runProject', "Run your Project"), 'command:workbench.action.debug.selectandstart')),
-					when: 'workspacePlatform != \'webworker\' && workspaceFolderCount != 0',
-					media: {
-						type: 'svg', altText: 'Run and debug view.', path: 'debug.svg',
-					},
-				},
-				{
-					id: 'scmClone',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scmClone.description.interpolated', "Set up the built-in version control for your project to track your changes and collaborate with others.\n{0}", Button(localize('cloneRepo', "Clone Repository"), 'command:git.clone')),
-					when: 'config.git.enabled && !git.missing && workspaceFolderCount == 0',
-					media: {
-						type: 'svg', altText: 'Source Control view.', path: 'git.svg',
-					},
-				},
-				{
-					id: 'scmSetup',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scmSetup.description.interpolated', "Set up the built-in version control for your project to track your changes and collaborate with others.\n{0}", Button(localize('initRepo', "Initialize Git Repository"), 'command:git.init')),
-					when: 'config.git.enabled && !git.missing && workspaceFolderCount != 0 && gitOpenRepositoryCount == 0',
-					media: {
-						type: 'svg', altText: 'Source Control view.', path: 'git.svg',
-					},
-				},
-				{
-					id: 'scm',
-					title: localize('gettingStarted.scm.title', "Track your code with Git"),
-					description: localize('gettingStarted.scm.description.interpolated', "No more looking up Git commands! Git and GitHub workflows are seamlessly integrated.\n{0}", Button(localize('openSCM', "Open Source Control"), 'command:workbench.view.scm')),
-					when: 'config.git.enabled && !git.missing && workspaceFolderCount != 0 && gitOpenRepositoryCount != 0 && activeViewlet != \'workbench.view.scm\'',
-					media: {
-						type: 'svg', altText: 'Source Control view.', path: 'git.svg',
-					},
-				},
-				{
-					id: 'installGit',
-					title: localize('gettingStarted.installGit.title', "Install Git"),
-					description: localize({ key: 'gettingStarted.installGit.description.interpolated', comment: ['The placeholders are command link items should not be translated'] }, "Install Git to track changes in your projects.\n{0}\n{1}Reload window{2} after installation to complete Git setup.", Button(localize('installGit', "Install Git"), 'https://aka.ms/vscode-install-git'), '[', '](command:workbench.action.reloadWindow)'),
-					when: 'git.missing',
-					media: {
-						type: 'svg', altText: 'Install Git.', path: 'git.svg',
-					},
-					completionEvents: [
-						'onContext:git.state == initialized'
-					]
-				},
-
-				{
-					id: 'tasks',
-					title: localize('gettingStarted.tasks.title', "Automate your project tasks"),
-					when: 'workspaceFolderCount != 0 && workspacePlatform != \'webworker\'',
-					description: localize('gettingStarted.tasks.description.interpolated', "Create tasks for your common workflows and enjoy the integrated experience of running scripts and automatically checking results.\n{0}", Button(localize('runTasks', "Run Auto-detected Tasks"), 'command:workbench.action.tasks.runTask')),
-					media: {
-						type: 'svg', altText: 'Task runner.', path: 'runTask.svg',
-					},
-				},
-				{
-					id: 'shortcuts',
-					title: localize('gettingStarted.shortcuts.title', "Customize your shortcuts"),
-					description: localize('gettingStarted.shortcuts.description.interpolated', "Once you have discovered your favorite commands, create custom keyboard shortcuts for instant access.\n{0}", Button(localize('keyboardShortcuts', "Keyboard Shortcuts"), 'command:toSide:workbench.action.openGlobalKeybindings')),
-					media: {
-						type: 'svg', altText: 'Interactive shortcuts.', path: 'shortcuts.svg',
-					}
-				},
-				{
-					id: 'workspaceTrust',
-					title: localize('gettingStarted.workspaceTrust.title', "Safely browse and edit code"),
-					description: localize('gettingStarted.workspaceTrust.description.interpolated', "{0} lets you decide whether your project folders should **allow or restrict** automatic code execution __(required for extensions, debugging, etc)__.\nOpening a file/folder will prompt to grant trust. You can always {1} later.", Button(localize('workspaceTrust', "Workspace Trust"), 'https://github.com/microsoft/vscode-docs/blob/workspaceTrust/docs/editor/workspace-trust.md'), Button(localize('enableTrust', "enable trust"), 'command:toSide:workbench.action.manageTrustedDomain')),
-					when: 'workspacePlatform != \'webworker\' && !isWorkspaceTrusted && workspaceFolderCount == 0',
-					media: {
-						type: 'svg', altText: 'Workspace Trust editor in Restricted mode and a primary button for switching to Trusted mode.', path: 'workspaceTrust.svg'
-					},
-				},
-			]
-		}
-	},
-	{
-		id: 'notebooks',
-		title: localize('gettingStarted.notebook.title', "Customize Notebooks"),
-		description: '',
-		icon: setupIcon,
-		isFeatured: false,
-		when: `config.${NotebookSetting.openGettingStarted} && userHasOpenedNotebook`,
-		content: {
-			type: 'steps',
-			steps: [
-				{
-					completionEvents: ['onCommand:notebook.setProfile'],
-					id: 'notebookProfile',
-					title: localize('gettingStarted.notebookProfile.title', "Select the layout for your notebooks"),
-					description: localize('gettingStarted.notebookProfile.description', "Get notebooks to feel just the way you prefer"),
-					when: 'userHasOpenedNotebook',
-					media: {
-						type: 'markdown', path: 'notebookProfile'
-					}
-				},
-			]
-		}
-	}
 ];
