@@ -428,7 +428,7 @@ export class DebugService implements IDebugService {
 			}
 
 			if (configOrName && !config) {
-				const message = !!launch ? nls.localize('configMissing', "Configuration '{0}' is missing in 'launch.json'.", typeof configOrName === 'string' ? configOrName : configOrName.name) :
+				const message = launch ? nls.localize('configMissing', "Configuration '{0}' is missing in 'launch.json'.", typeof configOrName === 'string' ? configOrName : configOrName.name) :
 					nls.localize('launchJsonDoesNotExist', "'launch.json' does not exist for passed workspace folder.");
 				throw new Error(message);
 			}

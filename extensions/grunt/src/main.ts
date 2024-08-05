@@ -179,7 +179,7 @@ class FolderDetector {
 						if (line.indexOf('Tasks run in the order specified') === 0) {
 							tasksEnd = true;
 						} else {
-							const regExp = /^\s*(\S.*\S)  \S/g;
+							const regExp = /^\s*(\S.*\S) {2}\S/g;
 							const matches = regExp.exec(line);
 							if (matches && matches.length === 2) {
 								const name = matches[1];

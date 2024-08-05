@@ -276,7 +276,7 @@ export class ExtHostWorkspace implements ExtHostWorkspaceShape, IExtHostWorkspac
 			});
 		}
 
-		if (!!this._unconfirmedWorkspace) {
+		if (this._unconfirmedWorkspace) {
 			return false; // prevent accumulated calls without a confirmed workspace
 		}
 

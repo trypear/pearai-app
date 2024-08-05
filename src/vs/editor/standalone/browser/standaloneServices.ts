@@ -1150,7 +1150,7 @@ registerSingleton(IAccessibilitySignalService, StandaloneAccessbilitySignalServi
  * We don't want to eagerly instantiate services because embedders get a one time chance
  * to override services when they create the first editor.
  */
-export module StandaloneServices {
+export namespace StandaloneServices {
 
 	const serviceCollection = new ServiceCollection();
 	for (const [id, descriptor] of getSingletonServiceDescriptors()) {

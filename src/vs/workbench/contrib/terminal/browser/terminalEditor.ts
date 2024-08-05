@@ -110,7 +110,7 @@ export class TerminalEditor extends EditorPane {
 		this._editorInput?.terminalInstance?.focus(true);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+	 
 	protected createEditor(parent: HTMLElement): void {
 		this._editorInstanceElement = parent;
 		this._overflowGuardElement = dom.$('.terminal-overflow-guard.terminal-editor');

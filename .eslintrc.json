@@ -12,6 +12,7 @@
 		"local"
 	],
 	"rules": {
+		"no-console": "warn",
 		"constructor-super": "warn",
 		"curly": "warn",
 		"eqeqeq": "warn",

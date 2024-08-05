@@ -468,7 +468,7 @@ export function createNotebookCellList(instantiationService: TestInstantiationSe
 		disposeTemplate() { }
 	};
 
-	const notebookOptions = !!viewContext ? viewContext.notebookOptions
+	const notebookOptions = viewContext ? viewContext.notebookOptions
 		: disposables.add(new NotebookOptions(mainWindow, instantiationService.get(IConfigurationService), instantiationService.get(INotebookExecutionStateService), instantiationService.get(ICodeEditorService), false));
 	const cellList: NotebookCellList = disposables.add(instantiationService.createInstance(
 		NotebookCellList,

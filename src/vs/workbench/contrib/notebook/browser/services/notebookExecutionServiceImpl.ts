@@ -50,7 +50,7 @@ export class NotebookExecutionService implements INotebookExecutionService, IDis
 		const cellExecutions: [NotebookCellTextModel, INotebookCellExecution][] = [];
 		for (const cell of cellsArr) {
 			const cellExe = this._notebookExecutionStateService.getCellExecution(cell.uri);
-			if (!!cellExe) {
+			if (cellExe) {
 				continue;
 			}
 			cellExecutions.push([cell, this._notebookExecutionStateService.createCellExecution(notebook.uri, cell.handle)]);

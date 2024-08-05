@@ -284,8 +284,8 @@ export class NpmScriptsTreeDataProvider implements TreeDataProvider<TreeItem> {
 	}
 
 	private buildTaskTree(tasks: ITaskWithLocation[]): TaskTree {
-		const folders: Map<String, Folder> = new Map();
-		const packages: Map<String, PackageJSON> = new Map();
+		const folders: Map<string, Folder> = new Map();
+		const packages: Map<string, PackageJSON> = new Map();
 
 		let folder = null;
 		let packageJson = null;

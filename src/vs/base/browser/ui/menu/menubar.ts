@@ -120,7 +120,7 @@ export class MenuBar extends Disposable {
 		this._register(DOM.addDisposableListener(this.container, DOM.EventType.KEY_DOWN, (e) => {
 			const event = new StandardKeyboardEvent(e as KeyboardEvent);
 			let eventHandled = true;
-			const key = !!e.key ? e.key.toLocaleLowerCase() : '';
+			const key = e.key ? e.key.toLocaleLowerCase() : '';
 
 			const tabNav = isMacintosh && !this.isCompact;
 
@@ -211,7 +211,7 @@ export class MenuBar extends Disposable {
 
 			// Register mnemonics
 			if (mnemonicMatches) {
-				const mnemonic = !!mnemonicMatches[1] ? mnemonicMatches[1] : mnemonicMatches[3];
+				const mnemonic = mnemonicMatches[1] ? mnemonicMatches[1] : mnemonicMatches[3];
 
 				this.registerMnemonic(this.menus.length, mnemonic);
 			}
@@ -600,7 +600,7 @@ export class MenuBar extends Disposable {
 
 		// Register mnemonics
 		if (mnemonicMatches) {
-			const mnemonic = !!mnemonicMatches[1] ? mnemonicMatches[1] : mnemonicMatches[3];
+			const mnemonic = mnemonicMatches[1] ? mnemonicMatches[1] : mnemonicMatches[3];
 
 			if (this.options.enableMnemonics) {
 				buttonElement.setAttribute('aria-keyshortcuts', 'Alt+' + mnemonic.toLocaleLowerCase());

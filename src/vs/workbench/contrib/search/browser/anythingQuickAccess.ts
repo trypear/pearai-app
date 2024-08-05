@@ -978,7 +978,7 @@ export class AnythingQuickAccessProvider extends PickerQuickAccessProvider<IAnyt
 			resource = URI.isUri(resourceOrEditor) ? resourceOrEditor : resourceOrEditor.resource;
 			const customLabel = this.customEditorLabelService.getName(resource);
 			label = customLabel || basenameOrAuthority(resource);
-			description = this.labelService.getUriLabel(!!customLabel ? resource : dirname(resource), { relative: true });
+			description = this.labelService.getUriLabel(customLabel ? resource : dirname(resource), { relative: true });
 			isDirty = this.workingCopyService.isDirty(resource) && !this.filesConfigurationService.hasShortAutoSaveDelay(resource);
 			extraClasses = [];
 		}

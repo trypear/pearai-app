@@ -252,7 +252,7 @@ export class TerminalService extends Disposable implements ITerminalService {
 				await this.createContributedTerminalProfile(result.config.extensionIdentifier, result.config.id, {
 					icon: result.config.options?.icon,
 					color: result.config.options?.color,
-					location: !!(keyMods?.alt && activeInstance) ? { splitActiveTerminal: true } : this.defaultLocation
+					location: keyMods?.alt && activeInstance ? { splitActiveTerminal: true } : this.defaultLocation
 				});
 				return;
 			} else if (result.config && 'profileName' in result.config) {

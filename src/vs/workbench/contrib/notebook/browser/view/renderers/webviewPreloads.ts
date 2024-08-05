@@ -19,7 +19,7 @@ import type * as rendererApi from 'vscode-notebook-renderer';
 // function. Imports are not allowed. This is stringified and injected into
 // the webview.
 
-declare module globalThis {
+declare namespace globalThis {
 	const acquireVsCodeApi: () => ({
 		getState(): { [key: string]: unknown };
 		setState(data: { [key: string]: unknown }): void;
@@ -90,7 +90,7 @@ declare function __import(path: string): Promise<any>;
 
 async function webviewPreloads(ctx: PreloadContext) {
 
-	/* eslint-disable no-restricted-globals, no-restricted-syntax */
+	 
 
 	// The use of global `window` should be fine in this context, even
 	// with aux windows. This code is running from within an `iframe`

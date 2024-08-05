@@ -815,7 +815,7 @@ export class XtermTerminal extends Disposable implements IXtermTerminal, IDetach
 		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+	 
 	_writeText(data: string): void {
 		this.raw.write(data);
 	}

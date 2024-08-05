@@ -248,7 +248,7 @@ export class UtilityProcess extends Disposable {
 			allowLoadingUnsignedLibraries,
 			forceAllocationsToV8Sandbox,
 			stdio
-		} as ForkOptions & { forceAllocationsToV8Sandbox?: Boolean });
+		} as ForkOptions & { forceAllocationsToV8Sandbox?: boolean });
 
 		// Register to events
 		this.registerListeners(this.process, this.configuration, serviceName);

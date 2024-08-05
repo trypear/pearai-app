@@ -21,7 +21,7 @@ export function isStringArray(value: unknown): value is string[] {
  * @returns whether the provided parameter is of type `object` but **not**
  *	`null`, an `array`, a `regexp`, nor a `date`.
  */
-export function isObject(obj: unknown): obj is Object {
+export function isObject(obj: unknown): obj is object {
 	// The method can't do a type cast since there are type (like strings) which
 	// are subclasses of any put not positvely matched by the function. Hence type
 	// narrowing results in wrong results.
@@ -35,7 +35,7 @@ export function isObject(obj: unknown): obj is Object {
 /**
  * @returns whether the provided parameter is of type `Buffer` or Uint8Array dervived type
  */
-export function isTypedArray(obj: unknown): obj is Object {
+export function isTypedArray(obj: unknown): obj is object {
 	const TypedArray = Object.getPrototypeOf(Uint8Array);
 	return typeof obj === 'object'
 		&& obj instanceof TypedArray;

@@ -8178,7 +8178,7 @@ declare namespace monaco.languages {
 		/**
 		 * map from string to ILanguageAction
 		 */
-		cases?: Object;
+		cases?: object;
 		/**
 		 * token class (ie. css class) (or "@brackets" or "@rematch")
 		 */

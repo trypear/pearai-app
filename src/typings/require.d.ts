@@ -39,4 +39,4 @@ interface NodeRequire {
 	define(amdModuleId: string, dependencies: string[], callback: (...args: any[]) => any): any;
 }
 
-declare var require: NodeRequire;
+declare let require: NodeRequire;

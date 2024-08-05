@@ -536,7 +536,7 @@ export function compile(languageId: string, json: IMonarchLanguage): monarchComm
 			}
 
 			const rules = json.tokenizer[key];
-			lexer.tokenizer[key] = new Array();
+			lexer.tokenizer[key] = [];
 			addRules('tokenizer.' + key, lexer.tokenizer[key], rules);
 		}
 	}

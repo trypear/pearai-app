@@ -106,7 +106,7 @@ export const enum State {
 }
 
 function canShowQuickSuggest(editor: ICodeEditor, contextKeyService: IContextKeyService, configurationService: IConfigurationService): boolean {
-	if (!Boolean(contextKeyService.getContextKeyValue(InlineCompletionContextKeys.inlineSuggestionVisible.key))) {
+	if (!contextKeyService.getContextKeyValue(InlineCompletionContextKeys.inlineSuggestionVisible.key)) {
 		// Allow if there is no inline suggestion.
 		return true;
 	}
@@ -118,7 +118,7 @@ function canShowQuickSuggest(editor: ICodeEditor, contextKeyService: IContextKey
 }
 
 function canShowSuggestOnTriggerCharacters(editor: ICodeEditor, contextKeyService: IContextKeyService, configurationService: IConfigurationService): boolean {
-	if (!Boolean(contextKeyService.getContextKeyValue('inlineSuggestionVisible'))) {
+	if (!contextKeyService.getContextKeyValue('inlineSuggestionVisible')) {
 		// Allow if there is no inline suggestion.
 		return true;
 	}

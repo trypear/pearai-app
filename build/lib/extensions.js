@@ -259,10 +259,10 @@ const webBuiltInExtensions = productJson.webBuiltInExtensions || [];
  * Loosely based on `getExtensionKind` from `src/vs/workbench/services/extensions/common/extensionManifestPropertiesService.ts`
  */
 function isWebExtension(manifest) {
-    if (Boolean(manifest.browser)) {
+    if (manifest.browser) {
         return true;
     }
-    if (Boolean(manifest.main)) {
+    if (manifest.main) {
         return false;
     }
     // neither browser nor main

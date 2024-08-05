@@ -42,7 +42,7 @@ export class KeybindingIO {
 		out.write(' }');
 	}
 
-	public static readUserKeybindingItem(input: Object): IUserKeybindingItem {
+	public static readUserKeybindingItem(input: object): IUserKeybindingItem {
 		const keybinding = 'key' in input && typeof input.key === 'string'
 			? KeybindingParser.parseKeybinding(input.key)
 			: null;

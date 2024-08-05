@@ -8,7 +8,7 @@
 //@ts-check
 'use strict';
 
-/* eslint-disable no-restricted-globals */
+ 
 
 // Simple module style to support node.js and browser environments
 (function (globalThis, factory) {

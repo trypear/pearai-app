@@ -1940,7 +1940,7 @@ export class SettingsExtensionToggleRenderer extends AbstractSettingRenderer imp
 
 		const extensionId = dataElement.setting.displayExtensionId!;
 		template.elementDisposables.add(template.actionButton.onDidClick(async () => {
-			this._telemetryService.publicLog2<{ extensionId: String }, ManageExtensionClickTelemetryClassification>('ManageExtensionClick', { extensionId });
+			this._telemetryService.publicLog2<{ extensionId: string }, ManageExtensionClickTelemetryClassification>('ManageExtensionClick', { extensionId });
 			this._commandService.executeCommand('extension.open', extensionId);
 		}));
 	}

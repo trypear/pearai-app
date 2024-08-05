@@ -334,7 +334,7 @@ suite('Event', function () {
 			const a = ds.add(new Emitter<undefined>());
 			let hit = false;
 			ds.add(a.event(function () {
-				// eslint-disable-next-line no-throw-literal
+				 
 				throw 9;
 			}));
 			ds.add(a.event(function () {
@@ -357,7 +357,7 @@ suite('Event', function () {
 		}));
 		let hit = false;
 		ds.add(a.event(function () {
-			// eslint-disable-next-line no-throw-literal
+			 
 			throw 9;
 		}));
 		ds.add(a.event(function () {

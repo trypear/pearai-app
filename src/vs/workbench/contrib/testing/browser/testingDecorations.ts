@@ -355,7 +355,7 @@ export class TestingDecorationService extends Disposable implements ITestingDeco
 		return newDecorations || lastDecorations;
 	}
 
-	private applyDecorationsFromResult(lastResult: ITestResult, messageLines: Set<Number>, uriStr: string, lastDecorations: CachedDecorations, model: ITextModel, newDecorations: CachedDecorations) {
+	private applyDecorationsFromResult(lastResult: ITestResult, messageLines: Set<number>, uriStr: string, lastDecorations: CachedDecorations, model: ITextModel, newDecorations: CachedDecorations) {
 		if (this.testService.showInlineOutput.value && lastResult instanceof LiveTestResult) {
 			for (const task of lastResult.tasks) {
 				for (const m of task.otherMessages) {

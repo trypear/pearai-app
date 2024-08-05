@@ -1734,7 +1734,7 @@ export class EditorFontLigatures extends BaseEditorOption<EditorOption.fontLigat
 			}
 			return input;
 		}
-		if (Boolean(input)) {
+		if (input) {
 			return EditorFontLigatures.ON;
 		}
 		return EditorFontLigatures.OFF;
@@ -1788,7 +1788,7 @@ export class EditorFontVariations extends BaseEditorOption<EditorOption.fontVari
 			}
 			return input;
 		}
-		if (Boolean(input)) {
+		if (input) {
 			return EditorFontVariations.TRANSLATE;
 		}
 		return EditorFontVariations.OFF;

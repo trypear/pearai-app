@@ -730,7 +730,7 @@ export class WorkbenchKeybindingService extends AbstractKeybindingService {
 
 class UserKeybindings extends Disposable {
 
-	private _rawKeybindings: Object[] = [];
+	private _rawKeybindings: object[] = [];
 	private _keybindings: IUserKeybindingItem[] = [];
 	get keybindings(): IUserKeybindingItem[] { return this._keybindings; }
 
@@ -804,7 +804,7 @@ class UserKeybindings extends Disposable {
 		return true;
 	}
 
-	private async readUserKeybindings(): Promise<Object[]> {
+	private async readUserKeybindings(): Promise<object[]> {
 		try {
 			const content = await this.fileService.readFile(this.userDataProfileService.currentProfile.keybindingsResource);
 			const value = parse(content.value.toString());

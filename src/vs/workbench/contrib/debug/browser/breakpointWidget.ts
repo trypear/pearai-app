@@ -361,7 +361,7 @@ export class BreakpointWidget extends ZoneWidget implements IPrivateBreakpointWi
 		this.toDispose.push(model);
 		const setDecorations = () => {
 			const value = this.input.getModel().getValue();
-			const decorations = !!value ? [] : createDecorations(this.themeService.getColorTheme(), this.placeholder);
+			const decorations = value ? [] : createDecorations(this.themeService.getColorTheme(), this.placeholder);
 			this.input.setDecorationsByType('breakpoint-widget', DECORATION_KEY, decorations);
 		};
 		this.input.getModel().onDidChangeContent(() => setDecorations());

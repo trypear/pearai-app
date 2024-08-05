@@ -780,7 +780,7 @@ class ViewContainerActivityAction extends CompositeBarAction {
 			viewletId: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The view in the activity bar for which the action was performed.' };
 			action: { classification: 'SystemMetaData'; purpose: 'FeatureInsight'; comment: 'The action that was performed. e.g. "hide", "show", or "refocus"' };
 		};
-		this.telemetryService.publicLog2<{ viewletId: String; action: String }, ActivityBarActionClassification>('activityBarAction', { viewletId: this.compositeBarActionItem.id, action });
+		this.telemetryService.publicLog2<{ viewletId: string; action: string }, ActivityBarActionClassification>('activityBarAction', { viewletId: this.compositeBarActionItem.id, action });
 	}
 }
 

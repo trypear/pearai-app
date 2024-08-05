@@ -31,7 +31,7 @@ export interface IExtensionSignatureVerificationService {
 	verify(extension: IGalleryExtension, vsixFilePath: string, signatureArchiveFilePath: string, clientTargetPlatform?: TargetPlatform): Promise<boolean>;
 }
 
-declare module vsceSign {
+declare namespace vsceSign {
 	export function verify(vsixFilePath: string, signatureArchiveFilePath: string, verbose: boolean): Promise<ExtensionSignatureVerificationResult>;
 }
 

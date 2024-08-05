@@ -126,35 +126,35 @@ suite('keybindingIO', () => {
 
 	test('issue #10452 - invalid command', () => {
 		const strJSON = `[{ "key": "ctrl+k ctrl+f", "command": ["firstcommand", "seccondcommand"] }]`;
-		const userKeybinding = <Object>JSON.parse(strJSON)[0];
+		const userKeybinding = <object>JSON.parse(strJSON)[0];
 		const keybindingItem = KeybindingIO.readUserKeybindingItem(userKeybinding);
 		assert.strictEqual(keybindingItem.command, null);
 	});
 
 	test('issue #10452 - invalid when', () => {
 		const strJSON = `[{ "key": "ctrl+k ctrl+f", "command": "firstcommand", "when": [] }]`;
-		const userKeybinding = <Object>JSON.parse(strJSON)[0];
+		const userKeybinding = <object>JSON.parse(strJSON)[0];
 		const keybindingItem = KeybindingIO.readUserKeybindingItem(userKeybinding);
 		assert.strictEqual(keybindingItem.when, undefined);
 	});
 
 	test('issue #10452 - invalid key', () => {
 		const strJSON = `[{ "key": [], "command": "firstcommand" }]`;
-		const userKeybinding = <Object>JSON.parse(strJSON)[0];
+		const userKeybinding = <object>JSON.parse(strJSON)[0];
 		const keybindingItem = KeybindingIO.readUserKeybindingItem(userKeybinding);
 		assert.deepStrictEqual(keybindingItem.keybinding, null);
 	});
 
 	test('issue #10452 - invalid key 2', () => {
 		const strJSON = `[{ "key": "", "command": "firstcommand" }]`;
-		const userKeybinding = <Object>JSON.parse(strJSON)[0];
+		const userKeybinding = <object>JSON.parse(strJSON)[0];
 		const keybindingItem = KeybindingIO.readUserKeybindingItem(userKeybinding);
 		assert.deepStrictEqual(keybindingItem.keybinding, null);
 	});
 
 	test('test commands args', () => {
 		const strJSON = `[{ "key": "ctrl+k ctrl+f", "command": "firstcommand", "when": [], "args": { "text": "theText" } }]`;
-		const userKeybinding = <Object>JSON.parse(strJSON)[0];
+		const userKeybinding = <object>JSON.parse(strJSON)[0];
 		const keybindingItem = KeybindingIO.readUserKeybindingItem(userKeybinding);
 		assert.strictEqual(keybindingItem.commandArgs.text, 'theText');
 	});

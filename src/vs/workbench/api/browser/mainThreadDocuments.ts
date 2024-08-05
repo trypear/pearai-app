@@ -263,7 +263,7 @@ export class MainThreadDocuments extends Disposable implements MainThreadDocumen
 			// don't create a new file ontop of an existing file
 			return Promise.reject(new Error('file already exists'));
 		}
-		return await this._doCreateUntitled(Boolean(uri.path) ? uri : undefined);
+		return await this._doCreateUntitled(uri.path ? uri : undefined);
 	}
 
 	private async _doCreateUntitled(associatedResource?: URI, languageId?: string, initialValue?: string): Promise<URI> {

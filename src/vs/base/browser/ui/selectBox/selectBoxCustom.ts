@@ -60,8 +60,8 @@ class SelectListRenderer implements IListRenderer<ISelectOptionItem, ISelectList
 		const isDisabled = element.isDisabled;
 
 		data.text.textContent = text;
-		data.detail.textContent = !!detail ? detail : '';
-		data.decoratorRight.innerText = !!decoratorRight ? decoratorRight : '';
+		data.detail.textContent = detail ? detail : '';
+		data.decoratorRight.innerText = decoratorRight ? decoratorRight : '';
 
 		// pseudo-select disabled option
 		if (isDisabled) {
@@ -705,8 +705,8 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 			let longestLength = 0;
 
 			this.options.forEach((option, index) => {
-				const detailLength = !!option.detail ? option.detail.length : 0;
-				const rightDecoratorLength = !!option.decoratorRight ? option.decoratorRight.length : 0;
+				const detailLength = option.detail ? option.detail.length : 0;
+				const rightDecoratorLength = option.decoratorRight ? option.decoratorRight.length : 0;
 
 				const len = option.text.length + detailLength + rightDecoratorLength;
 				if (len > longestLength) {
@@ -716,7 +716,7 @@ export class SelectBoxList extends Disposable implements ISelectBoxDelegate, ILi
 			});
 
 
-			container.textContent = this.options[longest].text + (!!this.options[longest].decoratorRight ? (this.options[longest].decoratorRight + ' ') : '');
+			container.textContent = this.options[longest].text + (this.options[longest].decoratorRight ? (this.options[longest].decoratorRight + ' ') : '');
 			elementWidth = dom.getTotalWidth(container);
 		}
 

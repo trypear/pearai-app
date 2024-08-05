@@ -11,10 +11,10 @@ import { IProductService } from 'vs/platform/product/common/productService';
 import { AbstractSignService, IVsdaValidator } from 'vs/platform/sign/common/abstractSignService';
 import { ISignService } from 'vs/platform/sign/common/sign';
 
-declare module vsdaWeb {
+declare namespace vsdaWeb {
 	export function sign(salted_message: string): string;
 
-	// eslint-disable-next-line @typescript-eslint/naming-convention
+	 
 	export class validator {
 		free(): void;
 		constructor();

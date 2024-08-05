@@ -497,7 +497,7 @@ function createDOMPurify() {
 	 *
 	 * @param  {Object} cfg optional config literal
 	 */
-	// eslint-disable-next-line complexity
+	 
 
 
 	const _parseConfig = function _parseConfig(cfg) {
@@ -523,15 +523,15 @@ function createDOMPurify() {
 		ALLOWED_TAGS = 'ALLOWED_TAGS' in cfg ? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunc) : DEFAULT_ALLOWED_TAGS;
 		ALLOWED_ATTR = 'ALLOWED_ATTR' in cfg ? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc) : DEFAULT_ALLOWED_ATTR;
 		ALLOWED_NAMESPACES = 'ALLOWED_NAMESPACES' in cfg ? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString) : DEFAULT_ALLOWED_NAMESPACES;
-		URI_SAFE_ATTRIBUTES = 'ADD_URI_SAFE_ATTR' in cfg ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES), // eslint-disable-line indent
-			cfg.ADD_URI_SAFE_ATTR, // eslint-disable-line indent
-			transformCaseFunc // eslint-disable-line indent
-		) // eslint-disable-line indent
+		URI_SAFE_ATTRIBUTES = 'ADD_URI_SAFE_ATTR' in cfg ? addToSet(clone(DEFAULT_URI_SAFE_ATTRIBUTES),  
+			cfg.ADD_URI_SAFE_ATTR,  
+			transformCaseFunc  
+		)  
 			: DEFAULT_URI_SAFE_ATTRIBUTES;
-		DATA_URI_TAGS = 'ADD_DATA_URI_TAGS' in cfg ? addToSet(clone(DEFAULT_DATA_URI_TAGS), // eslint-disable-line indent
-			cfg.ADD_DATA_URI_TAGS, // eslint-disable-line indent
-			transformCaseFunc // eslint-disable-line indent
-		) // eslint-disable-line indent
+		DATA_URI_TAGS = 'ADD_DATA_URI_TAGS' in cfg ? addToSet(clone(DEFAULT_DATA_URI_TAGS),  
+			cfg.ADD_DATA_URI_TAGS,  
+			transformCaseFunc  
+		)  
 			: DEFAULT_DATA_URI_TAGS;
 		FORBID_CONTENTS = 'FORBID_CONTENTS' in cfg ? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunc) : DEFAULT_FORBID_CONTENTS;
 		FORBID_TAGS = 'FORBID_TAGS' in cfg ? addToSet({}, cfg.FORBID_TAGS, transformCaseFunc) : {};
@@ -938,7 +938,7 @@ function createDOMPurify() {
 
 
 	const _createIterator = function _createIterator(root) {
-		return createNodeIterator.call(root.ownerDocument || root, root, // eslint-disable-next-line no-bitwise
+		return createNodeIterator.call(root.ownerDocument || root, root,  
 			NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_COMMENT | NodeFilter.SHOW_TEXT, null, false);
 	};
 	/**
@@ -1102,7 +1102,7 @@ function createDOMPurify() {
 	 * @param  {string} value Attribute value.
 	 * @return {Boolean} Returns true if `value` is valid, otherwise false.
 	 */
-	// eslint-disable-next-line complexity
+	 
 
 
 	const _isValidAttribute = function _isValidAttribute(lcTag, lcName, value) {
@@ -1339,7 +1339,7 @@ function createDOMPurify() {
 	 * @param {String|Node} dirty string or DOM node
 	 * @param {Object} configuration object
 	 */
-	// eslint-disable-next-line complexity
+	 
 
 
 	DOMPurify.sanitize = function (dirty) {

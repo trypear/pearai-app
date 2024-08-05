@@ -35,7 +35,7 @@ suite('Hash', () => {
 		assert.strictEqual(hash([1, 2, 3]), hash([1, 2, 3]));
 		assert.strictEqual(hash(['foo', 'bar']), hash(['foo', 'bar']));
 		assert.strictEqual(hash([]), hash([]));
-		assert.strictEqual(hash([]), hash(new Array()));
+		assert.strictEqual(hash([]), hash([]));
 		assert.notStrictEqual(hash(['foo', 'bar']), hash(['bar', 'foo']));
 		assert.notStrictEqual(hash(['foo', 'bar']), hash(['bar', 'foo', null]));
 		assert.notStrictEqual(hash(['foo', 'bar', null]), hash(['bar', 'foo', null]));

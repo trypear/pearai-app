@@ -284,7 +284,7 @@ export class BugIndicatingError extends Error {
 
 		// Because we know for sure only buggy code throws this,
 		// we definitely want to break here and fix the bug.
-		// eslint-disable-next-line no-debugger
+		 
 		// debugger;
 	}
 }

@@ -271,7 +271,7 @@ module.exports.run = async function (debugSession, ctx) {
 
 				// Eval maintains source maps
 				function newScript(/* this parameter is used by newSrc */ define) {
-					// eslint-disable-next-line no-eval
+					 
 					eval(newSrc); // CodeQL [SM01632] This code is only executed during development. It is required for the hot-reload functionality.
 				}
 

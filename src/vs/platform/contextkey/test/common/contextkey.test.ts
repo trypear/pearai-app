@@ -87,7 +87,7 @@ suite('ContextKeyExpr', () => {
 			assert.strictEqual(rules!.evaluate(context), expected, expr);
 		}
 		function testBatch(expr: string, value: any): void {
-			/* eslint-disable eqeqeq */
+			 
 			testExpression(expr, !!value);
 			testExpression(expr + ' == true', !!value);
 			testExpression(expr + ' != true', !value);
@@ -98,7 +98,7 @@ suite('ContextKeyExpr', () => {
 			testExpression('!' + expr, !value);
 			testExpression(expr + ' =~ /d.*/', /d.*/.test(value));
 			testExpression(expr + ' =~ /D/i', /D/i.test(value));
-			/* eslint-enable eqeqeq */
+			 
 		}
 
 		testBatch('a', true);

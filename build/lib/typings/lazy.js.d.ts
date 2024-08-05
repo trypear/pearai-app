@@ -6,10 +6,10 @@
 declare function Lazy(value: string): Lazy.StringLikeSequence;
 declare function Lazy<T>(value: T[]): Lazy.ArrayLikeSequence<T>;
 declare function Lazy(value: any[]): Lazy.ArrayLikeSequence<any>;
-declare function Lazy<T>(value: Object): Lazy.ObjectLikeSequence<T>;
-declare function Lazy(value: Object): Lazy.ObjectLikeSequence<any>;
+declare function Lazy<T>(value: object): Lazy.ObjectLikeSequence<T>;
+declare function Lazy(value: object): Lazy.ObjectLikeSequence<any>;
 
-declare module Lazy {
+declare namespace Lazy {
 	function strict(): StrictLazy;
 	function generate<T>(generatorFn: GeneratorCallback<T>, length?: number): GeneratedSequence<T>;
 	function range(to: number): GeneratedSequence<number>;
@@ -23,8 +23,8 @@ declare module Lazy {
 		(value: string): StringLikeSequence;
 		<T>(value: T[]): ArrayLikeSequence<T>;
 		(value: any[]): ArrayLikeSequence<any>;
-		<T>(value: Object): ObjectLikeSequence<T>;
-		(value: Object): ObjectLikeSequence<any>;
+		<T>(value: object): ObjectLikeSequence<T>;
+		(value: object): ObjectLikeSequence<any>;
 		strict(): StrictLazy;
 		generate<T>(generatorFn: GeneratorCallback<T>, length?: number): GeneratedSequence<T>;
 		range(to: number): GeneratedSequence<number>;
@@ -109,8 +109,8 @@ declare module Lazy {
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	module Sequence {
-		function define(methodName: string[], overrides: Object): Function;
+	namespace Sequence {
+		function define(methodName: string[], overrides: object): Function;
 	}
 
 	interface Sequence<T> extends SequenceBase<T> {
@@ -148,7 +148,7 @@ declare module Lazy {
 		every(predicateFn: TestCallback<T>): boolean;
 		filter(predicateFn: TestCallback<T>): Sequence<T>;
 		find(predicateFn: TestCallback<T>): Sequence<T>;
-		findWhere(properties: Object): Sequence<T>;
+		findWhere(properties: object): Sequence<T>;
 
 		groupBy(keyFn: GetKeyCallback<T>): ObjectLikeSequence<T>;
 		initial(count?: number): Sequence<T>;
@@ -181,19 +181,19 @@ declare module Lazy {
 		takeWhile(predicateFn: TestCallback<T>): Sequence<T>;
 		union(var_args: T[]): Sequence<T>;
 		uniq(): Sequence<T>;
-		where(properties: Object): Sequence<T>;
+		where(properties: object): Sequence<T>;
 		without(...var_args: T[]): Sequence<T>;
 		without(var_args: T[]): Sequence<T>;
 		zip(var_args: T[]): ArraySequence<T>;
 
 		toArray(): T[];
-		toObject(): Object;
+		toObject(): object;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	module ArrayLikeSequence {
-		function define(methodName: string[], overrides: Object): Function;
+	namespace ArrayLikeSequence {
+		function define(methodName: string[], overrides: object): Function;
 	}
 
 	interface ArrayLikeSequence<T> extends Sequence<T> {
@@ -214,15 +214,15 @@ declare module Lazy {
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	module ObjectLikeSequence {
-		function define(methodName: string[], overrides: Object): Function;
+	namespace ObjectLikeSequence {
+		function define(methodName: string[], overrides: object): Function;
 	}
 
 	interface ObjectLikeSequence<T> extends Sequence<T> {
-		assign(other: Object): ObjectLikeSequence<T>;
+		assign(other: object): ObjectLikeSequence<T>;
 		// throws error
 		//async(): X;
-		defaults(defaults: Object): ObjectLikeSequence<T>;
+		defaults(defaults: object): ObjectLikeSequence<T>;
 		functions(): Sequence<T>;
 		get(property: string): ObjectLikeSequence<T>;
 		invert(): ObjectLikeSequence<T>;
@@ -231,14 +231,14 @@ declare module Lazy {
 		pairs(): Sequence<T>;
 		pick(properties: string[]): ObjectLikeSequence<T>;
 		toArray(): T[];
-		toObject(): Object;
+		toObject(): object;
 		values(): Sequence<T>;
 	}
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-	module StringLikeSequence {
-		function define(methodName: string[], overrides: Object): Function;
+	namespace StringLikeSequence {
+		function define(methodName: string[], overrides: object): Function;
 	}
 
 	interface StringLikeSequence extends SequenceBaser<string> {

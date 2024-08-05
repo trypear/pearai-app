@@ -1481,7 +1481,7 @@ export function getMultiSelectedEditorContexts(editorContext: IEditorCommandsCon
 	}
 
 	// Otherwise go with passed in context
-	return !!editorContext ? [editorContext] : [];
+	return editorContext ? [editorContext] : [];
 }
 
 export function setup(): void {

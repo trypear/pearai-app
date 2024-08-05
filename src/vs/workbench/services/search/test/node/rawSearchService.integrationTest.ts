@@ -98,7 +98,7 @@ flakySuite('RawSearchService', () => {
 
 		let results = 0;
 		const cb: (p: ISerializedSearchProgressItem) => void = value => {
-			if (!!(<IProgressMessage>value).message) {
+			if ((<IProgressMessage>value).message) {
 				return;
 			}
 			if (!Array.isArray(value)) {
@@ -120,7 +120,7 @@ flakySuite('RawSearchService', () => {
 
 		const results: number[] = [];
 		const cb: (p: ISerializedSearchProgressItem) => void = value => {
-			if (!!(<IProgressMessage>value).message) {
+			if ((<IProgressMessage>value).message) {
 				return;
 			}
 			if (Array.isArray(value)) {
@@ -233,7 +233,7 @@ flakySuite('RawSearchService', () => {
 
 		const results: any[] = [];
 		const cb: IProgressCallback = value => {
-			if (!!(<IProgressMessage>value).message) {
+			if ((<IProgressMessage>value).message) {
 				return;
 			}
 			if (Array.isArray(value)) {
@@ -261,7 +261,7 @@ flakySuite('RawSearchService', () => {
 
 		const results: number[] = [];
 		const cb: IProgressCallback = value => {
-			if (!!(<IProgressMessage>value).message) {
+			if ((<IProgressMessage>value).message) {
 				return;
 			}
 			if (Array.isArray(value)) {
@@ -297,7 +297,7 @@ flakySuite('RawSearchService', () => {
 
 		const results: any[] = [];
 		const cb: IProgressCallback = value => {
-			if (!!(<IProgressMessage>value).message) {
+			if ((<IProgressMessage>value).message) {
 				return;
 			}
 			if (Array.isArray(value)) {
@@ -346,7 +346,7 @@ flakySuite('RawSearchService', () => {
 			});
 			const results: any[] = [];
 			const cb: IProgressCallback = value => {
-				if (!!(<IProgressMessage>value).message) {
+				if ((<IProgressMessage>value).message) {
 					return;
 				}
 				if (Array.isArray(value)) {

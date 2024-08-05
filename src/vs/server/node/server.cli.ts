@@ -355,7 +355,7 @@ export async function main(desc: ProductDescription, args: string[]): Promise<vo
 }
 
 function runningInWSL2(): boolean {
-	if (!!process.env['WSL_DISTRO_NAME']) {
+	if (process.env['WSL_DISTRO_NAME']) {
 		try {
 			return _cp.execSync('uname -r', { encoding: 'utf8' }).includes('-microsoft-');
 		} catch (_e) {

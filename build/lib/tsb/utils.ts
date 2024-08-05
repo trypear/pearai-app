@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-export module collections {
+export namespace collections {
 
     const hasOwnProperty = Object.prototype.hasOwnProperty;
 
@@ -43,7 +43,7 @@ export module collections {
     }
 }
 
-export module strings {
+export namespace strings {
 
     /**
      * The empty string. The one and only.
@@ -60,7 +60,7 @@ export module strings {
     }
 }
 
-export module graph {
+export namespace graph {
 
     export interface Node<T> {
         data: T;

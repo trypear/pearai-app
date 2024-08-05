@@ -172,7 +172,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 				this.logService.error(err);
 
 				// only show message when explicitly checking for updates
-				const message: string | undefined = !!context ? (err.message || err) : undefined;
+				const message: string | undefined = context ? (err.message || err) : undefined;
 				this.setState(State.Idle(getUpdateType(), message));
 			});
 	}

@@ -278,7 +278,7 @@ export function parseExtensionHostDebugPort(args: NativeParsedArgs, isBuilt: boo
 export function parseDebugParams(debugArg: string | undefined, debugBrkArg: string | undefined, defaultBuildPort: number, isBuilt: boolean, debugId?: string, environmentString?: string): IExtensionHostDebugParams {
 	const portStr = debugBrkArg || debugArg;
 	const port = Number(portStr) || (!isBuilt ? defaultBuildPort : null);
-	const brk = port ? Boolean(!!debugBrkArg) : false;
+	const brk = port ? Boolean(debugBrkArg) : false;
 	let env: Record<string, string> | undefined;
 	if (environmentString) {
 		try {

@@ -420,7 +420,7 @@ export class AdapterManager extends Disposable implements IAdapterManager {
 
 			const status = this.extensionService.getExtensionsStatus();
 			for (const id in status) {
-				if (!!status[id].activationTimes) {
+				if (status[id].activationTimes) {
 					this.earlyActivatedExtensions.add(id);
 				}
 			}

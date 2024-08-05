@@ -50,7 +50,7 @@ function fileMatchToSerialized(match: IFileMatch): ISerializedFileMatch {
 		path: match.resource && match.resource.fsPath,
 		results: match.results,
 		numMatches: (match.results || []).reduce((sum, r) => {
-			if (!!(<ITextSearchMatch>r).ranges) {
+			if ((<ITextSearchMatch>r).ranges) {
 				const m = <ITextSearchMatch>r;
 				return sum + (Array.isArray(m.ranges) ? m.ranges.length : 1);
 			} else {

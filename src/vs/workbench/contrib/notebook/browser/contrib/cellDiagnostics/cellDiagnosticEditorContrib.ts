@@ -79,7 +79,7 @@ export class CellDiagnostics extends Disposable implements INotebookEditorContri
 			const notebookUri = this.notebookEditor.textModel?.uri;
 			if (e.type === NotebookExecutionType.cell && notebookUri && e.affectsNotebook(notebookUri) && !handled.has(e.cellHandle)) {
 				handled.add(e.cellHandle);
-				if (!!e.changed) {
+				if (e.changed) {
 					// cell is running
 					this.clear(e.cellHandle);
 				} else {

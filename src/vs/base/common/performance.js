@@ -99,7 +99,7 @@
 	// Because we want both instances to use the same perf-data
 	// we store them globally
 
-	// eslint-disable-next-line no-var
+	 
 	var sharedObj;
 	if (typeof global === 'object') {
 		// nodejs

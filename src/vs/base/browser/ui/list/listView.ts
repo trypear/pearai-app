@@ -1495,7 +1495,7 @@ export class ListView<T> implements IListView<T> {
 	private probeDynamicHeight(index: number): number {
 		const item = this.items[index];
 
-		if (!!this.virtualDelegate.getDynamicHeight) {
+		if (this.virtualDelegate.getDynamicHeight) {
 			const newSize = this.virtualDelegate.getDynamicHeight(item.element);
 			if (newSize !== null) {
 				const size = item.size;

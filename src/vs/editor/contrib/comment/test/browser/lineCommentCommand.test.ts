@@ -1116,7 +1116,7 @@ suite('Editor Contrib - Line Comment in mixed modes', () => {
 					throw new Error('not implemented');
 				},
 				tokenizeEncoded: (line: string, hasEOL: boolean, state: IState): EncodedTokenizationResult => {
-					const languageId = (/^  /.test(line) ? INNER_LANGUAGE_ID : OUTER_LANGUAGE_ID);
+					const languageId = (/^ {2}/.test(line) ? INNER_LANGUAGE_ID : OUTER_LANGUAGE_ID);
 					const encodedLanguageId = languageService.languageIdCodec.encodeLanguageId(languageId);
 
 					const tokens = new Uint32Array(1 << 1);

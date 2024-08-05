@@ -508,7 +508,7 @@ function doScoreItemFuzzySingle(label: string, description: string | undefined, 
 	// Finally compute description + label scores if we have a description
 	if (description) {
 		let descriptionPrefix = description;
-		if (!!path) {
+		if (path) {
 			descriptionPrefix = `${description}${sep}`; // assume this is a file path
 		}
 

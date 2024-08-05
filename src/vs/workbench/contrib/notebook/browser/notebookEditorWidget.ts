@@ -2715,7 +2715,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		}
 
 		const webviewTop = parseInt(this._list.webviewElement.domNode.style.top, 10);
-		const top = !!webviewTop ? (0 - webviewTop) : 0;
+		const top = webviewTop ? (0 - webviewTop) : 0;
 
 		const cellTop = this._list.getCellViewScrollTop(cell);
 		await this._webview.showMarkupPreview({
@@ -2809,7 +2809,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 			}
 
 			const webviewTop = parseInt(this._list.webviewElement.domNode.style.top, 10);
-			const top = !!webviewTop ? (0 - webviewTop) : 0;
+			const top = webviewTop ? (0 - webviewTop) : 0;
 
 			const cellTop = this._list.getCellViewScrollTop(cell) + top;
 
@@ -2867,7 +2867,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 			}
 
 			const webviewTop = parseInt(this._list.webviewElement.domNode.style.top, 10);
-			const top = !!webviewTop ? (0 - webviewTop) : 0;
+			const top = webviewTop ? (0 - webviewTop) : 0;
 
 			const cellTop = this._list.getCellViewScrollTop(cell) + top;
 			this._webview.updateOutput({ cellId: cell.id, cellHandle: cell.handle, cellUri: cell.uri }, output, cellTop, offset);
@@ -2959,7 +2959,7 @@ export class NotebookEditorWidget extends Disposable implements INotebookEditorD
 		this._webview.element.style.height = `${scrollHeight + NOTEBOOK_WEBVIEW_BOUNDARY * 2}px`;
 
 		const webviewTop = parseInt(this._list.webviewElement.domNode.style.top, 10);
-		const top = !!webviewTop ? (0 - webviewTop) : 0;
+		const top = webviewTop ? (0 - webviewTop) : 0;
 
 		const updateItems: IDisplayOutputLayoutUpdateRequest[] = [];
 		const removedItems: ICellOutputViewModel[] = [];

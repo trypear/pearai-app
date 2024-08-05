@@ -35,7 +35,7 @@ var Conway;
         property;
         cellSize = 0;
         property;
-        context: ICanvasRenderingContext2D;
+        ICanvasRenderingContext2D;
         property;
         world = createWorld();
         circleOfLife();

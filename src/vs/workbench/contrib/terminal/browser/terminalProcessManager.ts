@@ -257,7 +257,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 			// they're connected to the remote.
 			this.userHome = this._pathService.resolvedUserHome?.fsPath;
 			this.os = OS;
-			if (!!this.remoteAuthority) {
+			if (this.remoteAuthority) {
 
 				const userHomeUri = await this._pathService.userHome();
 				this.userHome = userHomeUri.path;
@@ -549,7 +549,7 @@ export class TerminalProcessManager extends Disposable implements ITerminalProce
 
 	async getBackendOS(): Promise<OperatingSystem> {
 		let os = OS;
-		if (!!this.remoteAuthority) {
+		if (this.remoteAuthority) {
 			const remoteEnv = await this._remoteAgentService.getEnvironment();
 			if (!remoteEnv) {
 				throw new Error(`Failed to get remote environment for remote authority "${this.remoteAuthority}"`);

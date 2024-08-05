@@ -1340,7 +1340,7 @@ export class WindowsMainService extends Disposable implements IWindowsMainServic
 
 		cliArgs = cliArgs.filter(path => {
 			const uri = URI.file(path);
-			if (!!findWindowOnWorkspaceOrFolder(this.getWindows(), uri)) {
+			if (findWindowOnWorkspaceOrFolder(this.getWindows(), uri)) {
 				return false;
 			}
 

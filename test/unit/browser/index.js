@@ -227,7 +227,7 @@ async function createServer() {
 
 async function runTestsInBrowser(testModules, browserType) {
 	const server = await createServer();
-	const browser = await playwright[browserType].launch({ headless: !Boolean(args.debug), devtools: Boolean(args.debug) });
+	const browser = await playwright[browserType].launch({ headless: !args.debug, devtools: Boolean(args.debug) });
 	const context = await browser.newContext();
 	const page = await context.newPage();
 	const target = new URL(server.url + '/test/unit/browser/renderer.html');

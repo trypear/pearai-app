@@ -41,7 +41,7 @@ function loadCSS(name: string, cssUrl: string, callback: () => void, errorback: 
 }
 
 function linkTagExists(name: string, cssUrl: string): boolean {
-	// eslint-disable-next-line no-restricted-globals
+	 
 	const links = window.document.getElementsByTagName('link');
 	for (let i = 0, len = links.length; i < len; i++) {
 		const nameAttr = links[i].getAttribute('data-name');
@@ -62,7 +62,7 @@ function createLinkTag(name: string, cssUrl: string, callback: () => void, error
 	attachListeners(name, linkNode, callback, errorback);
 	linkNode.setAttribute('href', cssUrl);
 
-	// eslint-disable-next-line no-restricted-globals
+	 
 	const head = window.document.head || window.document.getElementsByTagName('head')[0];
 	head.appendChild(linkNode);
 }

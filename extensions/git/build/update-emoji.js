@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-/* eslint-disable @typescript-eslint/no-var-requires */
+ 
 const fs = require('fs');
 const https = require('https');
 const path = require('path');

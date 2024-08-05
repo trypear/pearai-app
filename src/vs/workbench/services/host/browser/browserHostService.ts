@@ -398,7 +398,7 @@ export class BrowserHostService extends Disposable implements IHostService {
 	private preservePayload(isEmptyWindow: boolean): Array<unknown> | undefined {
 
 		// Selectively copy payload: for now only extension debugging properties are considered
-		const newPayload: Array<unknown> = new Array();
+		const newPayload: Array<unknown> = [];
 		if (!isEmptyWindow && this.environmentService.extensionDevelopmentLocationURI) {
 			newPayload.push(['extensionDevelopmentPath', this.environmentService.extensionDevelopmentLocationURI.toString()]);
 

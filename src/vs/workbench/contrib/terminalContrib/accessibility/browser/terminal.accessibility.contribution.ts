@@ -215,7 +215,7 @@ export class TerminalAccessibleViewContribution extends Disposable implements IT
 		}
 		if (currentCommand) {
 			const lineNumber = this._getEditorLineForCommand(currentCommand);
-			if (!!lineNumber) {
+			if (lineNumber) {
 				result.push({ command: currentCommand, lineNumber });
 			}
 		}

@@ -147,7 +147,7 @@ export class MemFs implements vscode.FileSystemProvider {
 	private readonly _emitter = new vscode.EventEmitter<vscode.FileChangeEvent[]>();
 
 	readonly onDidChangeFile: vscode.Event<vscode.FileChangeEvent[]> = this._emitter.event;
-	private readonly watchers = new Map<string, Set<Symbol>>;
+	private readonly watchers = new Map<string, Set<symbol>>;
 
 	watch(resource: vscode.Uri): vscode.Disposable {
 		if (!this.watchers.has(resource.path)) {

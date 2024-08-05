@@ -67,7 +67,7 @@ export class IssueReporter extends Disposable {
 			...configuration.data,
 			issueType: configuration.data.issueType || IssueType.Bug,
 			versionInfo: {
-				vscodeVersion: `${configuration.product.nameShort} ${!!configuration.product.darwinUniversalAssetId ? `${configuration.product.version} (Universal)` : configuration.product.version} (${configuration.product.commit || 'Commit unknown'}, ${configuration.product.date || 'Date unknown'})`,
+				vscodeVersion: `${configuration.product.nameShort} ${configuration.product.darwinUniversalAssetId ? `${configuration.product.version} (Universal)` : configuration.product.version} (${configuration.product.commit || 'Commit unknown'}, ${configuration.product.date || 'Date unknown'})`,
 				os: `${this.configuration.os.type} ${this.configuration.os.arch} ${this.configuration.os.release}${isLinuxSnap ? ' snap' : ''}`
 			},
 			extensionsDisabled: !!configuration.disableExtensions,

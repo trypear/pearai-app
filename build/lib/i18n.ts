@@ -65,7 +65,7 @@ interface LocalizeInfo {
 	comment: string[];
 }
 
-module LocalizeInfo {
+namespace LocalizeInfo {
 	export function is(value: any): value is LocalizeInfo {
 		const candidate = value as LocalizeInfo;
 		return candidate && typeof candidate.key === 'string' && (candidate.comment === undefined || (Array.isArray(candidate.comment) && candidate.comment.every(element => typeof element === 'string')));
@@ -78,7 +78,7 @@ interface BundledFormat {
 	bundles: Record<string, string[]>;
 }
 
-module BundledFormat {
+namespace BundledFormat {
 	export function is(value: any): value is BundledFormat {
 		if (value === undefined) {
 			return false;

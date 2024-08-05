@@ -1006,7 +1006,7 @@ namespace CommandConfiguration {
 		if (Types.isBoolean(config.isShellCommand) || ShellConfiguration.is(config.isShellCommand)) {
 			runtime = Tasks.RuntimeType.Shell;
 		} else if (config.isShellCommand !== undefined) {
-			runtime = !!config.isShellCommand ? Tasks.RuntimeType.Shell : Tasks.RuntimeType.Process;
+			runtime = config.isShellCommand ? Tasks.RuntimeType.Shell : Tasks.RuntimeType.Process;
 		}
 
 		const result: Tasks.ICommandConfiguration = {

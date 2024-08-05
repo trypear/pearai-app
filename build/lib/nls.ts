@@ -97,7 +97,7 @@ function isImportNode(ts: typeof import('typescript'), node: ts.Node): boolean {
 	return node.kind === ts.SyntaxKind.ImportDeclaration || node.kind === ts.SyntaxKind.ImportEqualsDeclaration;
 }
 
-module _nls {
+namespace _nls {
 
 	interface INlsStringResult {
 		javascript: string;

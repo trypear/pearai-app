@@ -3,7 +3,7 @@
  * To learn more about TypeScript, please visit http://www.typescriptlang.org/
  */
 
-module Conway {
+namespace Conway {
 
 	export class Cell {
 		public row: number;
@@ -59,17 +59,17 @@ module Conway {
 		}
 
 		public resolveNextGeneration(cell : Cell) {
-			var count = this.countNeighbors(cell);
-			var newCell = new Cell(cell.row, cell.col, cell.live);
+			const count = this.countNeighbors(cell);
+			const newCell = new Cell(cell.row, cell.col, cell.live);
 			if(count < 2 || count > 3) newCell.live = false;
 			else if(count == 3) newCell.live = true;
 			return newCell;
 		}
 
 		public countNeighbors(cell : Cell) {
-			var neighbors = 0;
-			for(var row = -1; row <=1; row++) {
-				for(var col = -1; col <= 1; col++) {
+			let neighbors = 0;
+			for(let row = -1; row <=1; row++) {
+				for(let col = -1; col <= 1; col++) {
 					if(row == 0 && col == 0) continue;
 					if(this.isAlive(cell.row + row, cell.col + col)) {
 						neighbors++;
@@ -85,10 +85,10 @@ module Conway {
 		}
 
 		public travelWorld(callback) {
-			var result = [];
-			for(var row = 0; row < this.gridSize; row++) {
-				var rowData = [];
-				for(var col = 0; col < this.gridSize; col++) {
+			const result = [];
+			for(let row = 0; row < this.gridSize; row++) {
+				const rowData = [];
+				for(let col = 0; col < this.gridSize; col++) {
 					rowData.push(callback(new Cell(row, col, false)));
 				}
 				result.push(rowData);
@@ -108,4 +108,4 @@ module Conway {
 	}
 }
 
-var game = new Conway.GameOfLife();
+const game = new Conway.GameOfLife();

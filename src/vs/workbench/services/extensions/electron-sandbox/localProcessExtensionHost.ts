@@ -558,7 +558,7 @@ export class NativeLocalProcessExtensionHost implements IExtensionHost {
 	}
 
 	public async enableInspectPort(): Promise<boolean> {
-		if (!!this._inspectListener) {
+		if (this._inspectListener) {
 			return true;
 		}
 

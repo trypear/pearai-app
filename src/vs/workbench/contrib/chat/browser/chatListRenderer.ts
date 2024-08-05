@@ -1687,7 +1687,7 @@ class ChatListTreeDataSource implements IAsyncDataSource<IChatResponseProgressFi
 	}
 }
 
-function isInteractiveProgressTreeData(item: Object): item is IChatResponseProgressFileTreeData {
+function isInteractiveProgressTreeData(item: object): item is IChatResponseProgressFileTreeData {
 	return 'label' in item;
 }
 

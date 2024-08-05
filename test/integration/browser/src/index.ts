@@ -63,7 +63,7 @@ const height = 800;
 type BrowserType = 'chromium' | 'firefox' | 'webkit';
 
 async function runTestsInBrowser(browserType: BrowserType, endpoint: url.UrlWithStringQuery, server: cp.ChildProcess): Promise<void> {
-	const browser = await playwright[browserType].launch({ headless: !Boolean(args.debug) });
+	const browser = await playwright[browserType].launch({ headless: !args.debug });
 	const context = await browser.newContext();
 
 	const page = await context.newPage();

@@ -350,7 +350,7 @@ export function coalesce<T>(array: ReadonlyArray<T | undefined | null>): T[] {
 export function coalesceInPlace<T>(array: Array<T | undefined | null>): asserts array is Array<T> {
 	let to = 0;
 	for (let i = 0; i < array.length; i++) {
-		if (!!array[i]) {
+		if (array[i]) {
 			array[to] = array[i];
 			to += 1;
 		}

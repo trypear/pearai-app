@@ -187,7 +187,7 @@ export class Renderer implements IPagedRenderer<IExtension, ITemplateData> {
 
 		const computeEnablement = async () => {
 			if (extension.state === ExtensionState.Uninstalled) {
-				if (!!extension.deprecationInfo) {
+				if (extension.deprecationInfo) {
 					return true;
 				}
 				if (this.extensionsWorkbenchService.canSetLanguage(extension)) {

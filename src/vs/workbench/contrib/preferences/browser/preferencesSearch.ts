@@ -77,7 +77,7 @@ function cleanFilter(filter: string): string {
 	// Leave other special characters which the user might want to search for.
 	return filter
 		.replace(/[":]/g, ' ')
-		.replace(/  /g, ' ')
+		.replace(/ {2}/g, ' ')
 		.trim();
 }
 

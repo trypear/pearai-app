@@ -65,7 +65,7 @@ import { SearchContext } from 'vs/workbench/contrib/search/common/constants';
 import { getDefaultHoverDelegate } from 'vs/base/browser/ui/hover/hoverDelegateFactory';
 import { IHoverService } from 'vs/platform/hover/browser/hover';
 
-const RESULT_LINE_REGEX = /^(\s+)(\d+)(: |  )(\s*)(.*)$/;
+const RESULT_LINE_REGEX = /^(\s+)(\d+)(: | {2})(\s*)(.*)$/;
 const FILE_LINE_REGEX = /^(\S.*):$/;
 
 type SearchEditorViewState = ICodeEditorViewState & { focused: 'input' | 'editor' };
