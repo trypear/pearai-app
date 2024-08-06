@@ -46,7 +46,7 @@ function Initialize-BaseFunctionality {
 }
 
 function Create-SymLink {
-    Write-Host "`nCreating symbolic link 'extensions\pearai-submodule\extensions\vscode' -> 'extensions\pearai-submodule'" -ForegroundColor White
+    Write-Host "`nCreating symbolic link 'extensions\pearai-ref' -> 'extensions\pearai-submodule\extensions\vscode'" -ForegroundColor White
     Start-Process powershell.exe -Verb RunAs -ArgumentList ("-ExecutionPolicy Bypass ", "-Command", "powershell.exe -ExecutionPolicy Bypass -File '$createLinkScript' '$targetPath' '$linkPath'")
     Start-Sleep 1
 }
