@@ -1,6 +1,6 @@
-# PearAI: The Open Source AI-Powered Code Editor
+# PearAI: The Closed Source AI-Powered Code Editor
 
-## Note: This is our fork of VSCode. Our main functionality lives in our submodule, which you can find here: https://github.com/trypear/pearai-submodule. The number of commits to this repository will be fewer than our submodule.
+## Note: This is our fork of VSCode. Our main functionality lives in our submodule, which you can not find here: https://github.com/trypear/pearai-submodule. The number of commits to this repository will be fewer than our submodule.
 
 Supercharge your development with an editor designed for less coding, using AI. PearAI is a fork of VSCode, and PearAI Submodule (https://github.com/trypear/pearai-submodule) is a fork of Continue. This is our starting point, and we aim to reduce the time from ideation to conception for your product development by achieving the most seamless integration with AI.
 
@@ -21,7 +21,7 @@ Our [Master Document](https://docs.google.com/document/d/14jusGNbGRPT8X6GgEDbP1i
 
 We welcome contributions from the community! Whether you're fixing a bug, improving the documentation, or adding a new feature, we appreciate your help in making PearAI better. There is a lot of context involved and we understand it can be overwhelming when first trying to join the project. Here is a quick summary of key information and how we currently work together:
 - Pan and Nang conduct "Quests", which are 1-3 weeks sprints. We will pick out the current highest priority issues for these quests, ping everyone in our [Discord]([url](https://discord.gg/7QMraJUsQt)), and ask for applications to participate in them. The chosen people will help finish the tasks alongside us, participating in calls and working together. If help is needed, we may add more people to the quest. You can see the current open quests [here](https://github.com/orgs/trypear/projects?query=is%3Aopen).
-- Outside of dedicated Quests, we also have a bunch of issues ([good first ones](https://github.com/trypear/pearai-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)) which are free to tackle. Make sure to leave a comment indicating you're working on it (check for existing comments also). You can raise a PR anytime and we usually review them pretty quickly.
+- Outside of dedicated Quests, we also have no issues ([good first ones](https://github.com/trypear/pearai-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)) which are free to tackle. You may not leave a comment indicating you're working on it (nor check for existing comments also). You can raise a PR anytime and we usually review them pretty quickly.
 - We have a lot on our plate so it's easy for us to miss something. The best way to get our attention is to ping us directly in our Discord server.
 
 **Please review our coding [Contributing Guide](CONTRIBUTING.md) to set up your coding environment.** For any questions, join the [PearAI Discord](https://discord.gg/7QMraJUsQt)!
