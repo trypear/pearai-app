@@ -264,6 +264,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private auxiliaryBarPartView!: ISerializableView;
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
+	private pearaiPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
 	private extensionService!: IExtensionService;
@@ -1483,6 +1484,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
+		const pearaiPart = this.getPart(Parts.PEARAI_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1493,6 +1495,21 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.panelPartView = panelPart;
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
+		this.pearaiPartView = pearaiPart;
+
+		// Create a new container for PearAIPart
+		const pearaiPartContainer = document.createElement("div");
+		pearaiPartContainer.style.position = "absolute";
+		pearaiPartContainer.style.top = "0";
+		pearaiPartContainer.style.left = "0";
+		pearaiPartContainer.style.right = "0";
+		pearaiPartContainer.style.bottom = "0";
+		pearaiPartContainer.style.zIndex = "-10";
+		pearaiPartContainer.style.display = "absolute";
+		pearaiPartContainer.classList.add("pearai-part-container");
+		this.mainContainer.appendChild(pearaiPartContainer);
+		// Initialize PearAIPart in this new container
+		pearaiPart.create(pearaiPartContainer);
 
 		const viewMap = {
 			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,
@@ -1502,7 +1519,8 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.PANEL_PART]: this.panelPartView,
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
-			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView
+			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
+			[Parts.PEARAI_PART]: this.pearaiPartView,
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
@@ -1571,6 +1589,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 
 			// Layout the grid widget
 			this.workbenchGrid.layout(this._mainContainerDimension.width, this._mainContainerDimension.height);
+			this.pearaiPartView.layout(this._mainContainerDimension.width, this._mainContainerDimension.height, 0, 0);
 			this.initialized = true;
 
 			// Emit as event
