@@ -3,31 +3,77 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Codicon } from 'vs/base/common/codicons';
-import { localize, localize2 } from 'vs/nls';
-import { Action2, MenuId, MenuRegistry, registerAction2 } from 'vs/platform/actions/common/actions';
-import { ContextKeyExpr } from 'vs/platform/contextkey/common/contextkey';
-import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
-import { Categories } from 'vs/platform/action/common/actionCommonCategories';
-import { AuxiliaryBarVisibleContext } from 'vs/workbench/common/contextkeys';
-import { ViewContainerLocation, ViewContainerLocationToString } from 'vs/workbench/common/views';
-import { IWorkbenchLayoutService, Parts } from 'vs/workbench/services/layout/browser/layoutService';
-import { IPaneCompositePartService } from 'vs/workbench/services/panecomposite/browser/panecomposite';
-import { ServicesAccessor } from 'vs/platform/instantiation/common/instantiation';
-import { KeybindingWeight } from 'vs/platform/keybinding/common/keybindingsRegistry';
-import { KeyCode, KeyCodeUtils, KeyMod, KeyModUtils } from 'vs/base/common/keyCodes';
-import { mainWindow } from 'vs/base/browser/window';
-import { ICommandService } from 'vs/platform/commands/common/commands';
+import { Codicon } from "vs/base/common/codicons";
+import { localize, localize2 } from "vs/nls";
+import {
+	Action2,
+	MenuId,
+	MenuRegistry,
+	registerAction2,
+} from "vs/platform/actions/common/actions";
+import { ContextKeyExpr } from "vs/platform/contextkey/common/contextkey";
+import { registerIcon } from "vs/platform/theme/common/iconRegistry";
+import { Categories } from "vs/platform/action/common/actionCommonCategories";
+import { AuxiliaryBarVisibleContext } from "vs/workbench/common/contextkeys";
+import {
+	ViewContainerLocation,
+	ViewContainerLocationToString,
+} from "vs/workbench/common/views";
+import {
+	IWorkbenchLayoutService,
+	Parts,
+} from "vs/workbench/services/layout/browser/layoutService";
+import { IPaneCompositePartService } from "vs/workbench/services/panecomposite/browser/panecomposite";
+import { ServicesAccessor } from "vs/platform/instantiation/common/instantiation";
+import { KeybindingWeight } from "vs/platform/keybinding/common/keybindingsRegistry";
+import {
+	KeyCode,
+	KeyCodeUtils,
+	KeyMod,
+	KeyModUtils,
+} from "vs/base/common/keyCodes";
+import { mainWindow } from "vs/base/browser/window";
+import { ICommandService } from "vs/platform/commands/common/commands";
 
-const auxiliaryBarRightIcon = registerIcon('auxiliarybar-right-layout-icon', Codicon.layoutSidebarRight, localize('toggleAuxiliaryIconRight', 'Icon to toggle the auxiliary bar off in its right position.'));
-const auxiliaryBarRightOffIcon = registerIcon('auxiliarybar-right-off-layout-icon', Codicon.layoutSidebarRightOff, localize('toggleAuxiliaryIconRightOn', 'Icon to toggle the auxiliary bar on in its right position.'));
-const auxiliaryBarLeftIcon = registerIcon('auxiliarybar-left-layout-icon', Codicon.layoutSidebarLeft, localize('toggleAuxiliaryIconLeft', 'Icon to toggle the auxiliary bar in its left position.'));
-const auxiliaryBarLeftOffIcon = registerIcon('auxiliarybar-left-off-layout-icon', Codicon.layoutSidebarLeftOff, localize('toggleAuxiliaryIconLeftOn', 'Icon to toggle the auxiliary bar on in its left position.'));
+const auxiliaryBarRightIcon = registerIcon(
+	"auxiliarybar-right-layout-icon",
+	Codicon.layoutSidebarRight,
+	localize(
+		"toggleAuxiliaryIconRight",
+		"Icon to toggle the auxiliary bar off in its right position.",
+	),
+);
+const auxiliaryBarRightOffIcon = registerIcon(
+	"auxiliarybar-right-off-layout-icon",
+	Codicon.layoutSidebarRightOff,
+	localize(
+		"toggleAuxiliaryIconRightOn",
+		"Icon to toggle the auxiliary bar on in its right position.",
+	),
+);
+const auxiliaryBarLeftIcon = registerIcon(
+	"auxiliarybar-left-layout-icon",
+	Codicon.layoutSidebarLeft,
+	localize(
+		"toggleAuxiliaryIconLeft",
+		"Icon to toggle the auxiliary bar in its left position.",
+	),
+);
+const auxiliaryBarLeftOffIcon = registerIcon(
+	"auxiliarybar-left-off-layout-icon",
+	Codicon.layoutSidebarLeftOff,
+	localize(
+		"toggleAuxiliaryIconLeftOn",
+		"Icon to toggle the auxiliary bar on in its left position.",
+	),
+);
 
 export class ToggleAuxiliaryBarAction extends Action2 {
-
-	static readonly ID = 'workbench.action.toggleAuxiliaryBar';
-	static readonly LABEL = localize2('toggleAuxiliaryBar', "Toggle Secondary Side Bar Visibility");
+	static readonly ID = "workbench.action.toggleAuxiliaryBar";
+	static readonly LABEL = localize2(
+		"toggleAuxiliaryBar",
+		"Toggle Secondary Side Bar Visibility",
+	);
 
 	constructor() {
 		super({
@@ -35,8 +81,14 @@ export class ToggleAuxiliaryBarAction extends Action2 {
 			title: ToggleAuxiliaryBarAction.LABEL,
 			toggled: {
 				condition: AuxiliaryBarVisibleContext,
-				title: localize('secondary sidebar', "Secondary Side Bar"),
-				mnemonicTitle: localize({ key: 'secondary sidebar mnemonic', comment: ['&& denotes a mnemonic'] }, "Secondary Si&&de Bar"),
+				title: localize("secondary sidebar", "Secondary Side Bar"),
+				mnemonicTitle: localize(
+					{
+						key: "secondary sidebar mnemonic",
+						comment: ["&& denotes a mnemonic"],
+					},
+					"Secondary Si&&de Bar",
+				),
 			},
 
 			category: Categories.View,
@@ -45,111 +97,155 @@ export class ToggleAuxiliaryBarAction extends Action2 {
 				weight: KeybindingWeight.WorkbenchContrib,
 				primary: KeyMod.CtrlCmd | KeyCode.Semicolon,
 				linux: {
-					primary: KeyMod.CtrlCmd | KeyCode.Semicolon
+					primary: KeyMod.CtrlCmd | KeyCode.Semicolon,
 				},
 				win: {
-					primary: KeyMod.CtrlCmd | KeyCode.Semicolon
+					primary: KeyMod.CtrlCmd | KeyCode.Semicolon,
 				},
 				mac: {
-					primary: KeyMod.CtrlCmd | KeyCode.Semicolon
-				}
+					primary: KeyMod.CtrlCmd | KeyCode.Semicolon,
+				},
 			},
 			menu: [
 				{
 					id: MenuId.LayoutControlMenuSubmenu,
-					group: '0_workbench_layout',
-					order: 1
+					group: "0_workbench_layout",
+					order: 1,
 				},
 				{
 					id: MenuId.MenubarAppearanceMenu,
-					group: '2_workbench_layout',
-					order: 2
-				}
-			]
+					group: "2_workbench_layout",
+					order: 2,
+				},
+			],
 		});
 	}
 
 	override async run(accessor: ServicesAccessor): Promise<void> {
 		const layoutService = accessor.get(IWorkbenchLayoutService);
-		layoutService.setPartHidden(layoutService.isVisible(Parts.AUXILIARYBAR_PART), Parts.AUXILIARYBAR_PART);
+		layoutService.setPartHidden(
+			layoutService.isVisible(Parts.AUXILIARYBAR_PART),
+			Parts.AUXILIARYBAR_PART,
+		);
 	}
 }
 
 registerAction2(ToggleAuxiliaryBarAction);
 
-registerAction2(class FocusAuxiliaryBarAction extends Action2 {
+registerAction2(
+	class FocusAuxiliaryBarAction extends Action2 {
+		static readonly ID = "workbench.action.focusAuxiliaryBar";
+		static readonly LABEL = localize2(
+			"focusAuxiliaryBar",
+			"Focus into Secondary Side Bar",
+		);
 
-	static readonly ID = 'workbench.action.focusAuxiliaryBar';
-	static readonly LABEL = localize2('focusAuxiliaryBar', "Focus into Secondary Side Bar");
-
-	constructor() {
-		super({
-			id: FocusAuxiliaryBarAction.ID,
-			title: FocusAuxiliaryBarAction.LABEL,
-			category: Categories.View,
-			f1: true,
-		});
-	}
-
-	override async run(accessor: ServicesAccessor): Promise<void> {
-		const paneCompositeService = accessor.get(IPaneCompositePartService);
-		const layoutService = accessor.get(IWorkbenchLayoutService);
-
-		// Show auxiliary bar
-		if (!layoutService.isVisible(Parts.AUXILIARYBAR_PART)) {
-			layoutService.setPartHidden(false, Parts.AUXILIARYBAR_PART);
+		constructor() {
+			super({
+				id: FocusAuxiliaryBarAction.ID,
+				title: FocusAuxiliaryBarAction.LABEL,
+				category: Categories.View,
+				f1: true,
+			});
 		}
 
-		// Focus into active composite
-		const composite = paneCompositeService.getActivePaneComposite(ViewContainerLocation.AuxiliaryBar);
-		composite?.focus();
-	}
-});
+		override async run(accessor: ServicesAccessor): Promise<void> {
+			const paneCompositeService = accessor.get(IPaneCompositePartService);
+			const layoutService = accessor.get(IWorkbenchLayoutService);
+
+			// Show auxiliary bar
+			if (!layoutService.isVisible(Parts.AUXILIARYBAR_PART)) {
+				layoutService.setPartHidden(false, Parts.AUXILIARYBAR_PART);
+			}
+
+			// Focus into active composite
+			const composite = paneCompositeService.getActivePaneComposite(
+				ViewContainerLocation.AuxiliaryBar,
+			);
+			composite?.focus();
+		}
+	},
+);
 
 MenuRegistry.appendMenuItems([
 	{
 		id: MenuId.LayoutControlMenu,
 		item: {
-			group: '0_workbench_toggles',
+			group: "0_workbench_toggles",
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Secondary Side Bar"),
-				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarLeftIcon },
+				title: localize("toggleSecondarySideBar", "Toggle Secondary Side Bar"),
+				toggled: {
+					condition: AuxiliaryBarVisibleContext,
+					icon: auxiliaryBarLeftIcon,
+				},
 				icon: auxiliaryBarLeftOffIcon,
 			},
-			when: ContextKeyExpr.and(ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')), ContextKeyExpr.equals('config.workbench.sideBar.location', 'right')),
-			order: 0
-		}
-	}, {
+			when: ContextKeyExpr.and(
+				ContextKeyExpr.or(
+					ContextKeyExpr.equals(
+						"config.workbench.layoutControl.type",
+						"toggles",
+					),
+					ContextKeyExpr.equals("config.workbench.layoutControl.type", "both"),
+				),
+				ContextKeyExpr.equals("config.workbench.sideBar.location", "right"),
+			),
+			order: 0,
+		},
+	},
+	{
 		id: MenuId.LayoutControlMenu,
 		item: {
-			group: '0_workbench_toggles',
+			group: "0_workbench_toggles",
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Secondary Side Bar"),
-				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarRightIcon },
+				title: localize("toggleSecondarySideBar", "Toggle Secondary Side Bar"),
+				toggled: {
+					condition: AuxiliaryBarVisibleContext,
+					icon: auxiliaryBarRightIcon,
+				},
 				icon: auxiliaryBarRightOffIcon,
 			},
-			when: ContextKeyExpr.and(ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')), ContextKeyExpr.equals('config.workbench.sideBar.location', 'left')),
-			order: 2
-		}
-	}, {
+			when: ContextKeyExpr.and(
+				ContextKeyExpr.or(
+					ContextKeyExpr.equals(
+						"config.workbench.layoutControl.type",
+						"toggles",
+					),
+					ContextKeyExpr.equals("config.workbench.layoutControl.type", "both"),
+				),
+				ContextKeyExpr.equals("config.workbench.sideBar.location", "left"),
+			),
+			order: 2,
+		},
+	},
+	{
 		id: MenuId.ViewTitleContext,
 		item: {
-			group: '3_workbench_layout_move',
+			group: "3_workbench_layout_move",
 			command: {
 				id: ToggleAuxiliaryBarAction.ID,
-				title: localize2('hideAuxiliaryBar', 'Hide Secondary Side Bar'),
+				title: localize2("hideAuxiliaryBar", "Hide Secondary Side Bar"),
 			},
-			when: ContextKeyExpr.and(AuxiliaryBarVisibleContext, ContextKeyExpr.equals('viewLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
-			order: 2
-		}
-	}
+			when: ContextKeyExpr.and(
+				AuxiliaryBarVisibleContext,
+				ContextKeyExpr.equals(
+					"viewLocation",
+					ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar),
+				),
+			),
+			order: 2,
+		},
+	},
 ]);
 
 export class ResizeAuxiliaryBarWidthAction extends Action2 {
-	static readonly ID = 'workbench.action.resizeAuxiliaryBarWidth';
-	static readonly LABEL = localize2('resizeAuxiliaryBarWidth', "Resize Auxiliary Bar Width");
+	static readonly ID = "workbench.action.resizeAuxiliaryBarWidth";
+	static readonly LABEL = localize2(
+		"resizeAuxiliaryBarWidth",
+		"Resize Auxiliary Bar Width",
+	);
 
 	// Tracking the previous width of the aux bar and visibility of the left side bar
 	static _previousAuxiliaryBarWidth: number | null = null;
@@ -165,14 +261,14 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 				weight: KeybindingWeight.WorkbenchContrib,
 				primary: KeyMod.CtrlCmd | KeyCode.Backslash,
 				linux: {
-					primary: KeyMod.CtrlCmd | KeyCode.Backslash
+					primary: KeyMod.CtrlCmd | KeyCode.Backslash,
 				},
 				win: {
-					primary: KeyMod.CtrlCmd | KeyCode.Backslash
+					primary: KeyMod.CtrlCmd | KeyCode.Backslash,
 				},
 				mac: {
-					primary: KeyMod.CtrlCmd | KeyCode.Backslash
-				}
+					primary: KeyMod.CtrlCmd | KeyCode.Backslash,
+				},
 			},
 		});
 	}
@@ -184,9 +280,14 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 			return;
 		}
 
-		const auxBarPart = layoutService.getContainer(mainWindow, Parts.AUXILIARYBAR_PART);
+		const auxBarPart = layoutService.getContainer(
+			mainWindow,
+			Parts.AUXILIARYBAR_PART,
+		);
 		const auxBarDimensions = auxBarPart?.getBoundingClientRect();
-		const isAuxiliaryBarVisible = layoutService.isVisible(Parts.AUXILIARYBAR_PART);
+		const isAuxiliaryBarVisible = layoutService.isVisible(
+			Parts.AUXILIARYBAR_PART,
+		);
 
 		// If the auxiliary bar is not visible, or the dimensions are null, return
 		if (!auxBarDimensions || !isAuxiliaryBarVisible) {
@@ -195,8 +296,10 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 
 		// Save the current width as the previous width if it has not been saved yet
 		if (ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth === null) {
-			ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth = auxBarDimensions.width;
-			ResizeAuxiliaryBarWidthAction._previousSideBarVisibility = layoutService.isVisible(Parts.SIDEBAR_PART);
+			ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth =
+				auxBarDimensions.width;
+			ResizeAuxiliaryBarWidthAction._previousSideBarVisibility =
+				layoutService.isVisible(Parts.SIDEBAR_PART);
 		}
 
 		// Set a minimum width for the auxiliary bar, unless its greater than a % of the window width
@@ -204,21 +307,42 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 
 		// Calculate the minimum width for the auxiliary bar
 		// 70% of the window width is the maximum width
-		const maxWidth = (0.7 * mainWindow.innerWidth);
+		const maxWidth = 0.7 * mainWindow.innerWidth;
 		// The minimum width is the maximum width, unless it is less than the max of (previous width * 2) or the predetermined minimum width
-		const minWidth = Math.min(maxWidth, Math.max(ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth * 2, PSEUDO_MINIMUM_AUX_BAR_WIDTH));
+		const minWidth = Math.min(
+			maxWidth,
+			Math.max(
+				ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth * 2,
+				PSEUDO_MINIMUM_AUX_BAR_WIDTH,
+			),
+		);
 
 		// If the current width is less than or equal to the previous width, expand the auxiliary bar
-		if (auxBarDimensions.width <= ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth) {
+		if (
+			auxBarDimensions.width <=
+			ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth
+		) {
 			// Expand to the calculated minWidth
-			layoutService.resizePart(Parts.AUXILIARYBAR_PART, (minWidth - auxBarDimensions.width), 0);
+			layoutService.resizePart(
+				Parts.AUXILIARYBAR_PART,
+				minWidth - auxBarDimensions.width,
+				0,
+			);
 			// Hide the left side bar if it was previously visible
 			layoutService.setPartHidden(true, Parts.SIDEBAR_PART);
 		} else {
 			// If the current width is greater than the previous width, collapse the auxiliary bar back to the previous width (initial width)
-			layoutService.resizePart(Parts.AUXILIARYBAR_PART, (auxBarDimensions.width - ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth) * -1, 0);
+			layoutService.resizePart(
+				Parts.AUXILIARYBAR_PART,
+				(auxBarDimensions.width -
+					ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth) *
+					-1,
+				0,
+			);
 			// Restore the left side bar to the user's previous state
-			ResizeAuxiliaryBarWidthAction._previousSideBarVisibility ? layoutService.setPartHidden(false, Parts.SIDEBAR_PART) : layoutService.setPartHidden(true, Parts.SIDEBAR_PART);
+			ResizeAuxiliaryBarWidthAction._previousSideBarVisibility
+				? layoutService.setPartHidden(false, Parts.SIDEBAR_PART)
+				: layoutService.setPartHidden(true, Parts.SIDEBAR_PART);
 			// Reset the previous width to null after collapsing
 			ResizeAuxiliaryBarWidthAction._previousAuxiliaryBarWidth = null;
 		}
@@ -230,7 +354,7 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 registerAction2(ResizeAuxiliaryBarWidthAction);
 
 class FocusPearAIExtensionAction extends Action2 {
-	static readonly ID = 'workbench.action.focusPearAIExtension';
+	static readonly ID = "workbench.action.focusPearAIExtension";
 	static readonly LABEL = localize2(
 		"focusPearAIExtension",
 		"Focus into PearAI Extension",
@@ -249,7 +373,7 @@ class FocusPearAIExtensionAction extends Action2 {
 	override async run(accessor: ServicesAccessor): Promise<void> {
 		// focus pearai extension
 		const commandService = accessor.get(ICommandService);
-		commandService.executeCommand('pearai.focusContinueInput');
+		commandService.executeCommand("pearai.focusContinueInput");
 	}
 }
 
@@ -259,7 +383,7 @@ MenuRegistry.appendMenuItems([
 	{
 		id: MenuId.LayoutControlMenu,
 		item: {
-			group: '0_workbench_toggles',
+			group: "0_workbench_toggles",
 			command: {
 				id: FocusPearAIExtensionAction.ID,
 				title: `New Chat (${KeyModUtils.keyModToString(KeyMod.CtrlCmd)} + ${KeyCodeUtils.toString(KeyCode.KeyL)})`,
@@ -270,12 +394,13 @@ MenuRegistry.appendMenuItems([
 ]);
 
 // Following is a only PearAI related action, need to refactor these type of actions to separate file
-import { IOpenerService } from 'vs/platform/opener/common/opener';
-import { URI } from 'vs/base/common/uri';
-import { IProductService } from 'vs/platform/product/common/productService';
+import { IOpenerService } from "vs/platform/opener/common/opener";
+import { URI } from "vs/base/common/uri";
+import { IProductService } from "vs/platform/product/common/productService";
+import { PopupWindowService } from "./popupWindowService";
 
 class OpenPearAIDocsAction extends Action2 {
-	static readonly ID = 'workbench.action.openPearAIDocs';
+	static readonly ID = "workbench.action.openPearAIDocs";
 	static readonly LABEL = localize2(
 		"openPearAIDocs",
 		"Open PearAI Documentation",
@@ -300,6 +425,34 @@ class OpenPearAIDocsAction extends Action2 {
 	}
 }
 
+class CreatePopupWindowAction extends Action2 {
+	static readonly ID = "workbench.action.createPopupWindow";
+	static readonly LABEL = localize2("createPopupWindow", "Create Popup Window");
+
+	constructor() {
+		super({
+			id: CreatePopupWindowAction.ID,
+			title: CreatePopupWindowAction.LABEL,
+			category: Categories.View,
+			f1: true,
+		});
+	}
+
+	override async run(accessor: ServicesAccessor): Promise<void> {
+		const openerService = accessor.get(IOpenerService);
+		const popupWindowService = new PopupWindowService(openerService);
+
+		const popup = popupWindowService.openPopupWindow();
+
+		if (popup) {
+			popup.document.write("<h1>Hello from VS Code!</h1>");
+			popup.document.close();
+		}
+	}
+}
+
+registerAction2(CreatePopupWindowAction);
+
 registerAction2(OpenPearAIDocsAction);
 
 MenuRegistry.appendMenuItems([
@@ -308,9 +461,22 @@ MenuRegistry.appendMenuItems([
 		item: {
 			command: {
 				id: OpenPearAIDocsAction.ID,
-				title: 'Docs',
+				title: "Docs",
 			},
 			order: 150,
+		},
+	},
+]);
+
+MenuRegistry.appendMenuItems([
+	{
+		id: MenuId.CommandCenter,
+		item: {
+			command: {
+				id: CreatePopupWindowAction.ID,
+				title: localize("createPopupWindow", "Perplexity"),
+			},
+			order: 151,
 		},
 	},
 ]);
