@@ -397,7 +397,10 @@ MenuRegistry.appendMenuItems([
 import { IOpenerService } from "vs/platform/opener/common/opener";
 import { URI } from "vs/base/common/uri";
 import { IProductService } from "vs/platform/product/common/productService";
+import { IStorageService } from "vs/platform/storage/common/storage";
+import { IConfigurationService } from "vs/platform/configuration/common/configuration";
 import { PopupWindowService } from "./popupWindowService";
+import { getPerplexityPopupContent } from "./popupContents";
 
 class OpenPearAIDocsAction extends Action2 {
 	static readonly ID = "workbench.action.openPearAIDocs";
@@ -440,13 +443,53 @@ class CreatePopupWindowAction extends Action2 {
 
 	override async run(accessor: ServicesAccessor): Promise<void> {
 		const openerService = accessor.get(IOpenerService);
-		const popupWindowService = new PopupWindowService(openerService);
+		const storageService = accessor.get(IStorageService);
+		const configurationService = accessor.get(IConfigurationService);
 
-		const popup = popupWindowService.openPopupWindow();
+		const popupWindowService = new PopupWindowService(
+			openerService,
+			storageService,
+			configurationService,
+		);
+
+		// Get the dimensions of the VS Code window
+		const windowWidth = mainWindow.innerWidth;
+		const windowHeight = mainWindow.innerHeight;
+
+		// Calculate the center position
+		const width = 800;
+		const height = 600;
+		const left = Math.max(0, (windowWidth - width) / 2);
+		const top = Math.max(0, (windowHeight - height) / 2);
+
+		const content = getPerplexityPopupContent();
+		console.log("Content to be set:", content.substring(0, 100) + "...");
+
+		const popup = window.open(
+			"",
+			"Perplexity",
+			`width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`,
+		);
 
 		if (popup) {
-			popup.document.write("<h1>Hello from VS Code!</h1>");
+			popup.document.open();
+			popup.document.write(content);
 			popup.document.close();
+
+			// Add event listeners to the popup
+			popup.addEventListener("load", () => {
+				console.log("Popup window loaded");
+				popup.focus();
+			});
+
+			popup.addEventListener("error", (event) => {
+				console.error("Error in popup window:", event.message);
+			});
+
+			// Store the popup in the service
+			popupWindowService.storePopup(popup);
+		} else {
+			console.error("Failed to create popup window");
 		}
 	}
 }
