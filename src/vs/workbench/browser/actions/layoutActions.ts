@@ -31,6 +31,7 @@ import { ICommandActionTitle } from 'vs/platform/action/common/action';
 import { mainWindow } from 'vs/base/browser/window';
 import { IKeybindingService } from 'vs/platform/keybinding/common/keybinding';
 import { TitlebarStyle } from 'vs/platform/window/common/window';
+import { TogglePearOverlayAction } from 'vs/workbench/browser/parts/pearai/pearOverlayActions';
 
 // Register Icons
 const menubarIcon = registerIcon('menuBar', Codicon.layoutMenubar, localize('menuBarIcon', "Represents the menu bar"));
@@ -1341,6 +1342,7 @@ ToggleVisibilityActions.push(...[
 	CreateToggleLayoutItem(ToggleAuxiliaryBarAction.ID, AuxiliaryBarVisibleContext, localize('secondarySideBar', "Secondary Side Bar"), { whenA: ContextKeyExpr.equals('config.workbench.sideBar.location', 'left'), iconA: panelRightIcon, iconB: panelLeftIcon }),
 	CreateToggleLayoutItem(TogglePanelAction.ID, PanelVisibleContext, localize('panel', "Panel"), panelIcon),
 	CreateToggleLayoutItem(ToggleStatusbarVisibilityAction.ID, ContextKeyExpr.equals('config.workbench.statusBar.visible', true), localize('statusBar', "Status Bar"), statusBarIcon),
+	CreateToggleLayoutItem(TogglePearOverlayAction.ID, PearAIVisibleContext, 'PearAI', pearaiIcon)
 ]);
 
 const MoveSideBarActions: CustomizeLayoutItem[] = [
