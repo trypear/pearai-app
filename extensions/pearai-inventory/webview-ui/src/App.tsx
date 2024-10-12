@@ -19,10 +19,10 @@ function App() {
 			<h1>Vite + React</h1>
 			<div className="card">
 				<button onClick={() => setCount((count) => count + 1)}>
-					count is {count}
+					FK THIS count {count}
 				</button>
 				<p>
-					Edit <code>src/App.tsx</code> and save to test HMRsds
+					Edit <code>src/App.tsx</code>
 				</p>
 			</div>
 			<p className="read-the-docs">

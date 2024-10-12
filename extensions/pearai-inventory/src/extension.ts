@@ -22,8 +22,8 @@ export class PearInventoryExtension {
 		// 	vscode.window.registerWebviewViewProvider("pearai.overlayWebview", this.pearInventoryPanel)
 		// );
 
-		outputChannel.appendLine("Pear Inventory extension activated");
-		console.log("Pear Inventory extension activated");
+		outputChannel.appendLine("Pear Inventory extension activated!!");
+		console.log("Pear Inventory extension activated!!!");
 	}
 
 	async deactivate(): Promise<void> {
@@ -35,9 +35,9 @@ let outputChannel: vscode.OutputChannel;
 let extension: PearInventoryExtension;
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log("Activating Pear extension");
+	console.log("Activating Pear extension!!!!!");
 	outputChannel = vscode.window.createOutputChannel("Pear");
-	outputChannel.appendLine("Activating Pear extension");
+	outputChannel.appendLine("Activating Pear extension!!");
 
 	// extension = new PearInventoryExtension(context, outputChannel);
 	// extension.activate();
