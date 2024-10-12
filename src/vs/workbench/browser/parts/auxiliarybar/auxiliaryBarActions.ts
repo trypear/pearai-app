@@ -397,10 +397,7 @@ MenuRegistry.appendMenuItems([
 import { IOpenerService } from "vs/platform/opener/common/opener";
 import { URI } from "vs/base/common/uri";
 import { IProductService } from "vs/platform/product/common/productService";
-import { IStorageService } from "vs/platform/storage/common/storage";
-import { IConfigurationService } from "vs/platform/configuration/common/configuration";
-import { PopupWindowService } from "./popupWindowService";
-import { getPerplexityPopupContent } from "./popupContents";
+import { IPerplexityWindowService } from "vs/workbench/services/perplexity/IPerplexityWindowService";
 
 class OpenPearAIDocsAction extends Action2 {
 	static readonly ID = "workbench.action.openPearAIDocs";
@@ -428,75 +425,29 @@ class OpenPearAIDocsAction extends Action2 {
 	}
 }
 
-class CreatePopupWindowAction extends Action2 {
-	static readonly ID = "workbench.action.createPopupWindow";
-	static readonly LABEL = localize2("createPopupWindow", "Create Popup Window");
+class PerplexityWindowAction extends Action2 {
+	static readonly ID = "workbench.action.openPerplexity";
+	static readonly LABEL = localize2("openPerplexity", "Open Perplexity");
 
 	constructor() {
 		super({
-			id: CreatePopupWindowAction.ID,
-			title: CreatePopupWindowAction.LABEL,
+			id: PerplexityWindowAction.ID,
+			title: PerplexityWindowAction.LABEL,
 			category: Categories.View,
 			f1: true,
 		});
 	}
 
 	override async run(accessor: ServicesAccessor): Promise<void> {
-		const openerService = accessor.get(IOpenerService);
-		const storageService = accessor.get(IStorageService);
-		const configurationService = accessor.get(IConfigurationService);
-
-		const popupWindowService = new PopupWindowService(
-			openerService,
-			storageService,
-			configurationService,
-		);
-
-		// Get the dimensions of the VS Code window
-		const windowWidth = mainWindow.innerWidth;
-		const windowHeight = mainWindow.innerHeight;
-
-		// Calculate the center position
-		const width = 800;
-		const height = 600;
-		const left = Math.max(0, (windowWidth - width) / 2);
-		const top = Math.max(0, (windowHeight - height) / 2);
-
-		const content = getPerplexityPopupContent();
-		console.log("Content to be set:", content.substring(0, 100) + "...");
-
-		const popup = window.open(
-			"",
-			"Perplexity",
-			`width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`,
-		);
-
-		if (popup) {
-			popup.document.open();
-			popup.document.write(content);
-			popup.document.close();
-
-			// Add event listeners to the popup
-			popup.addEventListener("load", () => {
-				console.log("Popup window loaded");
-				popup.focus();
-			});
-
-			popup.addEventListener("error", (event) => {
-				console.error("Error in popup window:", event.message);
-			});
-
-			// Store the popup in the service
-			popupWindowService.storePopup(popup);
-		} else {
-			console.error("Failed to create popup window");
-		}
+		console.log("PerplexityWindowAction run method called");
+		const perplexityWindowService = accessor.get(IPerplexityWindowService);
+		perplexityWindowService.openNewWindow();
 	}
 }
 
-registerAction2(CreatePopupWindowAction);
-
 registerAction2(OpenPearAIDocsAction);
+
+registerAction2(PerplexityWindowAction);
 
 MenuRegistry.appendMenuItems([
 	{
@@ -513,13 +464,15 @@ MenuRegistry.appendMenuItems([
 
 MenuRegistry.appendMenuItems([
 	{
-		id: MenuId.CommandCenter,
+		id: MenuId.ActivityBarPositionMenu,
 		item: {
 			command: {
-				id: CreatePopupWindowAction.ID,
-				title: localize("createPopupWindow", "Perplexity"),
+				id: PerplexityWindowAction.ID,
+				title: PerplexityWindowAction.LABEL,
+				icon: Codicon.window,
 			},
-			order: 151,
+			group: "navigation",
+			order: 1,
 		},
 	},
 ]);
