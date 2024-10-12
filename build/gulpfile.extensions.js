@@ -21,6 +21,28 @@ const root = path.dirname(__dirname);
 const commit = getVersion(root);
 const plumber = require('gulp-plumber');
 const ext = require('./lib/extensions');
+const spawn = require('cross-spawn');
+const through = require('through2');
+
+function vitePlugin() {
+	return through.obj(function (file, enc, cb) {
+		if (file.isDirectory()) {
+			return cb();
+		}
+
+		const viteBuild = spawn('yarn', ['run', 'build'], {
+			cwd: path.join(root, 'extensions', 'pearai-inventory', 'gui'),
+			stdio: 'inherit'
+		});
+
+		viteBuild.on('close', (code) => {
+			if (code !== 0) {
+				this.emit('error', new Error(`Vite build failed with code ${code}`));
+			}
+			cb(null, file);
+		});
+	});
+}
 
 // To save 250ms for each gulp startup, we are caching the result here
 // const compilations = glob.sync('**/tsconfig.json', {
@@ -67,6 +89,7 @@ const compilations = [
 	'extensions/vscode-api-tests/tsconfig.json',
 	'extensions/vscode-colorize-tests/tsconfig.json',
 	'extensions/vscode-test-resolver/tsconfig.json',
+	'extensions/pearai-inventory/tsconfig.json',
 
 	'.vscode/extensions/vscode-selfhost-test-provider/tsconfig.json',
 ];
@@ -179,9 +202,19 @@ const tasks = compilations.map(function (tsconfigFile) {
 		const input = es.merge(nonts, pipeline.tsProjectSrc());
 		const watchInput = watcher(src, { ...srcOpts, ...{ readDelay: 200 } });
 
-		return watchInput
+		const extensionWatch = watchInput
 			.pipe(util.incremental(pipeline, input))
 			.pipe(gulp.dest(out));
+
+		if (name === 'pearai-inventory') {
+			const guiWatch = gulp.src('gui/**/*', { cwd: path.join(root, 'extensions', name) })
+				.pipe(watcher('gui/**/*', { cwd: path.join(root, 'extensions', name), readDelay: 200 }))
+				.pipe(gulp.dest(path.join(out, 'gui')));
+
+			return es.merge(extensionWatch, guiWatch);
+		}
+
+		return extensionWatch;
 	}));
 
 	const compileBuildTask = task.define(`compile-build-extension-${name}`, task.series(cleanTask, () => {

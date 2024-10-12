@@ -1,5 +1,6 @@
 src/**
 out/**
+!dist/gui/**
 tsconfig.json
 .vscode/**
 extension.webpack.config.js
