@@ -116,8 +116,6 @@ export class PearOverlayPart extends Part {
 			},
 		};
 
-		// this.webviewView = this.getTestWebviewContent();
-
 		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, i.e., HelloWorldPanel
 		// const source = new CancellationTokenSource(); // todo add to disposables
 		// await this._webviewViewService.resolve(

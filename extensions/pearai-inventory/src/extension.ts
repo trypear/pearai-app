@@ -1,32 +1,56 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
+import { PearInventoryPanel } from "./panels/PearInventoryPanel";
+import { commands } from "vscode";
 
-// This method is called when your extension is activated
-// Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log(
-		'Congratulations, your extension "pearai-inventory" is now active!',
-	);
+export class PearInventoryExtension {
+	private outputChannel: vscode.OutputChannel;
+	private pearInventoryPanel: PearInventoryPanel | null = null;
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	const disposable = vscode.commands.registerCommand(
-		"pearai-inventory.helloWorld",
-		() => {
-			// The code you place here will be executed every time your command is executed
-			// Display a message box to the user
-			vscode.window.showInformationMessage(
-				"PEARAI !!",
-			);
-		},
-	);
+	constructor(
+		private context: vscode.ExtensionContext,
+		outputChannel: vscode.OutputChannel,
+	) {
+		this.outputChannel = outputChannel;
+	}
 
-	context.subscriptions.push(disposable);
+	async activate() {
+		this.outputChannel.appendLine("Pear activation started");
+
+		// this.pearInventoryPanel = new PearInventoryPanel(this.context, this.context.extensionUri);
+
+		// this.context.subscriptions.push(
+		// 	vscode.window.registerWebviewViewProvider("pearai.overlayWebview", this.pearInventoryPanel)
+		// );
+
+		outputChannel.appendLine("Pear Inventory extension activated");
+		console.log("Pear Inventory extension activated");
+	}
+
+	async deactivate(): Promise<void> {
+		// await this.pearInventoryPanel?.deactivate();
+	}
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() {}
+let outputChannel: vscode.OutputChannel;
+let extension: PearInventoryExtension;
+
+export function activate(context: vscode.ExtensionContext) {
+	console.log("Activating Pear extension");
+	outputChannel = vscode.window.createOutputChannel("Pear");
+	outputChannel.appendLine("Activating Pear extension");
+
+	// extension = new PearInventoryExtension(context, outputChannel);
+	// extension.activate();
+
+	const showPearInventoryCommand = commands.registerCommand("pearai-inventory.helloWorld", () => {
+		PearInventoryPanel.render(context.extensionUri);
+	  });
+	
+	console.log("Activating!");
+	context.subscriptions.push(showPearInventoryCommand);
+}
+
+export async function deactivate(): Promise<void> {
+	// await extension.deactivate();
+	console.log("Pear extension deactivated");
+}
