@@ -116,7 +116,7 @@ export class PearInventoryPanel implements WebviewViewProvider {
 			const text = message.text;
 
 			switch (command) {
-				case "hello":
+				case "saveInventory":
 					// Code that should run in response to the hello message command
 					console.log("message here!");
 					window.showInformationMessage(text);
