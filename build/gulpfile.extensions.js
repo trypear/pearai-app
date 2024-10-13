@@ -67,6 +67,7 @@ const compilations = [
 	'extensions/vscode-api-tests/tsconfig.json',
 	'extensions/vscode-colorize-tests/tsconfig.json',
 	'extensions/vscode-test-resolver/tsconfig.json',
+	'extensions/pearai-inventory/tsconfig.json',
 
 	'.vscode/extensions/vscode-selfhost-test-provider/tsconfig.json',
 ];

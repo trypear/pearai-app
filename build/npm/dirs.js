@@ -53,6 +53,7 @@ const dirs = [
 	'test/monaco',
 	'test/smoke',
 	'.vscode/extensions/vscode-selfhost-test-provider',
+	'extensions/pearai-inventory/tsconfig.json'
 ];
 
 if (fs.existsSync(`${__dirname}/../../.build/distro/npm`)) {

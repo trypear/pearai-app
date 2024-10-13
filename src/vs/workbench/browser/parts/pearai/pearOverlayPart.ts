@@ -6,12 +6,11 @@ import {
 import { IThemeService } from "vs/platform/theme/common/themeService";
 import { IStorageService } from "vs/platform/storage/common/storage";
 import { $, getActiveWindow } from "vs/base/browser/dom";
-// import { CancellationTokenSource } from "vs/base/common/cancellation";
+import { CancellationTokenSource } from "vs/base/common/cancellation";
 import { IInstantiationService } from "vs/platform/instantiation/common/instantiation";
 
-// imports that violate vscode source organization
 import {
-	// IWebviewViewService,
+	IWebviewViewService,
 	WebviewView,
 } from "vs/workbench/contrib/webviewView/browser/webviewViewService";
 import { WebviewService } from "vs/workbench/contrib/webview/browser/webviewService";
@@ -19,14 +18,10 @@ import { WebviewService } from "vs/workbench/contrib/webview/browser/webviewServ
 export class PearOverlayPart extends Part {
 	static readonly ID = "workbench.parts.pearoverlay";
 
-	//#region IView
-
 	readonly minimumWidth: number = 300;
 	readonly maximumWidth: number = 800;
 	readonly minimumHeight: number = 200;
 	readonly maximumHeight: number = 600;
-
-	//#endregion
 
 	private fullScreenOverlay: HTMLElement | undefined;
 	private popupAreaOverlay: HTMLElement | undefined;
@@ -39,8 +34,8 @@ export class PearOverlayPart extends Part {
 		@IThemeService themeService: IThemeService,
 		@IStorageService storageService: IStorageService,
 		@IWorkbenchLayoutService layoutService: IWorkbenchLayoutService,
-		// @IWebviewViewService
-		// private readonly _webviewViewService: IWebviewViewService,
+		@IWebviewViewService
+		private readonly _webviewViewService: IWebviewViewService,
 		@IInstantiationService
 		private readonly _instantiationService: IInstantiationService,
 	) {
@@ -67,17 +62,12 @@ export class PearOverlayPart extends Part {
 			},
 			contentOptions: {
 				allowScripts: true,
-				localResourceRoots: [
-					// Uri.joinPath(this._pearaiUri, 'out'),
-					// URI.joinPath(pearaiUri, 'webview-ui/build'),
-				],
+				localResourceRoots: [],
 			},
 			extension: undefined,
 		});
 
 		webview.claim(this, getActiveWindow(), undefined);
-
-		webview.setHtml(this.getTestWebviewContent());
 
 		// 2. initialize this.webviewView by creating a WebviewView
 		this.webviewView = {
@@ -104,25 +94,18 @@ export class PearOverlayPart extends Part {
 			},
 			set badge(badge) {},
 
-			dispose: () => {
-				// Only reset and clear the webview itself. Don't dispose of the view container
-				// this._activated = false;
-				// this._webview.clear();
-				// // this._webviewDisposables.clear();
-			},
+			dispose: () => {},
 
-			show: (preserveFocus) => {
-				// this.viewService.openView(this.id, !preserveFocus);
-			},
+			show: (preserveFocus) => {},
 		};
 
-		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, i.e., HelloWorldPanel
-		// const source = new CancellationTokenSource(); // todo add to disposables
-		// await this._webviewViewService.resolve(
-		// 	"pearai.overlayWebview",
-		// 	this.webviewView!,
-		// 	source.token,
-		// );
+		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, PearInventoryPanel
+		const source = new CancellationTokenSource(); // todo add to disposables
+		await this._webviewViewService.resolve(
+			"pearai.overlayWebview",
+			this.webviewView!,
+			source.token,
+		);
 
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
@@ -132,34 +115,6 @@ export class PearOverlayPart extends Part {
 			// hide stuff while we load
 			this.webviewView!.webview.container.style.display = "none";
 		}
-	}
-
-	private getTestWebviewContent(): string {
-		return `
-			<!DOCTYPE html>
-			<html lang="en">
-			<head>
-				<meta charset="UTF-8">
-				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<title>PearAI Test Webview</title>
-				<style>
-					.content {
-						text-align: center;
-						padding: 20px;
-						background-color: white;
-						border-radius: 8px;
-						box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-					}
-				</style>
-			</head>
-			<body>
-				<div class="content">
-					<h1>Hello from PearAI!</h1>
-					<p>This is a test webview content.</p>
-				</div>
-			</body>
-			</html>
-		`;
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
