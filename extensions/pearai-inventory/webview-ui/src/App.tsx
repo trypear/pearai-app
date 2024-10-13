@@ -1,35 +1,23 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+
+import { vscode } from "./utilities/vscode";
+import { VSCodeButton } from "@vscode/webview-ui-toolkit/react";
 
 function App() {
-	const [count, setCount] = useState(0);
-
+	function handleHowdyClick() {
+	  vscode.postMessage({
+		command: "hello",
+		text: "Hey there partner! 🤠",
+	  });
+	}
+  
 	return (
-		<>
-			<div>
-				<a href="https://vitejs.dev" target="_blank">
-					<img src={viteLogo} className="logo" alt="Vite logo" />
-				</a>
-				<a href="https://react.dev" target="_blank">
-					<img src={reactLogo} className="logo react" alt="React logo" />
-				</a>
-			</div>
-			<h1>Vite + React</h1>
-			<div className="card">
-				<button onClick={() => setCount((count) => count + 1)}>
-					FK THIS count {count}!!222
-				</button>
-				<p>
-					Edit <code>src/App.tsx</code>
-				</p>
-			</div>
-			<p className="read-the-docs">
-				Click on the Vite and React logos to learn more
-			</p>
-		</>
+  <main className="p-4 border border-gray-300 rounded-lg">
+    <h1 className="text-2xl font-bold mb-4">Hello World!</h1>
+    <div className="border border-gray-300 p-4 rounded-lg">
+		<VSCodeButton onClick={handleHowdyClick}>Howdy!</VSCodeButton>
+    </div>
+	  </main>
 	);
-}
+  }
 
 export default App;

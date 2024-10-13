@@ -132,7 +132,7 @@ export class PearOverlayPart extends Part {
 		// create the popup area overlay. this is just a target for webview to layout over
 		this.popupAreaOverlay = $("div.pearai-popup-area-overlay");
 		this.popupAreaOverlay.style.position = "absolute"; // couldn't get it to work with relative for some reason
-		this.popupAreaOverlay.style.margin = "0px";
+		this.popupAreaOverlay.style.margin = "0";
 		this.popupAreaOverlay.style.top = "0";
 		this.popupAreaOverlay.style.left = "0";
 		this.popupAreaOverlay.style.right = "0";
@@ -181,6 +181,14 @@ export class PearOverlayPart extends Part {
 		// container.style.borderRadius = '12px';
 		container.style.backgroundColor = "white";
 		container.style.zIndex = "1000";
+
+		// Make container 80% smaller and center it
+		container.style.width = "80%";
+		container.style.height = "80%";
+		container.style.position = "absolute";
+		container.style.top = "50%";
+		container.style.left = "50%";
+		container.style.transform = "translate(-50%, -50%)";
 
 		// Add faster bounce animation
 		container.style.animation =
