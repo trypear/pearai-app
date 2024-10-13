@@ -163,6 +163,21 @@ export class PearOverlayPart extends Part {
 			this.fullScreenOverlay!.style.height = `${height}px`;
 		}
 
+		// Calculate 80% of width and height
+		const overlayWidth = Math.floor(width * 0.8);
+		const overlayHeight = Math.floor(height * 0.8);
+
+		// Calculate position to center the overlay
+		const overlayLeft = Math.floor((width - overlayWidth) / 2);
+		const overlayTop = Math.floor((height - overlayHeight) / 2);
+
+		if (this.popupAreaOverlay) {
+			this.popupAreaOverlay.style.width = `${overlayWidth}px`;
+			this.popupAreaOverlay.style.height = `${overlayHeight}px`;
+			this.popupAreaOverlay.style.left = `${overlayLeft}px`;
+			this.popupAreaOverlay.style.top = `${overlayTop}px`;
+		}
+
 		if (this.state === "open") {
 			this.webviewView!.webview.layoutWebviewOverElement(
 				this.popupAreaOverlay!,
@@ -178,17 +193,9 @@ export class PearOverlayPart extends Part {
 		container.style.display = "flex";
 		container.style.boxSizing = "border-box";
 		container.style.boxShadow = "0 0 20px 0 rgba(0, 0, 0, 0.5)";
-		// container.style.borderRadius = '12px';
+		container.style.borderRadius = "12px";
 		container.style.backgroundColor = "white";
 		container.style.zIndex = "1000";
-
-		// Make container 80% smaller and center it
-		container.style.width = "80%";
-		container.style.height = "80%";
-		container.style.position = "absolute";
-		container.style.top = "50%";
-		container.style.left = "50%";
-		container.style.transform = "translate(-50%, -50%)";
 
 		// Add faster bounce animation
 		container.style.animation =
