@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { Part } from "vs/workbench/browser/part";
 import {
 	IWorkbenchLayoutService,
@@ -206,8 +210,7 @@ export class PearOverlayPart extends Part {
 		const style = document.createElement("style");
 		style.textContent = `
 			@keyframes pearaiBounceIn {
-				0% { transform: scale(0.95); opacity: 0; }
-				70% { transform: scale(1.02); opacity: 1; }
+				0% { transform: scale(0.9); opacity: 0; }
 				100% { transform: scale(1); opacity: 1; }
 			}
 			@keyframes pearaiFadeOut {
