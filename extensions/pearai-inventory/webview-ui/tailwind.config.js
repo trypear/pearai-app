@@ -6,8 +6,52 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-  	extend: {
-  		borderRadius: {
+	  extend: {
+			colors: {
+				background: 'var(--background)',
+				foreground: 'var(--foreground)',
+				button: {
+					DEFAULT: 'var(--button-background)',
+					foreground: 'var(--button-foreground)',
+					hover: 'var(--button-hover-background)',
+				},
+				input: {
+					DEFAULT: 'var(--input-background)',
+					foreground: 'var(--input-foreground)',
+					border: 'var(--input-border)',
+				},
+				dropdown: {
+					DEFAULT: 'var(--dropdown-background)',
+					foreground: 'var(--dropdown-foreground)',
+				},
+				list: {
+					activeSelection: {
+						background: 'var(--list-active-selection-background)',
+						foreground: 'var(--list-active-selection-foreground)',
+					},
+					hoverBackground: 'var(--list-hover-background)',
+				},
+				sidebar: {
+					background: 'var(--sidebar-background)',
+				},
+				statusbar: {
+					background: 'var(--statusbar-background)',
+					foreground: 'var(--statusbar-foreground)',
+				},
+				tab: {
+					activeBackground: 'var(--tab-active-background)',
+					activeForeground: 'var(--tab-active-foreground)',
+				},
+			},
+		},
+	},
+	plugins: [require("tailwindcss-animate")],
+}
+
+
+/**
+ * Default taildwindcss configs
+ *   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
@@ -55,6 +99,4 @@ export default {
   			}
   		}
   	}
-  },
-  plugins: [require("tailwindcss-animate")],
-}
+ */

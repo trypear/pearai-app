@@ -77,7 +77,7 @@ const suggestedBuild = ['1', '2', '4'] // IDs of suggested tools
 function AIToolCard({ tool, onClick, onToggle }: { tool: AITool; onClick: () => void; onToggle: () => void }) {
   return (
     <Card 
-      className={`cursor-pointer transition-all ${tool.enabled ? 'bg-gray-700' : 'bg-gray-800'} ${tool.comingSoon ? 'opacity-50' : ''}`}
+      className={`cursor-pointer transition-all ${tool.enabled ? 'bg-button' : 'bg-input'} ${tool.comingSoon ? 'opacity-50' : ''}`}
       onClick={tool.comingSoon ? undefined : onClick}
     >
       <CardContent className="p-4">
@@ -90,8 +90,8 @@ function AIToolCard({ tool, onClick, onToggle }: { tool: AITool; onClick: () => 
             disabled={tool.comingSoon}
           />
         </div>
-        <h3 className="font-bold mb-1">{tool.name}</h3>
-        <p className="text-sm text-gray-400">
+        <h3 className={`font-bold mb-1 ${tool.enabled ? "text-button-foreground" : ""}`}>{tool.name}</h3>
+        <p className={`text-sm ${tool.enabled ? "text-button-foreground" : "text-muted-foreground"}`}> 
           {tool.comingSoon ? 'Coming soon' : tool.description}
         </p>
       </CardContent>
@@ -101,21 +101,21 @@ function AIToolCard({ tool, onClick, onToggle }: { tool: AITool; onClick: () => 
 
 function QuickActionSlot({ tool, onRemove }: { tool: AITool | null; onRemove: () => void }) {
   return (
-    <div className={`w-24 h-24 flex flex-col items-center justify-center ${tool ? 'bg-gray-700' : 'bg-gray-800'} rounded relative`}>
+    <div className={`w-24 h-24 flex flex-col items-center justify-center ${tool ? 'bg-button' : 'bg-input'} rounded relative`}>
       {tool ? (
         <>
           <div className="text-2xl mb-1">{tool.icon}</div>
-          <div className="text-xs text-center">{tool.name}</div>
+          <div className="text-xs text-button-foreground text-center">{tool.name}</div>
           <button 
             onClick={onRemove} 
-            className="absolute top-1 right-1 text-gray-400 hover:text-white"
+            className="absolute top-1 right-1 hover:text-foreground"
             aria-label={`Remove ${tool.name} from quick action slot`}
           >
             <X size={14} />
           </button>
         </>
       ) : (
-        <div className="text-gray-500">Empty</div>
+        <div className="text-muted-foreground">Empty</div>
       )}
     </div>
   )
@@ -154,17 +154,17 @@ export default function AIToolInventory() {
 
   return (
     <TooltipProvider>
-      <div className="flex flex-col h-full bg-gray-900 text-white p-6">
+      <div className="flex flex-col h-full bg-background text-foreground p-6">
         <header className="mb-6">
           <h1 className="text-3xl font-bold mb-2">PearAI Inventory</h1>
           <div className="relative">
-            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
               placeholder="Search AI tools..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 w-full bg-gray-800 text-white border-gray-700"
+              className="pl-10 w-full bg-input text-foreground border-input"
               aria-label="Search AI tools"
             />
           </div>
@@ -186,7 +186,7 @@ export default function AIToolInventory() {
             </div>
           </div>
 
-          <div className="w-1/2 overflow-auto pl-4 border-l border-gray-700">
+          <div className="w-1/2 overflow-auto pl-4 border-l border-input">
             {focusedTool ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">{focusedTool.name} {focusedTool.icon}</h2>
@@ -207,17 +207,17 @@ export default function AIToolInventory() {
                 </ul>
                 {!focusedTool.comingSoon && (
                   <div className="mt-4">
-                    <Button onClick={() => handleEquipToQuickSlot(focusedTool)}>
+                    <Button className="border button-foreground" onClick={() => handleEquipToQuickSlot(focusedTool)}>
                       Equip to quick action slots
                     </Button>
                     {quickSlots.every(slot => slot !== null) && (
-                      <p className="text-red-500 mt-2">Quick action slots are full</p>
+                      <p className="text-destructive mt-2">Quick action slots are full</p>
                     )}
                   </div>
                 )}
               </div>
             ) : (
-              <div className="text-center text-gray-500 mt-8">
+              <div className="text-center text-muted-foreground mt-8">
                 Select an AI tool to view details
               </div>
             )}
@@ -236,7 +236,7 @@ export default function AIToolInventory() {
             ))}
           </div>
           <div className="flex items-center">
-            <Star className="text-yellow-500 mr-2" />
+            <Star className="text-accent-foreground mr-2" />
             <span className="font-bold">Suggested Build:</span>
             <div className="flex ml-2">
               {suggestedBuild.map(id => {
@@ -244,7 +244,7 @@ export default function AIToolInventory() {
                 return tool ? (
                   <Tooltip key={id}>
                     <TooltipTrigger asChild>
-                      <div className="flex items-center bg-gray-700 rounded mr-2 px-2 py-1">
+                      <div className="flex text-button-foreground items-center bg-button rounded mr-2 px-2 py-1">
                         <span className="mr-1">{tool.icon}</span>
                         <span className="text-xs">{tool.name}</span>
                       </div>

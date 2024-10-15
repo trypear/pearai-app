@@ -5,15 +5,13 @@
 
 html, body, #root {
     height: 100%;
-    margin: 0;
-    padding: 0;
-    background-color: var(--vscode-editor-background);
-    color: var(--vscode-foreground);
   }
 
 
 @layer base {
   :root {
+        /* default tailwindcss configs */
+        /*
         --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
         --card: 0 0% 100%;
@@ -38,9 +36,30 @@ html, body, #root {
         --chart-3: 197 37% 24%;
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
-        --radius: 0.5rem;
+        --radius: 0.5rem; */
+
+        --background: var(--vscode-editor-background);
+        --foreground: var(--vscode-editor-foreground);
+        --button-background: var(--vscode-button-background);
+        --button-foreground: var(--vscode-button-foreground);
+        --button-hover-background: var(--vscode-button-hoverBackground);
+        --input-background: var(--vscode-input-background);
+        --input-foreground: var(--vscode-input-foreground);
+        --input-border: var(--vscode-input-border);
+        --dropdown-background: var(--vscode-dropdown-background);
+        --dropdown-foreground: var(--vscode-dropdown-foreground);
+        --list-active-selection-background: var(--vscode-list-activeSelectionBackground);
+        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground);
+        --list-hover-background: var(--vscode-list-hoverBackground);
+        --sidebar-background: var(--vscode-sideBar-background);
+        --statusbar-background: var(--vscode-statusBar-background);
+        --statusbar-foreground: var(--vscode-statusBar-foreground);
+        --tab-active-background: var(--vscode-tab-activeBackground);
+        --tab-active-foreground: var(--vscode-tab-activeForeground);
+
     }
-  .dark {
+  /* default tailwindcss configs */
+  /* .dark {
         --background: 222.2 84% 4.9%;
         --foreground: 210 40% 98%;
         --card: 222.2 84% 4.9%;
@@ -65,13 +84,15 @@ html, body, #root {
         --chart-3: 30 80% 55%;
         --chart-4: 280 65% 60%;
         --chart-5: 340 75% 55%;
-    }
+    } */
 }
 
 
 @layer base {
   * {
-    @apply border-border;
+    /* default tailwindcss configs */
+    /* @apply border-border; */
+    @apply border-input;
     }
   body {
     @apply bg-background text-foreground;
