@@ -10,7 +10,88 @@ html, body, #root {
 
 @layer base {
   :root {
-        /* default tailwindcss configs */
+        --background: var(--vscode-editor-background, #002B36);
+        --foreground: var(--vscode-editor-foreground, #839496);
+        --button-background: var(--vscode-button-background, #2AA19899);
+        --button-foreground: var(--vscode-button-foreground, #839496);
+        --button-hover-background: var(--vscode-button-hoverBackground, #2AA198CC);
+        --input-background: var(--vscode-input-background, #003847);
+        --input-foreground: var(--vscode-input-foreground, #93A1A1);
+        --input-border: var(--vscode-input-border, #2AA19899);
+        --dropdown-background: var(--vscode-dropdown-background, #00212B);
+        --dropdown-foreground: var(--vscode-dropdown-foreground, #839496);
+        --list-active-selection-background: var(--vscode-list-activeSelectionBackground, #005A6F);
+        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground, #d6dbdb);
+        --list-hover-background: var(--vscode-list-hoverBackground, #004454AA);
+        --sidebar-background: var(--vscode-sideBar-background, #00212B);
+        --statusbar-background: var(--vscode-statusBar-background, #00212B);
+        --statusbar-foreground: var(--vscode-statusBar-foreground, #93A1A1);
+        --tab-active-background: var(--vscode-tab-activeBackground, #002B37);
+        --tab-active-foreground: var(--vscode-tab-activeForeground, #d6dbdb);
+
+        /* Additional variables */
+        --card: var(--vscode-editor-background, #002B36);
+        --card-foreground: var(--vscode-editor-foreground, #839496);
+        --popover: var(--vscode-editor-background, #002B36);
+        --popover-foreground: var(--vscode-editor-foreground, #839496);
+        --primary: var(--vscode-button-background, #2AA19899);
+        --primary-foreground: var(--vscode-button-foreground, #839496);
+        --secondary: var(--vscode-list-hoverBackground, #004454AA);
+        --secondary-foreground: var(--vscode-editor-foreground, #839496);
+        --muted: var(--vscode-list-hoverBackground, #004454AA);
+        --muted-foreground: var(--vscode-descriptionForeground, #586E75);
+        --accent: var(--vscode-list-hoverBackground, #004454AA);
+        --accent-foreground: var(--vscode-editor-foreground, #839496);
+        --destructive: #DC322F;
+        --destructive-foreground: #EEE8D5;
+        --border: var(--vscode-input-border, #2AA19899);
+        --ring: var(--vscode-focusBorder, #2AA19899);
+        --radius: 0.5rem;
+
+        /**
+        * Light theme variables
+        * Use these (uncomment)if want to see light theme when developing in the browser. In the actual editor,
+        * the themes will switch automatically when toggling command palette color themes.
+        */
+        /* --background: var(--vscode-editor-background, #FDF6E3);
+        --foreground: var(--vscode-editor-foreground, #657B83);
+        --button-background: var(--vscode-button-background, #AC9D57);
+        --button-foreground: var(--vscode-button-foreground, #FDF6E3);
+        --button-hover-background: var(--vscode-button-hoverBackground, #B58900);
+        --input-background: var(--vscode-input-background, #DDD6C1);
+        --input-foreground: var(--vscode-input-foreground, #586E75);
+        --input-border: var(--vscode-input-border, #D3AF86);
+        --dropdown-background: var(--vscode-dropdown-background, #EEE8D5);
+        --dropdown-foreground: var(--vscode-dropdown-foreground, #657B83);
+        --list-active-selection-background: var(--vscode-list-activeSelectionBackground, #DFCA88);
+        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground, #6C6C6C);
+        --list-hover-background: var(--vscode-list-hoverBackground, #DFCA8844);
+        --sidebar-background: var(--vscode-sideBar-background, #EEE8D5);
+        --statusbar-background: var(--vscode-statusBar-background, #EEE8D5);
+        --statusbar-foreground: var(--vscode-statusBar-foreground, #586E75);
+        --tab-active-background: var(--vscode-tab-activeBackground, #FDF6E3);
+        --tab-active-foreground: var(--vscode-tab-activeForeground, #657B83);
+
+
+        --card: var(--vscode-editor-background, #FDF6E3);
+        --card-foreground: var(--vscode-editor-foreground, #657B83);
+        --popover: var(--vscode-editor-background, #FDF6E3);
+        --popover-foreground: var(--vscode-editor-foreground, #657B83);
+        --primary: var(--vscode-button-background, #AC9D57);
+        --primary-foreground: var(--vscode-button-foreground, #FDF6E3);
+        --secondary: var(--vscode-list-hoverBackground, #DFCA8844);
+        --secondary-foreground: var(--vscode-editor-foreground, #657B83);
+        --muted: var(--vscode-list-hoverBackground, #DFCA8844);
+        --muted-foreground: var(--vscode-descriptionForeground, #93A1A1);
+        --accent: var(--vscode-list-hoverBackground, #DFCA8844);
+        --accent-foreground: var(--vscode-editor-foreground, #657B83);
+        --destructive: #DC322F;
+        --destructive-foreground: #FDF6E3;
+        --border: var(--vscode-input-border, #D3AF86);
+        --ring: var(--vscode-focusBorder, #b49471);
+        --radius: 0.5rem; */
+
+        /* Default tailwindcss configs with shadcn, can ignore */
         /*
         --background: 0 0% 100%;
         --foreground: 222.2 84% 4.9%;
@@ -37,26 +118,6 @@ html, body, #root {
         --chart-4: 43 74% 66%;
         --chart-5: 27 87% 67%;
         --radius: 0.5rem; */
-
-        --background: var(--vscode-editor-background);
-        --foreground: var(--vscode-editor-foreground);
-        --button-background: var(--vscode-button-background);
-        --button-foreground: var(--vscode-button-foreground);
-        --button-hover-background: var(--vscode-button-hoverBackground);
-        --input-background: var(--vscode-input-background);
-        --input-foreground: var(--vscode-input-foreground);
-        --input-border: var(--vscode-input-border);
-        --dropdown-background: var(--vscode-dropdown-background);
-        --dropdown-foreground: var(--vscode-dropdown-foreground);
-        --list-active-selection-background: var(--vscode-list-activeSelectionBackground);
-        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground);
-        --list-hover-background: var(--vscode-list-hoverBackground);
-        --sidebar-background: var(--vscode-sideBar-background);
-        --statusbar-background: var(--vscode-statusBar-background);
-        --statusbar-foreground: var(--vscode-statusBar-foreground);
-        --tab-active-background: var(--vscode-tab-activeBackground);
-        --tab-active-foreground: var(--vscode-tab-activeForeground);
-
     }
   /* default tailwindcss configs */
   /* .dark {
