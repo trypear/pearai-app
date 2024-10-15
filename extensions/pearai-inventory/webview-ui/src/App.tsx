@@ -27,17 +27,21 @@ export default function App() {
 	return (
 		<div className="h-full">
 			<Tabs defaultValue="inventory" className="">
-            <div className="flex justify-center mt-1">
-				<TabsList className="bg-input text-center text-xs">
-					{tabs.map((tab) => (
-						<TabsTrigger key={tab.id} value={tab.id}>
-							{tab.name}
-						</TabsTrigger>
-					))}
-				</TabsList>
-                </div>
+				<div className="flex justify-center mt-1">
+					<TabsList className="bg-input text-center">
+						{tabs.map((tab) => (
+							<TabsTrigger
+								key={tab.id}
+								value={tab.id}
+								className="text-[0.60rem]"
+							>
+								{tab.name}
+							</TabsTrigger>
+						))}
+					</TabsList>
+				</div>
 				{tabs.map((tab) => (
-					<TabsContent key={tab.id} value={tab.id} className="pb-4 pl-4 pr-4">
+					<TabsContent key={tab.id} value={tab.id} className="">
 						{tab.component}
 					</TabsContent>
 				))}
