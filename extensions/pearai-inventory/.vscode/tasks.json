@@ -59,6 +59,17 @@
 				"npm: watch-tests"
 			],
 			"problemMatcher": []
-		}
+		},
+        {
+            "type": "npm",
+            "script": "build:webview",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "npm: build:webview",
+            "detail": "Build webview",
+            "runOptions": {
+                "runOn": "folderOpen"
+            }
+        },
 	]
 }
