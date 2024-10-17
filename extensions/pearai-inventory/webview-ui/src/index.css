@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+html, body, #root {
+    height: 100%;
+  }
+
+
+@layer base {
+  :root {
+        --background: var(--vscode-editor-background, #002B36);
+        --foreground: var(--vscode-editor-foreground, #839496);
+        --button-background: var(--vscode-button-background, #2AA19899);
+        --button-foreground: var(--vscode-button-foreground, #839496);
+        --button-hover-background: var(--vscode-button-hoverBackground, #2AA198CC);
+        --input-background: var(--vscode-input-background, #003847);
+        --input-foreground: var(--vscode-input-foreground, #93A1A1);
+        --input-border: var(--vscode-input-border, #2AA19899);
+        --dropdown-background: var(--vscode-dropdown-background, #00212B);
+        --dropdown-foreground: var(--vscode-dropdown-foreground, #839496);
+        --list-active-selection-background: var(--vscode-list-activeSelectionBackground, #005A6F);
+        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground, #d6dbdb);
+        --list-hover-background: var(--vscode-list-hoverBackground, #004454AA);
+        --sidebar-background: var(--vscode-sideBar-background, #00212B);
+        --statusbar-background: var(--vscode-statusBar-background, #00212B);
+        --statusbar-foreground: var(--vscode-statusBar-foreground, #93A1A1);
+        --tab-active-background: var(--vscode-tab-activeBackground, #002B37);
+        --tab-active-foreground: var(--vscode-tab-activeForeground, #d6dbdb);
+
+        /* Additional variables */
+        --card: var(--vscode-editor-background, #002B36);
+        --card-foreground: var(--vscode-editor-foreground, #839496);
+        --popover: var(--vscode-editor-background, #002B36);
+        --popover-foreground: var(--vscode-editor-foreground, #839496);
+        --primary: var(--vscode-button-background, #2AA19899);
+        --primary-foreground: var(--vscode-button-foreground, #839496);
+        --secondary: var(--vscode-list-hoverBackground, #004454AA);
+        --secondary-foreground: var(--vscode-editor-foreground, #839496);
+        --muted: var(--vscode-list-hoverBackground, #004454AA);
+        --muted-foreground: var(--vscode-descriptionForeground, #586E75);
+        --accent: var(--vscode-list-hoverBackground, #004454AA);
+        --accent-foreground: var(--vscode-editor-foreground, #839496);
+        --destructive: #DC322F;
+        --destructive-foreground: #EEE8D5;
+        --border: var(--vscode-input-border, #2AA19899);
+        --ring: var(--vscode-focusBorder, #2AA19899);
+        --radius: 0.5rem;
+
+        /**
+        * Light theme variables
+        * Use these (uncomment)if want to see light theme when developing in the browser. In the actual editor,
+        * the themes will switch automatically when toggling command palette color themes.
+        */
+        /* --background: var(--vscode-editor-background, #FDF6E3);
+        --foreground: var(--vscode-editor-foreground, #657B83);
+        --button-background: var(--vscode-button-background, #AC9D57);
+        --button-foreground: var(--vscode-button-foreground, #FDF6E3);
+        --button-hover-background: var(--vscode-button-hoverBackground, #B58900);
+        --input-background: var(--vscode-input-background, #DDD6C1);
+        --input-foreground: var(--vscode-input-foreground, #586E75);
+        --input-border: var(--vscode-input-border, #D3AF86);
+        --dropdown-background: var(--vscode-dropdown-background, #EEE8D5);
+        --dropdown-foreground: var(--vscode-dropdown-foreground, #657B83);
+        --list-active-selection-background: var(--vscode-list-activeSelectionBackground, #DFCA88);
+        --list-active-selection-foreground: var(--vscode-list-activeSelectionForeground, #6C6C6C);
+        --list-hover-background: var(--vscode-list-hoverBackground, #DFCA8844);
+        --sidebar-background: var(--vscode-sideBar-background, #EEE8D5);
+        --statusbar-background: var(--vscode-statusBar-background, #EEE8D5);
+        --statusbar-foreground: var(--vscode-statusBar-foreground, #586E75);
+        --tab-active-background: var(--vscode-tab-activeBackground, #FDF6E3);
+        --tab-active-foreground: var(--vscode-tab-activeForeground, #657B83);
+
+
+        --card: var(--vscode-editor-background, #FDF6E3);
+        --card-foreground: var(--vscode-editor-foreground, #657B83);
+        --popover: var(--vscode-editor-background, #FDF6E3);
+        --popover-foreground: var(--vscode-editor-foreground, #657B83);
+        --primary: var(--vscode-button-background, #AC9D57);
+        --primary-foreground: var(--vscode-button-foreground, #FDF6E3);
+        --secondary: var(--vscode-list-hoverBackground, #DFCA8844);
+        --secondary-foreground: var(--vscode-editor-foreground, #657B83);
+        --muted: var(--vscode-list-hoverBackground, #DFCA8844);
+        --muted-foreground: var(--vscode-descriptionForeground, #93A1A1);
+        --accent: var(--vscode-list-hoverBackground, #DFCA8844);
+        --accent-foreground: var(--vscode-editor-foreground, #657B83);
+        --destructive: #DC322F;
+        --destructive-foreground: #FDF6E3;
+        --border: var(--vscode-input-border, #D3AF86);
+        --ring: var(--vscode-focusBorder, #b49471);
+        --radius: 0.5rem; */
+
+        /* Default tailwindcss configs with shadcn, can ignore */
+        /*
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 222.2 47.4% 11.2%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 222.2 84% 4.9%;
+        --chart-1: 12 76% 61%;
+        --chart-2: 173 58% 39%;
+        --chart-3: 197 37% 24%;
+        --chart-4: 43 74% 66%;
+        --chart-5: 27 87% 67%;
+        --radius: 0.5rem; */
+    }
+  /* default tailwindcss configs */
+  /* .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 210 40% 98%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 212.7 26.8% 83.9%;
+        --chart-1: 220 70% 50%;
+        --chart-2: 160 60% 45%;
+        --chart-3: 30 80% 55%;
+        --chart-4: 280 65% 60%;
+        --chart-5: 340 75% 55%;
+    } */
+}
+
+
+@layer base {
+  * {
+    /* default tailwindcss configs */
+    /* @apply border-border; */
+    @apply border-input;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
+}
