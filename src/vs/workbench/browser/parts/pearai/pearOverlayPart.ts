@@ -106,7 +106,7 @@ export class PearOverlayPart extends Part {
 		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, PearInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
-			"pearai.overlayWebview",
+			"pearai.overlayWebview2",
 			this.webviewView!,
 			source.token,
 		);
