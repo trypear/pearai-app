@@ -12,13 +12,18 @@ import { IStorageService } from "vs/platform/storage/common/storage";
 import { $, getActiveWindow } from "vs/base/browser/dom";
 import { CancellationTokenSource } from "vs/base/common/cancellation";
 import { IInstantiationService } from "vs/platform/instantiation/common/instantiation";
-import { ICommandService } from "vs/platform/commands/common/commands";
+import { WebviewExtensionDescription } from "vs/workbench/contrib/webview/browser/webview";
 
 import {
 	IWebviewViewService,
 	WebviewView,
 } from "vs/workbench/contrib/webviewView/browser/webviewViewService";
 import { WebviewService } from "vs/workbench/contrib/webview/browser/webviewService";
+import { URI } from "vs/base/common/uri";
+import { ExtensionIdentifier } from "vs/platform/extensions/common/extensions";
+
+const PEAROVERLAY_ID = "pearai.pearAIChatView";
+const PEAR_OVERLAY_TITLE = "pearai.pearOverlay";
 
 export class PearOverlayPart extends Part {
 	static readonly ID = "workbench.parts.pearoverlay";
@@ -39,7 +44,6 @@ export class PearOverlayPart extends Part {
 		@IThemeService themeService: IThemeService,
 		@IStorageService storageService: IStorageService,
 		@IWorkbenchLayoutService layoutService: IWorkbenchLayoutService,
-		@ICommandService private readonly _commandService: ICommandService,
 		@IWebviewViewService
 		private readonly _webviewViewService: IWebviewViewService,
 		@IInstantiationService
@@ -60,9 +64,13 @@ export class PearOverlayPart extends Part {
 	}
 
 	private async initialize() {
+		const extensionDescription: WebviewExtensionDescription = {
+			id: new ExtensionIdentifier(PEAROVERLAY_ID),
+			location: URI.parse(""),
+		};
 		// 1. create an IOverlayWebview
 		const webview = this._webviewService!.createWebviewOverlay({
-			title: "PearAIOverlay",
+			title: PEAR_OVERLAY_TITLE,
 			options: {
 				enableFindWidget: false,
 			},
@@ -70,7 +78,7 @@ export class PearOverlayPart extends Part {
 				allowScripts: true,
 				localResourceRoots: [],
 			},
-			extension: undefined,
+			extension: extensionDescription,
 		});
 
 		webview.claim(this, getActiveWindow(), undefined);
@@ -86,7 +94,7 @@ export class PearOverlayPart extends Part {
 			},
 
 			get title(): string | undefined {
-				return "PearAI";
+				return PEAR_OVERLAY_TITLE;
 			},
 			set title(value: string | undefined) {},
 
@@ -108,7 +116,7 @@ export class PearOverlayPart extends Part {
 		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, PearInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
-			"pearai.continueGUIView2",
+			PEAROVERLAY_ID,
 			this.webviewView!,
 			source.token,
 		);
@@ -192,9 +200,9 @@ export class PearOverlayPart extends Part {
 	}
 
 	private open() {
-		this._commandService.executeCommand("pearai.internal.switchWebview", {
-			state: "open",
-		});
+		if (this.state === "open") {
+			return;
+		}
 		this.state = "open";
 		this.fullScreenOverlay!.style.zIndex = "95";
 
@@ -234,9 +242,9 @@ export class PearOverlayPart extends Part {
 	}
 
 	private close() {
-		this._commandService.executeCommand("pearai.internal.switchWebview", {
-			state: "closed",
-		});
+		if (this.state === "closed") {
+			return;
+		}
 		this.state = "closed";
 		const container = this.webviewView!.webview.container;
 
