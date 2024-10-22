@@ -153,7 +153,7 @@ export class PearOverlayPart extends Part {
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
-			//this.open();
+			this.open();
 		} else {
 			// hide stuff while we load
 			this.fullScreenOverlay!.style.display = "none";
