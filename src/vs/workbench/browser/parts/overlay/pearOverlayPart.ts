@@ -120,7 +120,8 @@ export class PearOverlayPart extends Part {
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
-			this.open();
+			// Don't open on every startup
+			//this.open();
 		} else {
 			// hide stuff while we load
 			this.webviewView!.webview.container.style.display = "none";
@@ -141,7 +142,7 @@ export class PearOverlayPart extends Part {
 
 		// create the popup area overlay. this is just a target for webview to layout over
 		this.popupAreaOverlay = $("div.pearai-popup-area-overlay");
-		this.popupAreaOverlay.style.position = "absolute"; // couldn't get it to work with relative for some reason
+		this.popupAreaOverlay.style.position = "absolute";
 		this.popupAreaOverlay.style.margin = "0";
 		this.popupAreaOverlay.style.top = "0";
 		this.popupAreaOverlay.style.left = "0";
@@ -152,7 +153,7 @@ export class PearOverlayPart extends Part {
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
-			this.open();
+			//this.open();
 		} else {
 			// hide stuff while we load
 			this.fullScreenOverlay!.style.display = "none";
@@ -186,6 +187,8 @@ export class PearOverlayPart extends Part {
 			this.popupAreaOverlay.style.height = `${overlayHeight}px`;
 			this.popupAreaOverlay.style.left = `${overlayLeft}px`;
 			this.popupAreaOverlay.style.top = `${overlayTop}px`;
+			this.popupAreaOverlay.style.backgroundColor =
+				"var(--vscode-editor-background)";
 		}
 
 		if (this.state === "open") {
@@ -207,7 +210,7 @@ export class PearOverlayPart extends Part {
 		container.style.boxSizing = "border-box";
 		container.style.boxShadow = "0 0 20px 0 rgba(0, 0, 0, 0.5)";
 		container.style.borderRadius = "12px";
-		container.style.backgroundColor = "white";
+		container.style.backgroundColor = "var(--vscode-editor-background)";
 		container.style.zIndex = "1000";
 
 		// Add faster bounce animation
