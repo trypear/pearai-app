@@ -41,7 +41,6 @@ export class TogglePearOverlayAction extends Action2 {
 
 	run(accessor: ServicesAccessor): void {
 		const pearaiOverlayService = accessor.get(IPearOverlayService);
-		console.log("TOGGLED PEARAI SERVICE 2");
 		pearaiOverlayService.toggle();
 	}
 }
