@@ -189,6 +189,7 @@ export class PearOverlayPart extends Part {
 			this.popupAreaOverlay.style.top = `${overlayTop}px`;
 			this.popupAreaOverlay.style.backgroundColor =
 				"var(--vscode-editor-background)";
+			this.popupAreaOverlay.style.borderRadius = "12px";
 		}
 
 		if (this.state === "open") {
@@ -212,26 +213,6 @@ export class PearOverlayPart extends Part {
 		container.style.borderRadius = "12px";
 		container.style.backgroundColor = "var(--vscode-editor-background)";
 		container.style.zIndex = "1000";
-
-		// Add faster bounce animation
-		container.style.animation =
-			"pearaiBounceIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
-		container.style.transformOrigin = "center";
-
-		// Define keyframes for faster bounce animation and fade out
-		const style = document.createElement("style");
-		style.textContent = `
-			@keyframes pearaiBounceIn {
-				0% { transform: scale(0.9); opacity: 0; }
-				100% { transform: scale(1); opacity: 1; }
-			}
-			@keyframes pearaiFadeOut {
-				0% { opacity: 1; }
-				100% { opacity: 0; }
-			}
-		`;
-		document.head.appendChild(style);
-
 		this.fullScreenOverlay?.addEventListener("click", () => {
 			this.close();
 		});
