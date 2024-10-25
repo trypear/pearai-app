@@ -1484,6 +1484,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
+		console.log("[Test: layout.ts] right before getPart")
 		const pearOverlayPart = this.getPart(Parts.PEAROVERLAY_PART);
 
 		// View references for all parts
@@ -1510,6 +1511,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		pearOverlayPartContainer.style.backgroundColor = 'var(--vscode-editor-background)';
 
 		this.mainContainer.appendChild(pearOverlayPartContainer);
+		console.log("[Test: layout.ts] right before .create()")
 		pearOverlayPart.create(pearOverlayPartContainer);
 
 		const viewMap = {
@@ -1589,7 +1591,9 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			size(this.mainContainer, this._mainContainerDimension.width, this._mainContainerDimension.height);
 
 			// Layout the grid widget
+			console.log("[Test: layout.ts] layout workbench grid")
 			this.workbenchGrid.layout(this._mainContainerDimension.width, this._mainContainerDimension.height);
+			console.log("[Test: layout.ts] right before pear.layout()")
 			this.pearOverlayPartView.layout(this._mainContainerDimension.width, this._mainContainerDimension.height, 0, 0);
 			this.initialized = true;
 
