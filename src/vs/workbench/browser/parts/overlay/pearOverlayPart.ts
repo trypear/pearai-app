@@ -83,7 +83,6 @@ export class PearOverlayPart extends Part {
 		this.webviewView = {
 			webview,
 			onDidChangeVisibility: () => {
-				console.log("[Test: pearOverlayPart.ts] visibility change")
 				return { dispose: () => {} };
 			},
 			onDispose: () => {
@@ -120,7 +119,6 @@ export class PearOverlayPart extends Part {
 
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
-			console.log("[Test: pearOverlayPart.ts] LayoutWebviewOverElement")
 			this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
 			// Don't open on every startup
 			//this.open();
@@ -128,7 +126,6 @@ export class PearOverlayPart extends Part {
 			// hide stuff while we load
 			this.webviewView!.webview.container.style.display = "none";
 		}
-		console.log("[Test: pearOverlayPart.ts] Finished initializing")
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
@@ -156,7 +153,6 @@ export class PearOverlayPart extends Part {
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
-			console.log("[Test: pearOverlayPart] Opening from createContentArea")
 			this.open();
 		} else {
 			// hide stuff while we load
@@ -205,10 +201,8 @@ export class PearOverlayPart extends Part {
 
 	private open() {
 		if (this.state === "open") {
-			console.log("[Test: pearOverPart.ts] Already open")
 			return;
-			}
-		console.log("[Test: in pearOverlayPart.ts] opening")
+		}
 		this.state = "open";
 		this.fullScreenOverlay!.style.zIndex = "95";
 
@@ -229,10 +223,8 @@ export class PearOverlayPart extends Part {
 
 	private close() {
 		if (this.state === "closed") {
-			console.log("[Test: pearOverPart.ts] already closed")
 			return;
 		}
-		console.log("[Test: pearOverPart.ts] closing")
 		this.state = "closed";
 		const container = this.webviewView!.webview.container;
 

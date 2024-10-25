@@ -23,4 +23,3 @@ product.overrides.json
 .vscode-test
 extensions/pearai-submodule
 extensions/pearai-ref
-.prompts

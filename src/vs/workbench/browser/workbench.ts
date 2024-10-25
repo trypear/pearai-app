@@ -186,7 +186,7 @@ export class Workbench extends Layout {
 
 				// Workbench Layout
 				this.createWorkbenchLayout();
-				console.log("[Test: FINISHED WORKBENCH. LAYOUT TIME")
+
 				// Layout
 				this.layout();
 
@@ -370,20 +370,17 @@ export class Workbench extends Layout {
 			{ id: Parts.PANEL_PART, role: 'none', classes: ['panel', 'basepanel', positionToString(this.getPanelPosition())] },
 			{ id: Parts.AUXILIARYBAR_PART, role: 'none', classes: ['auxiliarybar', 'basepanel', this.getSideBarPosition() === Position.LEFT ? 'right' : 'left'] },
 			{ id: Parts.STATUSBAR_PART, role: 'status', classes: ['statusbar'] },
-			{ id: Parts.PEAROVERLAY_PART, role: 'none', classes: ['overlay'] }
+			{ id: Parts.PEAROVERLAY_PART, role: 'none', classes: [] }
 		]) {
-			console.log("[Test: workbench.ts] right before createPart")
 			const partContainer = this.createPart(id, role, classes);
 
 			if (id === Parts.PEAROVERLAY_PART) {
 				instantiationService.invokeFunction(accessor => {
-					console.log("[Test: workbench.ts] within accessor.get(IPearOverlayService)")
 					accessor.get(IPearOverlayService);
 				});
 			}
 
 			mark(`code/willCreatePart/${id}`);
-			console.log("[Test: workbench.ts] right before getPart .create")
 			this.getPart(id).create(partContainer, options);
 			mark(`code/didCreatePart/${id}`);
 		}
