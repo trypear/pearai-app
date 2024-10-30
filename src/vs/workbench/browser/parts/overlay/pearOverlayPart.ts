@@ -18,10 +18,10 @@ import { WebviewService } from "vs/workbench/contrib/webview/browser/webviewServ
 import { URI } from "vs/base/common/uri";
 import { ExtensionIdentifier } from "vs/platform/extensions/common/extensions";
 
-const PEAROVERLAY_ID = "pearai.pearAIChatView";
-const PEAR_OVERLAY_TITLE = "pearai.pearOverlay";
+const PEARAI_OVERLAY_ID = "pearai.pearAIChatView";
+const PEARAI_OVERLAY_TITLE = "pearai.pearOverlay";
 
-export class PearOverlayPart extends Part {
+export class PearAIOverlayPart extends Part {
 	static readonly ID = "workbench.parts.pearoverlay";
 
 	readonly minimumWidth: number = 300;
@@ -46,7 +46,7 @@ export class PearOverlayPart extends Part {
 		private readonly _instantiationService: IInstantiationService,
 	) {
 		super(
-			PearOverlayPart.ID,
+			PearAIOverlayPart.ID,
 			{ hasTitle: false },
 			themeService,
 			storageService,
@@ -61,12 +61,12 @@ export class PearOverlayPart extends Part {
 
 	private async initialize() {
 		const extensionDescription: WebviewExtensionDescription = {
-			id: new ExtensionIdentifier(PEAROVERLAY_ID),
+			id: new ExtensionIdentifier(PEARAI_OVERLAY_ID),
 			location: URI.parse(""),
 		};
 		// 1. create an IOverlayWebview
 		const webview = this._webviewService!.createWebviewOverlay({
-			title: PEAR_OVERLAY_TITLE,
+			title: PEARAI_OVERLAY_TITLE,
 			options: {
 				enableFindWidget: false,
 			},
@@ -90,7 +90,7 @@ export class PearOverlayPart extends Part {
 			},
 
 			get title(): string | undefined {
-				return PEAR_OVERLAY_TITLE;
+				return PEARAI_OVERLAY_TITLE;
 			},
 			set title(value: string | undefined) {},
 
@@ -112,7 +112,7 @@ export class PearOverlayPart extends Part {
 		// 3. ask the webviewViewService to connect our webviewView to the webviewViewProvider, PearInventoryPanel
 		const source = new CancellationTokenSource(); // todo add to disposables
 		await this._webviewViewService.resolve(
-			PEAROVERLAY_ID,
+			PEARAI_OVERLAY_ID,
 			this.webviewView!,
 			source.token,
 		);
@@ -131,7 +131,7 @@ export class PearOverlayPart extends Part {
 	protected override createContentArea(element: HTMLElement): HTMLElement {
 		// create the full screen overlay. this serves as a click target for closing pearai
 		this.element = element;
-		this.fullScreenOverlay = element; // use the pearOverlayPart root element as the fullScreenOverlay
+		this.fullScreenOverlay = element; // use the pearAIOverlayPart root element as the fullScreenOverlay
 		this.fullScreenOverlay.style.zIndex = "-10";
 		this.fullScreenOverlay.style.position = "absolute";
 		this.fullScreenOverlay.style.top = "0";

@@ -3,7 +3,7 @@ import {
 	InstantiationType,
 } from "vs/platform/instantiation/common/extensions";
 import { Disposable, IDisposable } from "vs/base/common/lifecycle";
-import { PearOverlayPart } from "./pearOverlayPart";
+import { PearAIOverlayPart } from "./pearAIOverlayPart";
 import {
 	createDecorator,
 	IInstantiationService,
@@ -19,9 +19,9 @@ export interface IPearOverlayService extends IDisposable {
 	readonly _serviceBrand: undefined;
 
 	/**
-	 * Returns the PearOverlayPart instance.
+	 * Returns the PearAIOverlayPart instance.
 	 */
-	readonly pearOverlayPart: PearOverlayPart;
+	readonly pearAIOverlayPart: PearAIOverlayPart;
 
 	/**
 	 * Shows the PearAI popup.
@@ -45,7 +45,7 @@ export class PearOverlayService
 {
 	declare readonly _serviceBrand: undefined;
 
-	private readonly _pearOverlayPart: PearOverlayPart;
+	private readonly _pearAIOverlayPart: PearAIOverlayPart;
 
 	constructor(
 		@IInstantiationService
@@ -54,8 +54,8 @@ export class PearOverlayService
 		@ITerminalService private readonly _terminalService: ITerminalService,
 	) {
 		super();
-		this._pearOverlayPart =
-			this.instantiationService.createInstance(PearOverlayPart);
+		this._pearAIOverlayPart =
+			this.instantiationService.createInstance(PearAIOverlayPart);
 		this.registerListeners();
 	}
 
@@ -73,25 +73,25 @@ export class PearOverlayService
 		);
 	}
 
-	get pearOverlayPart(): PearOverlayPart {
-		return this._pearOverlayPart;
+	get pearAIOverlayPart(): PearAIOverlayPart {
+		return this._pearAIOverlayPart;
 	}
 
 	show(): void {
-		this._pearOverlayPart.show();
+		this._pearAIOverlayPart.show();
 	}
 
 	hide(): void {
-		this._pearOverlayPart.hide();
+		this._pearAIOverlayPart.hide();
 	}
 
 	toggle(): void {
-		this._pearOverlayPart.toggle();
+		this._pearAIOverlayPart.toggle();
 	}
 
 	override dispose(): void {
 		super.dispose();
-		this._pearOverlayPart.dispose();
+		this._pearAIOverlayPart.dispose();
 	}
 }
 
