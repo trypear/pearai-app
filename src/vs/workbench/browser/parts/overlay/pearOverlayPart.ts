@@ -223,6 +223,7 @@ export class PearOverlayPart extends Part {
 		container.style.backgroundColor = "var(--vscode-editor-background)";
 		container.style.zIndex = "1000";
 		this.fullScreenOverlay?.addEventListener("click", () => {
+			// If we are in the tutorial, don't close
 			this.close();
 		});
 
