@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { registerAction2, Action2 } from "vs/platform/actions/common/actions";
 import { ServicesAccessor } from "vs/platform/instantiation/common/instantiation";
 import { IPearOverlayService } from "./pearOverlayService";
@@ -45,5 +49,26 @@ export class TogglePearOverlayAction extends Action2 {
 	}
 }
 
+class UpdatePathnameAction extends Action2 {
+	static readonly ID = "workbench.action.updatePathname";
+
+	constructor() {
+		super({
+			id: UpdatePathnameAction.ID,
+			title: {
+				value: "Update PearAI Pathname",
+				original: "Update PearAI Pathname",
+			},
+			f1: true,
+		});
+	}
+
+	run(accessor: ServicesAccessor, pathname: string): void {
+		const pearaiOverlayService = accessor.get(IPearOverlayService);
+		pearaiOverlayService.updatePathname(pathname);
+	}
+}
+
 registerAction2(TogglePearOverlayAction);
 registerAction2(ClosePearOverlayAction);
+registerAction2(UpdatePathnameAction);

@@ -40,6 +40,16 @@ export class PearOverlayPart extends Part {
 
 	private state: "loading" | "open" | "closed" = "loading";
 
+	private _pathname: string = "";
+
+	get pathname(): string {
+		return this._pathname;
+	}
+
+	set pathname(value: string) {
+		this._pathname = value;
+	}
+
 	constructor(
 		@IThemeService themeService: IThemeService,
 		@IStorageService storageService: IStorageService,
@@ -226,8 +236,13 @@ export class PearOverlayPart extends Part {
 		container.style.borderRadius = "12px";
 		container.style.backgroundColor = "var(--vscode-editor-background)";
 		container.style.zIndex = "1000";
+		console.dir("IM HERE I GOT OPENE");
+		console.dir(this._pathname);
 		this.fullScreenOverlay?.addEventListener("click", () => {
 			// If we are in the tutorial, don't close
+			console.dir("IM HERE I GOT CLICEKD");
+			// print the _pathname
+			console.dir(this._pathname);
 			this.close();
 		});
 
