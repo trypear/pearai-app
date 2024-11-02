@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import { Part } from "vs/workbench/browser/part";
 import {
 	IWorkbenchLayoutService,
@@ -143,6 +147,8 @@ export class PearOverlayPart extends Part {
 		this.fullScreenOverlay.style.right = "0";
 		this.fullScreenOverlay.style.bottom = "0";
 		this.fullScreenOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
+		// this.fullScreenOverlay.style.pointerEvents = "none"; // Ignore clicks on the full screen overlay
+		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
 
 		// create the popup area overlay. this is just a target for webview to layout over
 		this.popupAreaOverlay = $("div.pearai-popup-area-overlay");
