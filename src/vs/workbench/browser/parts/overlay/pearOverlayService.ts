@@ -1,3 +1,7 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
 import {
 	registerSingleton,
 	InstantiationType,
@@ -43,6 +47,16 @@ export interface IPearOverlayService extends IDisposable {
 	 * Returns true if the PearAI popup is visible.
 	 */
 	isVisible(): boolean;
+
+	/**
+	 * Updates the pathname for the PearAI popup.
+	 */
+	updatePathname(pathname: string): void;
+
+	/**
+	 * Gets the current pathname for the PearAI popup.
+	 */
+	getPathname(): string;
 }
 
 export class PearOverlayService
@@ -52,6 +66,8 @@ export class PearOverlayService
 	declare readonly _serviceBrand: undefined;
 
 	private readonly _pearOverlayPart: PearOverlayPart;
+
+	private _pathname: string = "";
 
 	constructor(
 		@IInstantiationService
@@ -83,25 +99,37 @@ export class PearOverlayService
 
 	private registerCommands(): void {
 		// Register commands for external use e.g. in pearai submodule
-		CommandsRegistry.registerCommand('pearai.isOverlayVisible', (accessor) => {
+		CommandsRegistry.registerCommand("pearai.isOverlayVisible", (accessor) => {
 			const overlayService = accessor.get(IPearOverlayService);
 			return overlayService.isVisible();
 		});
 
-		CommandsRegistry.registerCommand('pearai.showOverlay', (accessor) => {
+		CommandsRegistry.registerCommand("pearai.showOverlay", (accessor) => {
 			const overlayService = accessor.get(IPearOverlayService);
 			overlayService.show();
 		});
 
-		CommandsRegistry.registerCommand('pearai.hideOverlay', (accessor) => {
+		CommandsRegistry.registerCommand("pearai.hideOverlay", (accessor) => {
 			const overlayService = accessor.get(IPearOverlayService);
 			overlayService.hide();
 		});
 
-		CommandsRegistry.registerCommand('pearai.toggleOverlay', (accessor) => {
+		CommandsRegistry.registerCommand("pearai.toggleOverlay", (accessor) => {
 			const overlayService = accessor.get(IPearOverlayService);
 			overlayService.toggle();
 		});
+		CommandsRegistry.registerCommand(
+			"pearai.updatePathname",
+			(accessor, pathname) => {
+				const overlayService = accessor.get(IPearOverlayService);
+				console.dir("HOLY SHIT IM IN REGISTER COMMAND");
+				console.dir(pathname);
+				if (typeof pathname === "string") {
+					console.dir("HOLY SHIT IM UPDATEING");
+					overlayService.updatePathname(pathname);
+				}
+			},
+		);
 	}
 
 	get pearOverlayPart(): PearOverlayPart {
@@ -129,6 +157,22 @@ export class PearOverlayService
 		return this._pearOverlayPart.isVisible();
 	}
 
+	/**
+	 * Updates the pathname for the PearAI popup.
+	 */
+	updatePathname(pathname: string): void {
+		console.dir("8888IMSETTING PATHNAME");
+		this._pearOverlayPart.pathname = pathname;
+		console.dir("8888IMSETTING PATHNAME SET");
+		console.dir(this._pearOverlayPart.pathname);
+	}
+
+	/**
+	 * Gets the current pathname for the PearAI popup.
+	 */
+	getPathname(): string {
+		return this._pearOverlayPart.pathname;
+	}
 }
 
 registerSingleton(
