@@ -145,69 +145,23 @@ export class PearOverlayPart extends Part {
 		this.fullScreenOverlay.style.left = "0";
 		this.fullScreenOverlay.style.right = "0";
 		this.fullScreenOverlay.style.bottom = "0";
-		this.fullScreenOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.2)";
-		// this.fullScreenOverlay.style.pointerEvents = "none"; // Ignore clicks on the full screen overlay
-		this.fullScreenOverlay!.style.backgroundColor = "rgba(0, 0, 0, 0.5)"; // Darken the overlay
-
-		// create the popup area overlay. this is just a target for webview to layout over
-		this.popupAreaOverlay = $("div.pearai-popup-area-overlay");
-		this.popupAreaOverlay.style.position = "absolute";
-		this.popupAreaOverlay.style.margin = "0";
-		this.popupAreaOverlay.style.top = "0";
-		this.popupAreaOverlay.style.left = "0";
-		this.popupAreaOverlay.style.right = "0";
-		this.popupAreaOverlay.style.bottom = "0";
-		this.element.appendChild(this.popupAreaOverlay);
-
-		// if both content and webview are ready, end loading state and open
-		if (this.popupAreaOverlay && this.webviewView) {
-			//this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
-			// createContentArea is called within the workbench and layout when instantiating the overlay.
-			// If we don't close it here, it will open up by default when editor starts, or appear for half a second.
-			// If we remove this completely, it gets stuck in the loading stage, so we must close it.
-			this.close();
-		} else {
-			// hide stuff while we load
-			this.fullScreenOverlay!.style.display = "none";
-		}
-
-		return this.fullScreenOverlay!;
+		this.fullScreenOverlay.style.backgroundColor = "transparent";
+		this.close();
+		// Remove popup area overlay creation
+		return this.fullScreenOverlay;
 	}
 
-	override layout(
-		width: number,
-		height: number,
-		top: number,
-		left: number,
-	): void {
+	override layout(width: number, height: number, top: number, left: number): void {
 		super.layout(width, height, top, left);
+
 		if (this.fullScreenOverlay) {
-			this.fullScreenOverlay!.style.width = `${width}px`;
-			this.fullScreenOverlay!.style.height = `${height}px`;
+			this.fullScreenOverlay.style.width = `${width}px`;
+			this.fullScreenOverlay.style.height = `${height}px`;
 		}
 
-		// Calculate 80% of width and height
-		const overlayWidth = Math.floor(width * 0.8);
-		const overlayHeight = Math.floor(height * 0.8);
-
-		// Calculate position to center the overlay
-		const overlayLeft = Math.floor((width - overlayWidth) / 2);
-		const overlayTop = Math.floor((height - overlayHeight) / 2);
-
-		if (this.popupAreaOverlay) {
-			this.popupAreaOverlay.style.width = `${overlayWidth}px`;
-			this.popupAreaOverlay.style.height = `${overlayHeight}px`;
-			this.popupAreaOverlay.style.left = `${overlayLeft}px`;
-			this.popupAreaOverlay.style.top = `${overlayTop}px`;
-			this.popupAreaOverlay.style.backgroundColor =
-				"var(--vscode-editor-background)";
-			this.popupAreaOverlay.style.borderRadius = "12px";
-		}
-
+		// The webview can now be positioned anywhere within the full screen overlay
 		if (this.state === "open") {
-			this.webviewView!.webview.layoutWebviewOverElement(
-				this.popupAreaOverlay!,
-			);
+			this.webviewView!.webview.layoutWebviewOverElement(this.fullScreenOverlay!);
 		}
 	}
 
@@ -219,18 +173,18 @@ export class PearOverlayPart extends Part {
 		this.fullScreenOverlay!.style.zIndex = "95";
 
 		const container = this.webviewView!.webview.container;
-		container.style.display = "flex";
-		container.style.boxSizing = "border-box";
-		container.style.boxShadow = "0 0 20px 0 rgba(0, 0, 0, 0.5)";
-		container.style.borderRadius = "12px";
-		container.style.backgroundColor = "var(--vscode-editor-background)";
+		container.style.position = "absolute";
+		container.style.display = "block";
 		container.style.zIndex = "1000";
-		this.fullScreenOverlay?.addEventListener("click", () => {
-			// TODO: If we are in the tutorial, don't close
-			this.close();
-		});
+		container.style.backgroundColor = "transparent";
 
-		this.webviewView!.webview.layoutWebviewOverElement(this.popupAreaOverlay!);
+		const iframe = container.querySelector('iframe');
+		if (iframe) {
+			iframe.style.backgroundColor = 'transparent';
+			iframe.style.background = 'none';
+		}
+
+		this.webviewView!.webview.layoutWebviewOverElement(this.fullScreenOverlay!);
 		this.focus();
 	}
 
