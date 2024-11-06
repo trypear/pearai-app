@@ -3,6 +3,8 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
+import * as vscode from 'vscode';
+
 import { timeout } from 'vs/base/common/async';
 import { CancellationToken } from 'vs/base/common/cancellation';
 import { Emitter, Event } from 'vs/base/common/event';
@@ -15,7 +17,9 @@ import { IRequestService } from 'vs/platform/request/common/request';
 import { AvailableForDownload, DisablementReason, IUpdateService, State, StateType, UpdateType } from 'vs/platform/update/common/update';
 
 export function createUpdateURL(platform: string, quality: string, productService: IProductService): string {
-	let updateURL = `${productService.updateUrl}/update/${platform}/${quality}/${productService.pearAIVersion}`;
+	// Lets get the PearAIVersion From PearAI Submodule here. :D
+	const pearAIVersion = vscode.extensions.getExtension('pearai.pearai')?.packageJSON.version;
+	const updateURL = `${productService.updateUrl}/update/${platform}/${quality}/${pearAIVersion}`;
 	return updateURL;
 }
 
