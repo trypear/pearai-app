@@ -22,7 +22,6 @@ export class ShadowOverlayService extends Disposable implements IShadowOverlaySe
         pointerEvents: string;
         backgroundColor: string;
         boxShadow: string;
-		transition: string,
     }> = new Map();
 
     constructor(
@@ -79,11 +78,8 @@ export class ShadowOverlayService extends Disposable implements IShadowOverlaySe
                         pointerEvents: element.style.pointerEvents,
                         backgroundColor: element.style.backgroundColor,
                         boxShadow: element.style.boxShadow,
-                        transition: element.style.transition
                     });
                 }
-				element.style.transition = 'box-shadow 0.3s ease-in-out';
-
                 element.style.position = 'absolute';
                 element.style.zIndex = '3000';
 				element.style.isolation = 'isolate';
