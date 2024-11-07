@@ -41,18 +41,13 @@ export class ShadowOverlayService extends Disposable implements IShadowOverlaySe
 		CommandsRegistry.registerCommand('pearai.removeHighlight', (accessor, ...args) => {
 			const selectors = args[0] as string[];  // array of CSS selectors
 			 // Convert selectors to elements
-			 console.dir("in app UNHIGHLIGHT COMMAND, GOT SELECTORS:");
-			 console.dir(selectors);
 			this.restoreStyles(selectors);
 		});
 	}
 
 	restoreStyles(selectors: string[]): void {
 		selectors.forEach(selector => {
-			console.dir("in app RESTORE STYLES, GOT ELEMENT:");
-			console.dir(selector);
 			const originalStyles = this.highlightedElements.get(selector);
-			console.dir(originalStyles);
 
 			const element = document.querySelector(selector) as HTMLElement
 
@@ -86,13 +81,7 @@ export class ShadowOverlayService extends Disposable implements IShadowOverlaySe
                         boxShadow: element.style.boxShadow,
                         transition: element.style.transition
                     });
-
-                    console.dir("SAVED ORIGINAL STYLES:");
-                    console.dir(this.highlightedElements.get(selector));
                 }
-
-				console.dir("in app EXCLUDE FROM DIMMING, GOT ELEMENT:");
-				console.dir(element);
 				element.style.transition = 'box-shadow 0.3s ease-in-out';
 
                 element.style.position = 'absolute';
