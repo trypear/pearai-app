@@ -46,6 +46,7 @@
 	margin: auto;
 	flex-direction: column;
 	align-items: center;
+	text-align: center;
 	justify-content: center;
 }
 
@@ -78,7 +79,7 @@
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .editor-group-watermark-no-workspace .open-folder-button {
-	padding: 8px 12px;
+	padding: 10px 16px;
 	background-color: var(--vscode-button-background);
 	color: var(--vscode-button-foreground);
 	border: none;
@@ -91,6 +92,7 @@
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .editor-group-watermark-no-workspace .open-folder-button .codicon {
+	color: var(--vscode-button-foreground);
 	font-size: 16px;
 }
 
@@ -285,7 +287,7 @@
 	opacity: 0.7;
 	cursor: pointer;
 	padding: 1px 0;
-	font-style: italic;
+	font-style: normal;
 	margin-bottom: 5px;
 	color: var(--vscode-editorWatermark-foreground);
 }
