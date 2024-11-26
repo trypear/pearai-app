@@ -7936,6 +7936,7 @@ declare namespace monaco.languages {
 		id: string;
 		title: string;
 		tooltip?: string;
+		isButton?: boolean;
 		arguments?: any[];
 	}
 
@@ -7956,6 +7957,7 @@ declare namespace monaco.languages {
 		range: IRange;
 		id?: string;
 		command?: Command;
+		readonly isButton?: boolean;
 	}
 
 	export interface CodeLensList {

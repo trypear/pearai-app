@@ -18,6 +18,7 @@ import { ILanguageFeaturesService } from 'vs/editor/common/services/languageFeat
 export interface CodeLensItem {
 	symbol: CodeLens;
 	provider: CodeLensProvider;
+	isButton?: boolean;
 }
 
 export class CodeLensModel {

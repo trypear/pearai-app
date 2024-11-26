@@ -63,3 +63,17 @@
 .monaco-editor .codelens-decoration.fadein {
 	animation: fadein 0.1s linear;
 }
+
+/* Add new styles for action buttons */
+.monaco-editor .codelens-decoration > a.action-button {
+    background-color: var(--vscode-button-background);
+    color: var(--vscode-button-foreground);
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--vscode-button-border, black);
+}
+
+.monaco-editor .codelens-decoration > a.action-button:hover {
+    background-color: var(--vscode-button-hoverBackground);
+    cursor: pointer;
+}

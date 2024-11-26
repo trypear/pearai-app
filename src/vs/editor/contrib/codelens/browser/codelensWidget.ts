@@ -95,10 +95,37 @@ class CodeLensContentWidget implements IContentWidget {
 			}
 			hasSymbol = true;
 			if (lens.command) {
+				let isButton = false;
+				console.dir("--");
+				console.dir(lens.command.title.startsWith('newButton.'));
+				if (lens.command.title.startsWith('newButton.')) {
+					isButton = true;
+					console.dir(isButton);
+					lens.command.title = lens.command.title.slice(10);
+				}
+				console.dir(isButton);
 				const title = renderLabelWithIcons(lens.command.title.trim());
+
 				if (lens.command.id) {
 					const id = `c${(CodeLensContentWidget._idPool++)}`;
-					children.push(dom.$('a', { id, title: lens.command.tooltip, role: 'button' }, ...title));
+					console.dir(lens);
+					console.dir(isButton);
+					console.log('Creating lens with isButton:', isButton);
+
+					const a = dom.$('a', {
+						id,
+						title: lens.command.tooltip,
+						role: 'button',
+						class: isButton ? 'action-button' : 'codelens-decoration-link'
+					}, ...title);
+
+					// console.log('Created element classes:', a.className);
+
+					if (isButton) {
+						a.classList.add('action-button');
+					}
+
+					children.push(a);
 					this._commands.set(id, lens.command);
 				} else {
 					children.push(dom.$('span', { title: lens.command.tooltip }, ...title));
@@ -217,7 +244,7 @@ export class CodeLensWidget {
 		const lenses: CodeLens[] = [];
 
 		this._data.forEach((codeLensData, i) => {
-
+			console.dir(codeLensData);
 			if (codeLensData.symbol.command) {
 				lenses.push(codeLensData.symbol);
 			}
