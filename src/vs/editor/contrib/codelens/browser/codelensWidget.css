@@ -30,7 +30,7 @@
 
 .monaco-editor .codelens-decoration > a:hover {
 	cursor: pointer;
-	color: var(--vscode-editorLink-activeForeground) !important;
+	color: var(--vscode-editorLink-activeForeground);
 }
 
 .monaco-editor .codelens-decoration > a:hover .codicon {
@@ -64,16 +64,35 @@
 	animation: fadein 0.1s linear;
 }
 
-/* Add new styles for action buttons */
+/* Add new styles for action buttons to make them more vscode button like */
 .monaco-editor .codelens-decoration > a.action-button {
-    background-color: var(--vscode-button-background);
     color: var(--vscode-button-foreground);
-    padding: 2px 8px;
+	margin-top: 6px;
+    padding-left:  6px;
+	padding-right: 6px;
     border-radius: 3px;
-    border: 1px solid var(--vscode-button-border, black);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.monaco-editor .codelens-decoration > a.primary-action-button {
+	background-color: var(--vscode-button-background);
+}
+
+.monaco-editor .codelens-decoration > a.secondary-action-button {
+	background-color: var(--vscode-button-secondaryBackground);
 }
 
 .monaco-editor .codelens-decoration > a.action-button:hover {
-    background-color: var(--vscode-button-hoverBackground);
+	color: var(--vscode-button-foreground);
     cursor: pointer;
+}
+
+.monaco-editor .codelens-decoration > a.primary-action-button:hover {
+	background-color: var(--vscode-button-hoverBackground);
+}
+
+.monaco-editor .codelens-decoration > a.secondary-action-button:hover {
+	background-color: var(--vscode-button-secondaryHoverBackground);
 }

@@ -18,7 +18,6 @@ import { ILanguageFeaturesService } from 'vs/editor/common/services/languageFeat
 export interface CodeLensItem {
 	symbol: CodeLens;
 	provider: CodeLensProvider;
-	isButton?: boolean;
 }
 
 export class CodeLensModel {
@@ -38,6 +37,7 @@ export class CodeLensModel {
 	add(list: CodeLensList, provider: CodeLensProvider): void {
 		this._disposables.add(list);
 		for (const symbol of list.lenses) {
+			// console.dir(symbol);
 			this.lenses.push({ symbol, provider });
 		}
 	}

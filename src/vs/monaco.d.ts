@@ -7957,7 +7957,7 @@ declare namespace monaco.languages {
 		range: IRange;
 		id?: string;
 		command?: Command;
-		readonly isButton?: boolean;
+		isButton?: boolean;
 	}
 
 	export interface CodeLensList {
