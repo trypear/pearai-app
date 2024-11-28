@@ -3,6 +3,7 @@ param (
 	[bool]$IS_GITHUB_ACTION = $false,
     [string]$Input_PearappCommitHash = $null,
     [string]$Input_SubmoduleCommitHash = $null,
+	[string]$Input_CustomPearappVersion = $null,
     [bool]$Input_ForceBuild = $false
 )
 
@@ -30,6 +31,7 @@ Write-Host "`nWorkflow Input Variables:"
 Write-Host "IS_GITHUB_ACTION: $IS_GITHUB_ACTION"
 Write-Host "pearapp_commit_hash: $Input_PearappCommitHash"
 Write-Host "submodule_commit_hash: $Input_SubmoduleCommitHash"
+Write-Host "custom_pearapp_version: $Input_CustomPearappVersion"
 Write-Host "force_build: $Input_ForceBuild"
 
 # # Print all environment variables (optional)

@@ -83,24 +83,20 @@ jobs:
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
           $pearappCommitHash = '${{ inputs.pearapp-commit-hash }}'
-          Write-Host "pearappCommitHash: $pearappCommitHash"
           $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
-          Write-Host "submoduleCommitHash: $submoduleCommitHash"
+          $customPearappVersion = '${{ inputs.custom-pearapp-version }}'
           $forceBuild = [System.Convert]::ToBoolean('${{ inputs.force-build }}')
+          Write-Host "pearappCommitHash: $pearappCommitHash"
+          Write-Host "submoduleCommitHash: $submoduleCommitHash"
+          Write-Host "customPearappVersion: $customPearappVersion"
           Write-Host "forceBuild: $forceBuild"
 
           .\.github\workflows\testenv.ps1 `
             -IS_GITHUB_ACTION $true `
             -Input_PearappCommitHash $pearappCommitHash `
             -Input_SubmoduleCommitHash $submoduleCommitHash `
+            -Input_CustomPearappVersion $customPearappVersion `
             -Input_ForceBuild $forceBuild
-
-
-      # Step 5: List Desktop Contents for Debugging
-      - name: List Desktop Directory
-        run: |
-          $username = [Environment]::UserName
-          Get-ChildItem "C:\Users\$username\Desktop"
 
       # Step 6: Verify Build Output and Set Output Variable
       - name: Verify Build Output

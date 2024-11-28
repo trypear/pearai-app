@@ -1,3 +1,28 @@
+# GitHub Action Input Variables
+param (
+	[bool]$IS_GITHUB_ACTION = $false,
+    [string]$Input_PearappCommitHash = $null,
+    [string]$Input_SubmoduleCommitHash = $null,
+	[string]$Input_CustomPearappVersion = $null,
+    [bool]$Input_ForceBuild = $false
+)
+
+if ($IS_GITHUB_ACTION) {
+	Write-Host "IS_GITHUB_ACTION: $IS_GITHUB_ACTION"
+}
+if ($Input_PearappCommitHash) {
+	Write-Host "Input_PearappCommitHash: $Input_PearappCommitHash"
+}
+if ($Input_SubmoduleCommitHash) {
+	Write-Host "Input_SubmoduleCommitHash: $Input_SubmoduleCommitHash"
+}
+if ($Input_CustomPearappVersion) {
+	Write-Host "Input_CustomPearappVersion: $Input_CustomPearappVersion"
+}
+if ($Input_ForceBuild) {
+	Write-Host "Input_ForceBuild: $Input_ForceBuild"
+}
+
 # Function to execute a command and check its status
 function Invoke-CMD {
     param (
@@ -68,7 +93,7 @@ Write-Host "BUILT-APP PearAI EXE path: $builtAppPearAIExePath"
 $builtAppPearAIExtensionDir = Join-Path -Path $buildOutputDir -ChildPath "resources/app/extensions"
 Write-Host "BUILT-APP EXTENSION directory: $builtAppPearAIExtensionDir"
 
-$cacheBuildCommitFilePath = Join-Path -Path $buildOutputDir -ChildPath ".repo-build-commit"
+$cacheBuildCommitFilePath = Join-Path -Path $buildOutputDir -ChildPath ".pearai-app-build-commit"
 Write-Host "Cache build commit file path: $cacheBuildCommitFilePath"
 
 $rceditExe = Join-Path -Path $pearaiDir -ChildPath "build/win32/rcedit.exe"
@@ -90,7 +115,7 @@ Write-Host "PEARAI-SUBMODULE Latest commit hash: $pearaiSubmoduleLatestCommitHas
 Write-Host "----------------------------------------"
 
 cd $pearaiDir
-git checkout main
+# git checkout main
 
 # Remove pearai-ref directory if it exists
 if (Test-Path $pearaiRefDir) {
@@ -102,8 +127,20 @@ if (Test-Path $pearaiRefDir) {
 # If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
 
 # Build the PEARAI app
-if (-not (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash) {
-    Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+if ($Input_ForceBuild -or -not (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash) {
+    if ($Input_ForceBuild) {
+        Write-Host ""
+        Write-Host "----------------------------------------"
+        Write-Host "FORCE BUILD FLAG IS TRUE - BUILDING PEARAI-APP" -ForegroundColor Green
+        Write-Host "----------------------------------------"
+        Write-Host ""
+    } else {
+        Write-Host ""
+        Write-Host "----------------------------------------"
+        Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+        Write-Host "----------------------------------------"
+        Write-Host ""
+    }
     if (Test-Path $buildOutputDir) {
         try {
             $creationDate = (Get-Item $buildOutputDir).CreationTime
