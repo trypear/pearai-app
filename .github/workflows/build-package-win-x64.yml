@@ -4,8 +4,8 @@ name: Build Package Download Win x64
 on:
   workflow_dispatch:
     inputs:
-      main-commit-hash:
-        description: 'Main commit hash to build (optional)'
+      pearapp-commit-hash:
+        description: 'PearApp commit hash to build (optional)'
         required: false
       submodule-commit-hash:
         description: 'Submodule commit hash to build (optional)'
@@ -14,6 +14,10 @@ on:
         description: 'Force build (optional)'
         required: false
         type: boolean
+      custom-pearapp-version:
+        description: 'Custom PearApp version (optional) if latest commits are only version bump (will skip build unless force-build is checked)'
+        required: false
+        type: string
 # for testing
 # on:
 #   push:
@@ -55,9 +59,12 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.set-path.outputs.build_path }}
-          key: vscode-win-x64-${{ github.sha }}
+          key: vscode-win-x64-build
           restore-keys: |
-            vscode-win-x64-${{ github.sha }}
+            vscode-win-x64-build
+          # key: vscode-win-x64-${{ github.sha }}
+          # restore-keys: |
+          #   vscode-win-x64-${{ github.sha }}
 
       # Optional: Debug step to check cache status
       - name: Debug - Check Cache Status
@@ -75,8 +82,8 @@ jobs:
       - name: Create Dummy Folder for Testing
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
-          $mainCommitHash = '${{ inputs.main-commit-hash }}'
-          Write-Host "mainCommitHash: $mainCommitHash"
+          $pearappCommitHash = '${{ inputs.pearapp-commit-hash }}'
+          Write-Host "pearappCommitHash: $pearappCommitHash"
           $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
           Write-Host "submoduleCommitHash: $submoduleCommitHash"
           $forceBuild = [System.Convert]::ToBoolean('${{ inputs.force-build }}')
@@ -84,7 +91,7 @@ jobs:
 
           .\.github\workflows\testenv.ps1 `
             -IS_GITHUB_ACTION $true `
-            -Input_MainCommitHash $mainCommitHash `
+            -Input_PearappCommitHash $pearappCommitHash `
             -Input_SubmoduleCommitHash $submoduleCommitHash `
             -Input_ForceBuild $forceBuild
 
