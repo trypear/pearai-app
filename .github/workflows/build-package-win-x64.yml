@@ -42,7 +42,7 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Cache the build output
+      # Step 3: Cache the build outputx
       - name: Cache Build Output
         id: cache-build
         uses: actions/cache@v4
