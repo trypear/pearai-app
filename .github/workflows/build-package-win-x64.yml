@@ -33,22 +33,50 @@ jobs:
       #   with:
       #     node-version-file: .nvmrc
 
-      # Step 3: Create a dummy folder and a temporary text file
-      - name: Create Dummy Folder for Testing
-        run: |
-          $username = [Environment]::UserName  # Get the current user's name
-          $dummyOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
-          mkdir -Force $dummyOutput
-          Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."  # Create a temp text file
-          Write-Output "$dummyOutput"  # Output the path for later use
 
-      # Step 4: List Desktop Contents for Debugging
+      # Step 2: Set Build Path
+      - name: Set Build Path
+        id: set-path
+        run: |
+          $username = [Environment]::UserName
+          $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+          echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
+
+      # Step 3: Cache the build output
+      - name: Cache Build Output
+        id: cache-build
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-path.outputs.build_path }}
+          key: vscode-win-x64-${{ github.sha }}
+          restore-keys: |
+            vscode-win-x64-
+
+      # Optional: Debug step to check cache status
+      - name: Debug - Check Cache Status
+        run: |
+          if ("${{ steps.cache-build.outputs.cache-hit }}" -eq 'true') {
+            Write-Host "Cache hit! Using cached build output"
+          } else {
+            Write-Host "Cache miss! Will need to build and cache"
+          }
+
+      # Step 4: Create a dummy folder and a temporary text file (if cache miss)
+      - name: Create Dummy Folder for Testing
+        if: steps.cache-build.outputs.cache-hit != 'true'
+        run: |
+          $username = [Environment]::UserName
+          $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
+          mkdir -Force $dummyOutput
+          Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."
+
+      # Step 5: List Desktop Contents for Debugging
       - name: List Desktop Directory
         run: |
           $username = [Environment]::UserName
           Get-ChildItem "C:\Users\$username\Desktop"
 
-      # Step 5: Verify Build Output and Set Output Variable
+      # Step 6: Verify Build Output and Set Output Variable
       - name: Verify Build Output
         id: verify-output
         run: |
@@ -62,7 +90,7 @@ jobs:
             echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT  # Set the output variable
           }
 
-      # Step 6: Upload the Build Output (Zipped)
+      # Step 7: Upload the Build Output (Zipped)
       - name: Upload Build Output
         uses: actions/upload-artifact@v4
         with:
@@ -78,32 +106,4 @@ jobs:
           } else {
             Write-Host "File not found at: $filepath"
           }
-
-      # Optional: Debug step to verify version reading
-      - name: Debug - Check Version
-        run: |
-          $version = Get-Content "product.json" | ConvertFrom-Json
-          Write-Host "PearAI Version: $($version.pearAIVersion)"
-
-      # Step 7: Create Release and Upload Raw File
-      - name: Create Release
-        id: create_release
-        env:
-          VERSION: |
-            $(Get-Content "product.json" | ConvertFrom-Json | Select-Object -ExpandProperty pearAIVersion)
-        run: |
-            $version = "$env:VERSION"
-            $date = Get-Date -Format "ddMMMhhmm" | ForEach-Object { $_.ToLower() }
-            $releaseTag = "${version}${date}"
-            echo "release_tag=$releaseTag" >> $env:GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: ${{ steps.verify-output.outputs.build_path }}\temp.txt
-          tag_name: ${{ env.release_tag }}  # Will be something like "1.0.0-28nov243pm"
-          name: Release ${{ env.release_tag }}
-          draft: false
-          prerelease: false
-          token: ${{ secrets.GITHUB_TOKEN }}
 
