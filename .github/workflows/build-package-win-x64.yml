@@ -42,10 +42,10 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Cache the build outputx
-      - name: Cache Build Output
-        id: cache-build
-        uses: actions/cache@v4
+      # Step 3: Restore cache (only restore here)
+      - name: Restore Cache
+        id: cache-restore
+        uses: actions/cache/restore@v4  # Note: using cache/restore instead of cache
         with:
           path: ${{ steps.set-path.outputs.build_path }}
           key: vscode-win-x64-${{ github.sha }}
@@ -55,7 +55,7 @@ jobs:
       # Optional: Debug step to check cache status
       - name: Debug - Check Cache Status
         run: |
-          if ("${{ steps.cache-build.outputs.cache-hit }}" -eq 'true') {
+          if ("${{ steps.cache-restore.outputs.cache-hit }}" -eq 'true') {
             Write-Host "Cache hit! Using cached build output"
           } else {
             Write-Host "Cache miss! Will need to build and cache"
@@ -63,7 +63,7 @@ jobs:
 
       # Step 4: Create a dummy folder and a temporary text file (if cache miss)
       - name: Create Dummy Folder for Testing
-        if: steps.cache-build.outputs.cache-hit != 'true'
+        if: steps.cache-restore.outputs.cache-hit != 'true'
         run: |
           $username = [Environment]::UserName
           $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
@@ -106,4 +106,12 @@ jobs:
           } else {
             Write-Host "File not found at: $filepath"
           }
+
+      # Step 8: Save cache (only if we built something)
+      - name: Save Cache
+        if: steps.cache-restore.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4  # Note: using cache/save instead of cache
+        with:
+          path: ${{ steps.set-path.outputs.build_path }}
+          key: vscode-win-x64-${{ github.sha }}
 
