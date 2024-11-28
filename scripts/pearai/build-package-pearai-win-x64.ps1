@@ -104,6 +104,16 @@ if (Test-Path $pearaiRefDir) {
 # Build the PEARAI app
 if (-not (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash) {
     Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+    if (Test-Path $buildOutputDir) {
+        try {
+            $creationDate = (Get-Item $buildOutputDir).CreationTime
+        } catch {
+            $creationDate = Get-Date
+        }
+        $backupBuildOutputName = $creationDate.ToString("ddMMyyyy-HHmm") + "-" + (Get-Item $buildOutputDir).Name
+        Rename-Item -Path $buildOutputDir -NewName $backupBuildOutputName
+        Write-Host "PREVIOUS BUILD FOUND, RENAMED to $backupBuildOutputName" -ForegroundColor Green
+    }
     for ($i = 3; $i -gt 0; $i--) {
 		Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
 		Start-Sleep -Seconds 1
