@@ -67,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vscode-win32-x64
-          path: $buildOutput
+          path: ${{ steps.verify-output.outputs.BUILD_PATH }}
