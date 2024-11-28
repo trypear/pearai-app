@@ -59,7 +59,7 @@ jobs:
             exit 1  # Exit with an error to stop the job
           } else {
             Write-Host "Build output found at $buildOutput"
-            echo "BUILD_PATH=$buildOutput" >> $GITHUB_ENV  # Set the environment variable for later steps
+            echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT  # Set the output variable
           }
 
       # Step 6: Upload the Build Output
@@ -67,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vscode-win32-x64
-          path: ${{ steps.verify-output.outputs.BUILD_PATH }}
+          path: ${{ steps.verify-output.outputs.build_path }}  # Use the output variable we set
