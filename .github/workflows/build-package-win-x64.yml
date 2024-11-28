@@ -79,6 +79,12 @@ jobs:
             Write-Host "File not found at: $filepath"
           }
 
+      # Optional: Debug step to verify version reading
+      - name: Debug - Check Version
+        run: |
+          $version = Get-Content "product.json" | ConvertFrom-Json
+          Write-Host "PearAI Version: $($version.pearAIVersion)"
+
       # Step 7: Create Release and Upload Raw File
       - name: Create Release
         id: create_release
@@ -101,8 +107,3 @@ jobs:
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      # Optional: Debug step to verify version reading
-      - name: Debug - Check Version
-        run: |
-          $version = Get-Content "product.json" | ConvertFrom-Json
-          Write-Host "PearAI Version: $($version.pearAIVersion)"
