@@ -91,7 +91,7 @@ jobs:
         env:
           VERSION: |
             $(Get-Content "product.json" | ConvertFrom-Json | Select-Object -ExpandProperty pearAIVersion)
-          run: |
+        run: |
             $version = "$env:VERSION"
             $date = Get-Date -Format "ddMMMhhmm" | ForEach-Object { $_.ToLower() }
             $releaseTag = "${version}${date}"
