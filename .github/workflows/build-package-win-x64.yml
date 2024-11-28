@@ -42,15 +42,23 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Check commit hash
+      # Step 3: Cache the build output
+      - name: Cache Build Output
+        id: cache-restore
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-path.outputs.build_path }}
+          key: vscode-win-x64-build
+
+      # Step 4: Check commit hash
       - name: Check Commit Hash
         id: check-commit
         run: |
           $currentCommit = git rev-parse HEAD
           Write-Host "Current commit: $currentCommit"
 
-          if (Test-Path ".build-commit") {
-            $cachedCommit = Get-Content ".build-commit"
+          if (Test-Path "${{ steps.set-path.outputs.build_path }}\.build-commit") {
+            $cachedCommit = Get-Content "${{ steps.set-path.outputs.build_path }}\.build-commit"
             Write-Host "Cached commit: $cachedCommit"
 
             if ($currentCommit -eq $cachedCommit) {
@@ -65,15 +73,6 @@ jobs:
             echo "needs_rebuild=true" >> $env:GITHUB_OUTPUT
           }
 
-      # Step 4: Cache the build output
-      - name: Cache Build Output
-        if: ${{ steps.check-commit.outputs.needs_rebuild == 'false' }}
-        id: cache-restore
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.set-path.outputs.build_path }}
-          key: vscode-win-x64-build
-
       # Optional: Debug step to check cache status
       - name: Debug - Check Cache Status
         run: |
@@ -86,12 +85,15 @@ jobs:
 
       # Step 4: Create a dummy folder and a temporary text file (if cache miss)
       - name: Create Dummy Folder for Testing
-        if: ${{ steps.check-commit.outputs.needs_rebuild == 'true' }}
+        if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
           $username = [Environment]::UserName
           $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
           mkdir -Force $dummyOutput
           Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."
+
+          # Store the commit hash in the build folder
+          git rev-parse HEAD > "$dummyOutput\.build-commit"
 
       # Step 5: List Desktop Contents for Debugging
       - name: List Desktop Directory
