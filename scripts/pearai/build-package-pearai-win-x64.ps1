@@ -7,6 +7,15 @@ param (
     [bool]$Input_ForceBuild = $false
 )
 
+$printInputs = $IS_GITHUB_ACTION -or
+              $Input_PearappCommitHash -or
+              $Input_SubmoduleCommitHash -or
+              $Input_CustomPearAppVersion -or
+              $Input_ForceBuild
+
+if ($printInputs) {
+    Write-Host "-----------------INPUTS-----------------------"
+}
 if ($IS_GITHUB_ACTION) {
 	Write-Host "IS_GITHUB_ACTION: $IS_GITHUB_ACTION"
 }
@@ -22,6 +31,9 @@ if ($Input_CustomPearAppVersion) {
 if ($Input_ForceBuild) {
 	Write-Host "Input_ForceBuild: $Input_ForceBuild"
 }
+
+
+Write-Host "----------------------------------------------"
 
 # Function to execute a command and check its status
 function Invoke-CMD {
@@ -274,6 +286,28 @@ Expand-Archive -Path $python2023ExtensionsZip -DestinationPath $builtAppPearAIEx
 Write-Host "Python 2023 extensions extracted to $builtAppPearAIExtensionDir"
 
 
+if ($Input_CustomPearAppVersion) {
+    # Don't serialize the JSON, it messes up the formatting, read it raw.
+    Write-Host "----------------------------------------"
+    Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, UPDATING VERSION INFO" -ForegroundColor Green
+
+    # Update product.json while preserving original formatting
+    $builtAppProductJsonPath = Join-Path -Path $buildOutputDir -ChildPath "resources/app/product.json"
+    $productJsonContent = Get-Content -Path $builtAppProductJsonPath -Raw
+    $productJsonContent = $productJsonContent -replace '"pearAIVersion"\s*:\s*"[^"]*"', "`"pearAIVersion`": `"$pearAIVersion`""
+    Set-Content -Path $builtAppProductJsonPath -Value $productJsonContent -NoNewline
+    Write-Host "Updated pearAIVersion in pearai-app product.json to $pearAIVersion" -ForegroundColor Green
+
+    # Update package.json while preserving original formatting
+    $builtExtensionPackageJsonPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai/package.json"
+    $packageJsonContent = Get-Content -Path $builtExtensionPackageJsonPath -Raw
+    $packageJsonContent = $packageJsonContent -replace '"version"\s*:\s*"[^"]*"', "`"version`": `"$extensionVersion`""
+    Set-Content -Path $builtExtensionPackageJsonPath -Value $packageJsonContent -NoNewline
+    Write-Host "Updated version in extension package.json to $extensionVersion" -ForegroundColor Green
+    Write-Host "----------------------------------------"
+}
+
+
 # Set Version info for the built app
 $versionInfo = @{
     'FileDescription' = 'PearAI';
@@ -299,7 +333,7 @@ $updateVersionInfoCommand = "$rceditExe `"$builtAppPearAIExePath`" " +
 	"--set-file-version `"$($versionInfo['FileVersion'])`" " +
 	"--set-product-version `"$($versionInfo['ProductVersion'])`" "
 
-Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set icon and version info" -ErrorMessage "Failed to set icon and version info"
+Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set icon and version info on EXE" -ErrorMessage "Failed to set icon and version info on EXE"
 
 
 # make setup using Inno Setup Compiler
@@ -309,4 +343,4 @@ $innoSetupScript = Join-Path -Path $pearaiDir -ChildPath "build/win32/pearai.iss
 Write-Host "Inno Setup script: $innoSetupScript"
 & $innoSetupCompiler "/dMyAppVersion=$pearAIVersion" $innoSetupScript
 
-cd $desktopDir
+cd $pearaiDir
