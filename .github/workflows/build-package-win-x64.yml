@@ -1,18 +1,24 @@
 name: Build Package Download Win x64
 
-# # Manual trigger
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       branch:
-#         description: 'Branch to build'
-#         required: true
-#         default: 'build-package-windows'
-# for testing
+# Manual trigger
 on:
-  push:
-    branches:
-      - him/build-package-windows
+  workflow_dispatch:
+    inputs:
+      main-commit-hash:
+        description: 'Main commit hash to build'
+        required: false
+      submodule-commit-hash:
+        description: 'Submodule commit hash to build'
+        required: false
+      focus-build:
+        description: 'Focus build'
+        required: false
+        type: boolean
+# for testing
+# on:
+#   push:
+#     branches:
+#       - him/build-package-windows
 
 jobs:
   windows:
