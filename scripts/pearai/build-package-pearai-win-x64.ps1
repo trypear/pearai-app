@@ -114,13 +114,22 @@ Write-Host "PEARAI-APP Latest commit hash: $pearaiLatestCommitHash" -ForegroundC
 Write-Host "PEARAI-SUBMODULE Latest commit hash: $pearaiSubmoduleLatestCommitHash" -ForegroundColor Green
 Write-Host "----------------------------------------"
 
+# Update cache commit file if custom version is specified
 if ($Input_CustomPearAppVersion) {
     Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED: $Input_CustomPearAppVersion" -ForegroundColor Green
     $pearAIVersion = $Input_CustomPearAppVersion
     Write-Host "CUSTOM PEARAI-APP VERSION: $pearAIVersion" -ForegroundColor Green
     $extensionVersion = $Input_CustomPearAppVersion
     Write-Host "CUSTOM PEARAI-EXTENSION VERSION: $extensionVersion" -ForegroundColor Green
-    Write-Host "Will skip building PEARAI-APP and update version info in the built app cache and final built extension" -ForegroundColor Green
+    # Update cache commit file to ensure build is skipped
+    if ((Test-Path $cacheBuildCommitFilePath) -and (Test-Path $buildOutputDir)) {
+        Remove-Item $cacheBuildCommitFilePath -Force
+        Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
+        Write-Host "Updated cache commit file to skip build" -ForegroundColor Green
+        Write-Host "CACHE COMMIT BYPASSED, CACHE COMMIT WILL HIT" -ForegroundColor Green
+    } else {
+        Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, BUT NO PREVIOUS BUILD FOUND, WILL BUILD PEARAI-APP" -ForegroundColor Green
+    }
     Write-Host "----------------------------------------"
 }
 
@@ -137,7 +146,8 @@ if (Test-Path $pearaiRefDir) {
 # If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
 
 # Build the PEARAI app
-if ($Input_ForceBuild -or -not (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash) {
+$cacheCommitHit = (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash
+if ($Input_ForceBuild -or -not $cacheCommitHit) {
     if ($Input_ForceBuild) {
         Write-Host ""
         Write-Host "----------------------------------------"
