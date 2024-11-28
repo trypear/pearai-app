@@ -78,14 +78,14 @@ jobs:
         run: |
           Write-Host "Raw cache-hit value: ${{ steps.cache-restore.outputs.cache-hit }}"
           if ("${{ steps.cache-restore.outputs.cache-hit }}" -eq "true") {
-            Write-Host "Cache hit! Using cached build output"
+            Write-Host "Cache hit!"
           } else {
-            Write-Host "Cache miss! Will need to build and cache"
+            Write-Host "Cache miss!"
           }
 
-      # Step 4: Create a dummy folder and a temporary text file (if cache miss)
+      # Step 5: Create a dummy folder and a temporary text file (if cache miss)
       - name: Create Dummy Folder for Testing
-        if: ${{ !steps.cache-restore.outputs.cache-hit }}
+        if: ${{ steps.check-commit.outputs.needs_rebuild == 'true' }}
         run: |
           $username = [Environment]::UserName
           $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
