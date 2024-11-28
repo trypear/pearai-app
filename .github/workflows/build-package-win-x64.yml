@@ -42,8 +42,32 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Cache the build output
+      # Step 3: Check commit hash
+      - name: Check Commit Hash
+        id: check-commit
+        run: |
+          $currentCommit = git rev-parse HEAD
+          Write-Host "Current commit: $currentCommit"
+
+          if (Test-Path ".build-commit") {
+            $cachedCommit = Get-Content ".build-commit"
+            Write-Host "Cached commit: $cachedCommit"
+
+            if ($currentCommit -eq $cachedCommit) {
+              Write-Host "Cache is up to date"
+              echo "needs_rebuild=false" >> $env:GITHUB_OUTPUT
+            } else {
+              Write-Host "Cache is outdated"
+              echo "needs_rebuild=true" >> $env:GITHUB_OUTPUT
+            }
+          } else {
+            Write-Host "No cached commit found"
+            echo "needs_rebuild=true" >> $env:GITHUB_OUTPUT
+          }
+
+      # Step 4: Cache the build output
       - name: Cache Build Output
+        if: ${{ steps.check-commit.outputs.needs_rebuild == 'true' }}
         id: cache-restore
         uses: actions/cache@v4
         with:
@@ -62,7 +86,7 @@ jobs:
 
       # Step 4: Create a dummy folder and a temporary text file (if cache miss)
       - name: Create Dummy Folder for Testing
-        if: ${{ !steps.cache-restore.outputs.cache-hit }}
+        if: ${{ steps.check-commit.outputs.needs_rebuild == 'true' }}
         run: |
           $username = [Environment]::UserName
           $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
