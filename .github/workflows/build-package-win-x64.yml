@@ -56,8 +56,10 @@ jobs:
       # Optional: Debug step to check cache status
       - name: Debug - Check Cache Status
         run: |
-          Write-Host "Raw cache-hit value: ${{ steps.cache-restore.outputs.cache-hit }}"
-          if ("${{ steps.cache-restore.outputs.cache-hit }}" -eq "true") {
+          $buildCacheHit = ${{ steps.cache-restore.outputs.cache-hit }}
+          Write-Host "Raw cache-hit value: $buildCacheHit"
+          echo "build_cache_hit=$buildCacheHit" >> $env:GITHUB_OUTPUT
+          if ($buildCacheHit -eq "true") {
             Write-Host "Cache hit!"
           } else {
             Write-Host "Cache miss!"
@@ -67,10 +69,8 @@ jobs:
       - name: Create Dummy Folder for Testing
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
-          $username = [Environment]::UserName
-          $dummyOutput = "${{ steps.set-path.outputs.build_path }}"
-          mkdir -Force $dummyOutput
-          Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."
+          .\github\workflows\testenv.ps1
+
 
       # Step 5: List Desktop Contents for Debugging
       - name: List Desktop Directory
