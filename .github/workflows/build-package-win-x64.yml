@@ -79,12 +79,12 @@ jobs:
           Write-Host "mainCommitHash: $mainCommitHash"
           $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
           Write-Host "submoduleCommitHash: $submoduleCommitHash"
-          $forceBuild = '${{ inputs.force-build }}'
+          $forceBuild = [System.Convert]::ToBoolean('${{ inputs.force-build }}')
           Write-Host "forceBuild: $forceBuild"
           $params = @()
           if ($mainCommitHash) { $params += "-Input_MainCommitHash '$mainCommitHash'" }
           if ($submoduleCommitHash) { $params += "-Input_SubmoduleCommitHash '$submoduleCommitHash'" }
-          if ($forceBuild -eq 'true') { $params += "-Input_ForceBuild `$true" }
+          if ($forceBuild) { $params += "-Input_ForceBuild `$true" }
           .\.github\workflows\testenv.ps1 -IS_GITHUB_ACTION $true @params
 
 
