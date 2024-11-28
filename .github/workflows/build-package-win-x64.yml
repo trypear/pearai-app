@@ -1,14 +1,6 @@
 name: Build Package Download Win x64
 
-# # Manual trigger
-# on:
-#   workflow_dispatch:
-#     inputs:
-#       branch:
-#         description: 'Branch to build'
-#         required: true
-#         default: 'build-package-windows'
-# for testing
+# Trigger when changes are merged into this branch (replace with your custom branch name)
 on:
   push:
     branches:
@@ -16,9 +8,9 @@ on:
 
 jobs:
   windows:
-    name: Build VSCode for Windows x64
+    name: Build VSCode for Windows
     runs-on: windows-2022
-    timeout-minutes: 90
+    timeout-minutes: 60
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -33,38 +25,23 @@ jobs:
         with:
           node-version-file: .nvmrc
 
-      # Step 3: Create a dummy folder and a temporary text file
-      - name: Create Dummy Folder for Testing
-        run: |
-          $username = [Environment]::UserName  # Get the current user's name
-          $dummyOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
-          mkdir -Force $dummyOutput
-          Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."  # Create a temp text file
-          Write-Output "$dummyOutput"  # Output the path for later use
+      # Step 3: Install dependencies using Yarn
+      - name: Install dependencies
+        run: yarn install --network-timeout 180000
 
-      # Step 4: List Desktop Contents for Debugging
-      - name: List Desktop Directory
-        run: |
-          $username = [Environment]::UserName
-          Get-ChildItem "C:\Users\$username\Desktop"
+      # Step 4: Build VSCode for Windows (64-bit)
+      - name: Build VSCode for Windows
+        run: yarn gulp vscode-win32-x64
 
-      # Step 5: Verify Build Output and Set Output Variable
-      - name: Verify Build Output
-        id: verify-output
+      # Step 5: Compress built files into a zip archive
+      - name: Compress built files
         run: |
-          $username = [Environment]::UserName  # Get the current user's name
-          $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
-          if (-Not (Test-Path $buildOutput)) {
-            Write-Error "Build output not found at $buildOutput"
-            exit 1  # Exit with an error to stop the job
-          } else {
-            Write-Host "Build output found at $buildOutput"
-            echo "BUILD_PATH=$buildOutput" >> $GITHUB_ENV  # Set the environment variable for later steps
-          }
+          mkdir -Force output
+          Compress-Archive -Path ./out/vscode-win32-x64/* -DestinationPath output/vscode-win32-x64.zip
 
-      # Step 6: Upload the Build Output
-      - name: Upload Build Output
-        uses: actions/upload-artifact@v4
+      # Step 6: Upload the zip file as an artifact for download
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v3
         with:
-          name: vscode-win32-x64
-          path: $buildOutput
+          name: vscode-windows-build
+          path: output/vscode-win32-x64.zip
