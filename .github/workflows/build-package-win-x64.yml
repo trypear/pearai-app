@@ -89,12 +89,13 @@ jobs:
       - name: Create Release
         id: create_release
         env:
-          VERSION: ${{ fromJson(file('product.json')).pearAIVersion }}
-        run: |
-          $version = "$env:VERSION"
-          $date = Get-Date -Format "ddMMMhhmm" | ForEach-Object { $_.ToLower() }
-          $releaseTag = "${version}${date}"
-          echo "release_tag=$releaseTag" >> $env:GITHUB_OUTPUT
+          VERSION: |
+            $(Get-Content "product.json" | ConvertFrom-Json | Select-Object -ExpandProperty pearAIVersion)
+          run: |
+            $version = "$env:VERSION"
+            $date = Get-Date -Format "ddMMMhhmm" | ForEach-Object { $_.ToLower() }
+            $releaseTag = "${version}${date}"
+            echo "release_tag=$releaseTag" >> $env:GITHUB_OUTPUT
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
