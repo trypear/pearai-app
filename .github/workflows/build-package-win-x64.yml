@@ -69,7 +69,7 @@ jobs:
       - name: Create Dummy Folder for Testing
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
-          .\github\workflows\testenv.ps1
+          .\.github\workflows\testenv.ps1
 
 
       # Step 5: List Desktop Contents for Debugging
