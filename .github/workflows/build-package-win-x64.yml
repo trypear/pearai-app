@@ -1,13 +1,18 @@
 name: Build Package Download Win x64
 
-# Manual trigger
+# # Manual trigger
+# on:
+#   workflow_dispatch:
+#     inputs:
+#       branch:
+#         description: 'Branch to build'
+#         required: true
+#         default: 'build-package-windows'
+# for testing
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to build'
-        required: true
-        default: 'build-package-windows'
+  push:
+    branches:
+      - build-package-windows
 
 jobs:
   windows:
