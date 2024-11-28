@@ -1,5 +1,15 @@
+# GitHub Action Input Variables
+param (
+	[bool]$IS_GITHUB_ACTION = $false,
+    [string]$Input_MainCommitHash = $null,
+    [string]$Input_SubmoduleCommitHash = $null,
+    [bool]$Input_ForceBuild = $false
+)
+
 # Print GitHub Environment Variables
 Write-Host "GitHub Environment Variables:"
+Write-Host "IS_GITHUB_ACTION: $env:GITHUB_ACTION"
+Write-Host "IS_GITHUB_ACTION: $env:GITHUB_ACTIONS"
 Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
 Write-Host "GITHUB_SHA: $env:GITHUB_SHA"
 Write-Host "GITHUB_REF: $env:GITHUB_REF"
@@ -17,9 +27,10 @@ Write-Host "needs_rebuild: $env:needs_rebuild"
 
 # Print Workflow Input Variables
 Write-Host "`nWorkflow Input Variables:"
-Write-Host "main_commit_hash: $env:GITHUB_EVENT_INPUT_MAIN_COMMIT_HASH"
-Write-Host "submodule_commit_hash: $env:GITHUB_EVENT_INPUT_SUBMODULE_COMMIT_HASH"
-Write-Host "force_build: $env:GITHUB_EVENT_INPUT_FORCE_BUILD"
+Write-Host "IS_GITHUB_ACTION: $IS_GITHUB_ACTION"
+Write-Host "main_commit_hash: $Input_MainCommitHash"
+Write-Host "submodule_commit_hash: $Input_SubmoduleCommitHash"
+Write-Host "force_build: $Input_ForceBuild"
 
 # # Print all environment variables (optional)
 # Write-Host "`nAll Environment Variables:"

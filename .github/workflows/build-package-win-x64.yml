@@ -75,7 +75,14 @@ jobs:
       - name: Create Dummy Folder for Testing
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
-          .\.github\workflows\testenv.ps1
+          $mainCommitHash = ${{ github.event.inputs.main_commit_hash }}
+          $submoduleCommitHash = ${{ github.event.inputs.submodule_commit_hash }}
+          $forceBuild = ${{ github.event.inputs.force_build }}
+          $params = @()
+          if ($mainCommitHash) { $params += "-Input_MainCommitHash $mainCommitHash" }
+          if ($submoduleCommitHash) { $params += "-Input_SubmoduleCommitHash $submoduleCommitHash" }
+          if ($forceBuild) { $params += "-Input_ForceBuild $forceBuild" }
+          .\.github\workflows\testenv.ps1 -IS_GITHUB_ACTION $true $params
 
 
       # Step 5: List Desktop Contents for Debugging
