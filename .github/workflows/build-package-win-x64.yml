@@ -42,10 +42,10 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Restore cache (only restore here)
-      - name: Restore Cache
+      # Step 3: Cache the build output
+      - name: Cache Build Output
         id: cache-restore
-        uses: actions/cache/restore@v4  # Note: using cache/restore instead of cache
+        uses: actions/cache@v4  # Using the combined cache action
         with:
           path: ${{ steps.set-path.outputs.build_path }}
           key: vscode-win-x64-${{ github.sha }}
