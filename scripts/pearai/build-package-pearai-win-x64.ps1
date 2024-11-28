@@ -51,12 +51,10 @@ Write-Host "PEARAI-APP extension build directory: $pearaiExtensionBuildDir"
 $productJsonPath = Join-Path -Path $pearaiDir -ChildPath "product.json"
 $productJsonContent = Get-Content -Path $productJsonPath | ConvertFrom-Json
 $pearAIVersion = $productJsonContent.pearAIVersion
-Write-Host "PEARAI-APP Version: $pearAIVersion"
 
 $extensionPackageJsonPath = Join-Path -Path $pearaiVSCodeExtensionDir -ChildPath "package.json"
 $extensionPackageJsonContent = Get-Content -Path $extensionPackageJsonPath | ConvertFrom-Json
 $extensionVersion = $extensionPackageJsonContent.version
-Write-Host "PEARAI-EXTENSION version: $extensionVersion"
 
 $pearaiExtension = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearai-$extensionVersion.vsix"
 Write-Host "PEARAI-EXTENSION VSIX file: $pearaiExtension"
@@ -70,11 +68,26 @@ Write-Host "BUILT-APP PearAI EXE path: $builtAppPearAIExePath"
 $builtAppPearAIExtensionDir = Join-Path -Path $buildOutputDir -ChildPath "resources/app/extensions"
 Write-Host "BUILT-APP EXTENSION directory: $builtAppPearAIExtensionDir"
 
+$cacheBuildCommitFilePath = Join-Path -Path $buildOutputDir -ChildPath ".repo-build-commit"
+Write-Host "Cache build commit file path: $cacheBuildCommitFilePath"
+
 $rceditExe = Join-Path -Path $pearaiDir -ChildPath "build/win32/rcedit.exe"
 Write-Host "rcedit.exe: $rceditExe"
 
 $pearIconPath = Join-Path -Path $pearaiDir -ChildPath "build/win32/pearicon.ico"
 Write-Host "Pear icon path: $pearIconPath"
+
+cd $pearaiDir
+$pearaiLatestCommitHash = (git rev-parse HEAD).Trim()
+cd $pearaiSubmoduleDir
+$pearaiSubmoduleLatestCommitHash = (git rev-parse HEAD).Trim()
+
+Write-Host "----------------------------------------"
+Write-Host "PEARAI-APP Version: $pearAIVersion" -ForegroundColor Green
+Write-Host "PEARAI-EXTENSION version: $extensionVersion" -ForegroundColor Green
+Write-Host "PEARAI-APP Latest commit hash: $pearaiLatestCommitHash" -ForegroundColor Green
+Write-Host "PEARAI-SUBMODULE Latest commit hash: $pearaiSubmoduleLatestCommitHash" -ForegroundColor Green
+Write-Host "----------------------------------------"
 
 cd $pearaiDir
 git checkout main
@@ -89,7 +102,20 @@ if (Test-Path $pearaiRefDir) {
 # If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
 
 # Build the PEARAI app
-# yarn gulp vscode-win32-x64
+if (-not (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash) {
+    Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+    for ($i = 3; $i -gt 0; $i--) {
+		Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
+		Start-Sleep -Seconds 1
+	}
+	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
+	# yarn gulp vscode-win32-x64
+    Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
+	Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
+    Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiLatestCommitHash" -ForegroundColor Green
+} else {
+	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING BUILD" -ForegroundColor Green
+}
 
 # Build the PEARAI extension (Submodule)
 cd $pearaiSubmoduleDir
