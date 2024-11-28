@@ -69,14 +69,40 @@ jobs:
           name: vscode-win32-x64
           path: ${{ steps.verify-output.outputs.build_path }}
 
+      # Optional: Debug step to verify file
+      - name: Debug - Check File Existence
+        run: |
+          $filepath = "${{ steps.verify-output.outputs.build_path }}\temp.txt"
+          if (Test-Path $filepath) {
+            Write-Host "File exists at: $filepath"
+          } else {
+            Write-Host "File not found at: $filepath"
+          }
+
       # Step 7: Create Release and Upload Raw File
       - name: Create Release
         id: create_release
+        env:
+          VERSION: |
+            $(Get-Content "product.json" | ConvertFrom-Json | Select-Object -ExpandProperty pearAIVersion)
+          DATE: $(Get-Date -Format "ddMMMhhtt")
+        run: |
+          $version = $env:VERSION
+          $date = $env:DATE.ToLower()
+          echo "release_tag=${version}-${date}" >> $env:GITHUB_ENV
+
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ steps.verify-output.outputs.build_path }}/temp.txt
-          tag_name: v${{ github.run_number }}  # Creates a version like v1, v2, etc.
-          name: Release ${{ github.run_number }}
+          files: ${{ steps.verify-output.outputs.build_path }}\temp.txt
+          tag_name: ${{ env.release_tag }}  # Will be something like "1.0.0-28nov243pm"
+          name: Release ${{ env.release_tag }}
           draft: false
           prerelease: false
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      # Optional: Debug step to verify version reading
+      - name: Debug - Check Version
+        run: |
+          $version = Get-Content "product.json" | ConvertFrom-Json
+          Write-Host "PearAI Version: $($version.pearAIVersion)"
