@@ -10,8 +10,8 @@ on:
       submodule-commit-hash:
         description: 'Submodule commit hash to build'
         required: false
-      focus-build:
-        description: 'Focus build'
+      force-build:
+        description: 'Force build'
         required: false
         type: boolean
 # for testing
