@@ -27,11 +27,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
+      # # Step 2: Setup Node.js environment
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version-file: .nvmrc
 
       # Step 3: Create a dummy folder and a temporary text file
       - name: Create Dummy Folder for Testing
@@ -91,10 +91,9 @@ jobs:
         env:
           VERSION: |
             $(Get-Content "product.json" | ConvertFrom-Json | Select-Object -ExpandProperty pearAIVersion)
-          DATE: $(Get-Date -Format "ddMMMhhtt")
         run: |
           $version = $env:VERSION
-          $date = $env:DATE.ToLower()
+          $date = $(Get-Date -Format "ddMMMhhmmtt").ToLower()
           echo "release_tag=${version}-${date}" >> $env:GITHUB_ENV
 
       - name: Create GitHub Release
