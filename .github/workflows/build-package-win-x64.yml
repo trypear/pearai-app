@@ -54,7 +54,7 @@ jobs:
       - name: Debug - Check Cache Status
         run: |
           Write-Host "Raw cache-hit value: ${{ steps.cache-restore.outputs.cache-hit }}"
-          if (${{ steps.cache-restore.outputs.cache-hit }}) {
+          if ("${{ steps.cache-restore.outputs.cache-hit }}" -eq "true") {
             Write-Host "Cache hit! Using cached build output"
           } else {
             Write-Host "Cache miss! Will need to build and cache"
