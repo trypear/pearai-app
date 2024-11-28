@@ -94,7 +94,7 @@ jobs:
         run: |
           $version = $env:VERSION
           $date = $(Get-Date -Format "ddMMMhhmmtt").ToLower()
-          echo "release_tag=${version}.${date}" >> $env:GITHUB_ENV
+          echo "release_tag=${version}${date}" >> $env:GITHUB_ENV
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
