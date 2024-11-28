@@ -3,7 +3,7 @@ param (
 	[bool]$IS_GITHUB_ACTION = $false,
     [string]$Input_PearappCommitHash = $null,
     [string]$Input_SubmoduleCommitHash = $null,
-	[string]$Input_CustomPearappVersion = $null,
+	[string]$Input_CustomPearAppVersion = $null,
     [bool]$Input_ForceBuild = $false
 )
 
@@ -16,8 +16,8 @@ if ($Input_PearappCommitHash) {
 if ($Input_SubmoduleCommitHash) {
 	Write-Host "Input_SubmoduleCommitHash: $Input_SubmoduleCommitHash"
 }
-if ($Input_CustomPearappVersion) {
-	Write-Host "Input_CustomPearappVersion: $Input_CustomPearappVersion"
+if ($Input_CustomPearAppVersion) {
+	Write-Host "Input_CustomPearAppVersion: $Input_CustomPearAppVersion"
 }
 if ($Input_ForceBuild) {
 	Write-Host "Input_ForceBuild: $Input_ForceBuild"
@@ -114,6 +114,16 @@ Write-Host "PEARAI-APP Latest commit hash: $pearaiLatestCommitHash" -ForegroundC
 Write-Host "PEARAI-SUBMODULE Latest commit hash: $pearaiSubmoduleLatestCommitHash" -ForegroundColor Green
 Write-Host "----------------------------------------"
 
+if ($Input_CustomPearAppVersion) {
+    Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED: $Input_CustomPearAppVersion" -ForegroundColor Green
+    $pearAIVersion = $Input_CustomPearAppVersion
+    Write-Host "CUSTOM PEARAI-APP VERSION: $pearAIVersion" -ForegroundColor Green
+    $extensionVersion = $Input_CustomPearAppVersion
+    Write-Host "CUSTOM PEARAI-EXTENSION VERSION: $extensionVersion" -ForegroundColor Green
+    Write-Host "Will skip building PEARAI-APP and update version info in the built app cache and final built extension" -ForegroundColor Green
+    Write-Host "----------------------------------------"
+}
+
 cd $pearaiDir
 # git checkout main
 
@@ -141,6 +151,7 @@ if ($Input_ForceBuild -or -not (Test-Path $cacheBuildCommitFilePath) -or (Get-Co
         Write-Host "----------------------------------------"
         Write-Host ""
     }
+
     if (Test-Path $buildOutputDir) {
         try {
             $creationDate = (Get-Item $buildOutputDir).CreationTime
@@ -151,19 +162,30 @@ if ($Input_ForceBuild -or -not (Test-Path $cacheBuildCommitFilePath) -or (Get-Co
         Rename-Item -Path $buildOutputDir -NewName $backupBuildOutputName
         Write-Host "PREVIOUS BUILD FOUND, RENAMED to $backupBuildOutputName" -ForegroundColor Green
     }
-    for ($i = 3; $i -gt 0; $i--) {
-		Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
-		Start-Sleep -Seconds 1
-	}
+
+    if (-not $IS_GITHUB_ACTION) {
+        for ($i = 3; $i -gt 0; $i--) {
+            Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
+            Start-Sleep -Seconds 1
+        }
+    }
+
 	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
 	# yarn gulp vscode-win32-x64
     Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
 	Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
     Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiLatestCommitHash" -ForegroundColor Green
 } else {
-	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING BUILD" -ForegroundColor Green
+	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING PEARAI-APP BUILD" -ForegroundColor Green
 }
 
+
+if (-not $IS_GITHUB_ACTION) {
+    for ($i = 3; $i -gt 0; $i--) {
+        Write-Host "PEARAI-SUBMODULE BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
+        Start-Sleep -Seconds 1
+    }
+}
 # Build the PEARAI extension (Submodule)
 cd $pearaiSubmoduleDir
 git checkout main
