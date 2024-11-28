@@ -5,13 +5,13 @@ on:
   workflow_dispatch:
     inputs:
       main-commit-hash:
-        description: 'Main commit hash to build'
+        description: 'Main commit hash to build (optional)'
         required: false
       submodule-commit-hash:
-        description: 'Submodule commit hash to build'
+        description: 'Submodule commit hash to build (optional)'
         required: false
       force-build:
-        description: 'Force build'
+        description: 'Force build (optional)'
         required: false
         type: boolean
 # for testing

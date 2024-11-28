@@ -15,11 +15,18 @@ Write-Host "build_path: $env:build_path"
 Write-Host "build_cache_hit: $env:build_cache_hit"
 Write-Host "needs_rebuild: $env:needs_rebuild"
 
-# Print all environment variables (optional)
-Write-Host "`nAll Environment Variables:"
-Get-ChildItem env: | ForEach-Object {
-    Write-Host "$($_.Name): $($_.Value)"
-}
+# Print Workflow Input Variables
+Write-Host "`nWorkflow Input Variables:"
+Write-Host "main_commit_hash: $env:GITHUB_EVENT_INPUT_MAIN_COMMIT_HASH"
+Write-Host "submodule_commit_hash: $env:GITHUB_EVENT_INPUT_SUBMODULE_COMMIT_HASH"
+Write-Host "force_build: $env:GITHUB_EVENT_INPUT_FORCE_BUILD"
+
+# # Print all environment variables (optional)
+# Write-Host "`nAll Environment Variables:"
+# Get-ChildItem env: | ForEach-Object {
+#     Write-Host "$($_.Name): $($_.Value)"
+# }
+
 
 
 if ($env:build_cache_hit -eq "true") {
