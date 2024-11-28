@@ -69,10 +69,14 @@ jobs:
           name: vscode-win32-x64
           path: ${{ steps.verify-output.outputs.build_path }}
 
-      # Step 7: Upload Raw Text File
-      - name: Upload Raw Text File
-        uses: actions/upload-artifact@v4
+      # Step 7: Create Release and Upload Raw File
+      - name: Create Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
         with:
-          name: temp.txt
-          path: ${{ steps.verify-output.outputs.build_path }}/temp.txt
-          compression-level: 0  # Disable compression for raw file
+          files: ${{ steps.verify-output.outputs.build_path }}/temp.txt
+          tag_name: v${{ github.run_number }}  # Creates a version like v1, v2, etc.
+          name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}
