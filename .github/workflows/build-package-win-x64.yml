@@ -82,10 +82,10 @@ jobs:
           $forceBuild = '${{ inputs.force-build }}'
           Write-Host "forceBuild: $forceBuild"
           $params = @()
-          if ($mainCommitHash) { $params += "-Input_MainCommitHash $mainCommitHash" }
-          if ($submoduleCommitHash) { $params += "-Input_SubmoduleCommitHash $submoduleCommitHash" }
-          if ($forceBuild) { $params += "-Input_ForceBuild $forceBuild" }
-          .\.github\workflows\testenv.ps1 -IS_GITHUB_ACTION $true $params
+          if ($mainCommitHash) { $params += "-Input_MainCommitHash '$mainCommitHash'" }
+          if ($submoduleCommitHash) { $params += "-Input_SubmoduleCommitHash '$submoduleCommitHash'" }
+          if ($forceBuild -eq 'true') { $params += "-Input_ForceBuild `$true" }
+          .\.github\workflows\testenv.ps1 -IS_GITHUB_ACTION $true @params
 
 
       # Step 5: List Desktop Contents for Debugging
