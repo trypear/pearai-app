@@ -3,6 +3,9 @@ name: Build Package Download Win x64
 # Manual trigger
 on:
   workflow_dispatch:
+    # Only allow manual triggers from him/build-package-windows branch
+    branches:
+      - him/build-package-windows
     inputs:
       main-commit-hash:
         description: 'Main commit hash to build'
