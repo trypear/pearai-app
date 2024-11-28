@@ -1,0 +1,65 @@
+name: Build Package Download Win x64
+
+# Manual trigger
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'build-package-windows'
+
+jobs:
+  windows:
+    name: Build VSCode for Windows x64
+    runs-on: windows-2022
+    timeout-minutes: 90
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # Step 3: Create a dummy folder and a temporary text file
+      - name: Create Dummy Folder for Testing
+        run: |
+          $username = [Environment]::UserName  # Get the current user's name
+          $dummyOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+          mkdir -Force $dummyOutput
+          Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."  # Create a temp text file
+          Write-Output "$dummyOutput"  # Output the path for later use
+
+      # Step 4: List Desktop Contents for Debugging
+      - name: List Desktop Directory
+        run: |
+          $username = [Environment]::UserName
+          Get-ChildItem "C:\Users\$username\Desktop"
+
+      # Step 5: Verify Build Output and Set Output Variable
+      - name: Verify Build Output
+        id: verify-output
+        run: |
+          $username = [Environment]::UserName  # Get the current user's name
+          $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+          if (-Not (Test-Path $buildOutput)) {
+            Write-Error "Build output not found at $buildOutput"
+            exit 1  # Exit with an error to stop the job
+          } else {
+            Write-Host "Build output found at $buildOutput"
+            echo "BUILD_PATH=$buildOutput" >> $GITHUB_ENV  # Set the environment variable for later steps
+          }
+
+      # Step 6: Upload the Build Output
+      - name: Upload Build Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-win32-x64
+          path: $buildOutput
