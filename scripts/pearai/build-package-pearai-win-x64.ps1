@@ -122,13 +122,16 @@ if ($Input_CustomPearAppVersion) {
     $extensionVersion = $Input_CustomPearAppVersion
     Write-Host "CUSTOM PEARAI-EXTENSION VERSION: $extensionVersion" -ForegroundColor Green
     # Update cache commit file to ensure build is skipped
-    if ((Test-Path $cacheBuildCommitFilePath) -and (Test-Path $buildOutputDir)) {
-        Remove-Item $cacheBuildCommitFilePath -Force
+    if (Test-Path $buildOutputDir) {
+        if (Test-Path $cacheBuildCommitFilePath) {
+            Remove-Item $cacheBuildCommitFilePath -Force
+        }
         Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
         Write-Host "Updated cache commit file to skip build" -ForegroundColor Green
         Write-Host "CACHE COMMIT BYPASSED, CACHE COMMIT WILL HIT" -ForegroundColor Green
     } else {
         Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, BUT NO PREVIOUS BUILD FOUND, WILL BUILD PEARAI-APP" -ForegroundColor Green
+        Write-Host "CACHE COMMIT WILL MISS" -ForegroundColor Green
     }
     Write-Host "----------------------------------------"
 }
@@ -146,7 +149,11 @@ if (Test-Path $pearaiRefDir) {
 # If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
 
 # Build the PEARAI app
-$cacheCommitHit = (Test-Path $cacheBuildCommitFilePath) -or (Get-Content $cacheBuildCommitFilePath) -ne $pearaiLatestCommitHash
+$cacheCommitHit = $false
+if (Test-Path $cacheBuildCommitFilePath) {
+    $cacheCommitHit = (Get-Content $cacheBuildCommitFilePath) -eq $pearaiLatestCommitHash
+}
+
 if ($Input_ForceBuild -or -not $cacheCommitHit) {
     if ($Input_ForceBuild) {
         Write-Host ""
@@ -157,10 +164,16 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
     } else {
         Write-Host ""
         Write-Host "----------------------------------------"
+        if (-not (Test-Path $cacheBuildCommitFilePath)) {
+            Write-Host "CACHE COMMIT FILE NOT FOUND" -ForegroundColor Green
+        } else {
+            Write-Host "CACHE COMMIT MISMATCH" -ForegroundColor Green
+            Write-Host "CACHED COMMIT: $(Get-Content $cacheBuildCommitFilePath)" -ForegroundColor Green
+            Write-Host "LATEST COMMIT: $pearaiLatestCommitHash" -ForegroundColor Green
+        }
         Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
-        Write-Host "----------------------------------------"
-        Write-Host ""
     }
+
 
     if (Test-Path $buildOutputDir) {
         try {
@@ -171,7 +184,12 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
         $backupBuildOutputName = $creationDate.ToString("ddMMyyyy-HHmm") + "-" + (Get-Item $buildOutputDir).Name
         Rename-Item -Path $buildOutputDir -NewName $backupBuildOutputName
         Write-Host "PREVIOUS BUILD FOUND, RENAMED to $backupBuildOutputName" -ForegroundColor Green
+    } else {
+        Write-Host "NO PREVIOUS BUILD FOUND" -ForegroundColor Green
     }
+
+    Write-Host "----------------------------------------"
+    Write-Host ""
 
     if (-not $IS_GITHUB_ACTION) {
         for ($i = 3; $i -gt 0; $i--) {
@@ -187,6 +205,7 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
     Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiLatestCommitHash" -ForegroundColor Green
 } else {
 	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING PEARAI-APP BUILD" -ForegroundColor Green
+    Write-Host "----------------------------------------"
 }
 
 
