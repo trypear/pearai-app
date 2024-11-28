@@ -81,11 +81,12 @@ jobs:
           Write-Host "submoduleCommitHash: $submoduleCommitHash"
           $forceBuild = [System.Convert]::ToBoolean('${{ inputs.force-build }}')
           Write-Host "forceBuild: $forceBuild"
-          $params = @()
-          if ($mainCommitHash) { $params += "-Input_MainCommitHash '$mainCommitHash'" }
-          if ($submoduleCommitHash) { $params += "-Input_SubmoduleCommitHash '$submoduleCommitHash'" }
-          if ($forceBuild) { $params += "-Input_ForceBuild `$true" }
-          .\.github\workflows\testenv.ps1 -IS_GITHUB_ACTION $true @params
+
+          .\.github\workflows\testenv.ps1 `
+            -IS_GITHUB_ACTION $true `
+            -Input_MainCommitHash $mainCommitHash `
+            -Input_SubmoduleCommitHash $submoduleCommitHash `
+            -Input_ForceBuild $forceBuild
 
 
       # Step 5: List Desktop Contents for Debugging
