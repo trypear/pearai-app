@@ -75,11 +75,11 @@ jobs:
       - name: Create Dummy Folder for Testing
         if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
-          $mainCommitHash = '${{ github.event.inputs.main_commit_hash }}'
+          $mainCommitHash = '${{ inputs.main-commit-hash }}'
           Write-Host "mainCommitHash: $mainCommitHash"
-          $submoduleCommitHash = '${{ github.event.inputs.submodule_commit_hash }}'
+          $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
           Write-Host "submoduleCommitHash: $submoduleCommitHash"
-          $forceBuild = '${{ github.event.inputs.force_build }}'
+          $forceBuild = '${{ inputs.force-build }}'
           Write-Host "forceBuild: $forceBuild"
           $params = @()
           if ($mainCommitHash) { $params += "-Input_MainCommitHash $mainCommitHash" }
