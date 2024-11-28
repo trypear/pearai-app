@@ -10,7 +10,7 @@ name: Build Package Download Win x64
 #         default: 'build-package-windows'
 # for testing
 on:
-  pull_request:
+  push:
     branches:
       - build-package-windows
 
