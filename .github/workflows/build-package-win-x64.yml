@@ -12,7 +12,7 @@ name: Build Package Download Win x64
 on:
   push:
     branches:
-      - build-package-windows
+      - him/build-package-windows
 
 jobs:
   windows:
