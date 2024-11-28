@@ -10,14 +10,14 @@ on:
       submodule-commit-hash:
         description: 'Submodule commit hash to build (optional)'
         required: false
+      custom-pearapp-version:
+        description: 'Custom PearApp version (optional) if latest commits are only version bump (will skip build unless force-build is checked) or cache expired'
+        required: false
+        type: string
       force-build:
         description: 'Force build (optional)'
         required: false
         type: boolean
-      custom-pearapp-version:
-        description: 'Custom PearApp version (optional) if latest commits are only version bump (will skip build unless force-build is checked)'
-        required: false
-        type: string
 # for testing
 # on:
 #   push:

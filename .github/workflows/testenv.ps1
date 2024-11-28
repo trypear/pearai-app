@@ -1,7 +1,7 @@
 # GitHub Action Input Variables
 param (
 	[bool]$IS_GITHUB_ACTION = $false,
-    [string]$Input_MainCommitHash = $null,
+    [string]$Input_PearappCommitHash = $null,
     [string]$Input_SubmoduleCommitHash = $null,
     [bool]$Input_ForceBuild = $false
 )
@@ -28,11 +28,9 @@ Write-Host "needs_rebuild: $env:needs_rebuild"
 # Print Workflow Input Variables
 Write-Host "`nWorkflow Input Variables:"
 Write-Host "IS_GITHUB_ACTION: $IS_GITHUB_ACTION"
-Write-Host "main_commit_hash: $Input_MainCommitHash"
+Write-Host "pearapp_commit_hash: $Input_PearappCommitHash"
 Write-Host "submodule_commit_hash: $Input_SubmoduleCommitHash"
 Write-Host "force_build: $Input_ForceBuild"
-$mainCommitHash = '${{ inputs.main-commit-hash }}'
-Write-Host "mainCommitHash: $mainCommitHash"
 
 # # Print all environment variables (optional)
 # Write-Host "`nAll Environment Variables:"
