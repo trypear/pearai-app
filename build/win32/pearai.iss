@@ -23,7 +23,7 @@
 
 #define MyAppName "PearAI"
 #define ApplicationName "PearAI"
-; Check if MyAppVersion is defined externally, otherwise use default
+; Check if MyAppVersion is passed as a parameter, otherwise use default
 #ifndef MyAppVersion
   #define MyAppVersion "1.5.2"
 #endif
@@ -88,8 +88,8 @@ Name: "runcode"; Description: "{cm:RunAfter,{#NameShort}}"; GroupDescription: "{
 
 
 [Files]
-;Source: "${DesktopDir}\VSCode-win32-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-;Source: "${DesktopDir}\VSCode-win32-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#DesktopDir}\VSCode-win32-x64\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#DesktopDir}\VSCode-win32-x64\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
