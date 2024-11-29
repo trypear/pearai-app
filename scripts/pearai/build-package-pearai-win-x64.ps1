@@ -56,11 +56,10 @@ if ($Input_ForceBuild) {
 }
 
 
-Write-Host "----------------------------------------------"
-
-
 $scriptStartTime = Get-Date
+Write-Host "SCRIPT STARTED AT: $scriptStartTime" -ForegroundColor Green
 
+Write-Host "----------------------------------------------"
 
 # Function to execute a command and check its status
 function Invoke-CMD {
@@ -279,6 +278,7 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
     } else {
         Write-Host ""
         Write-Host "----------------------------------------"
+        Write-Host "CACHE COMMIT MISS" -ForegroundColor Green
         if (-not (Test-Path $cacheBuildCommitFilePath)) {
             Write-Host "CACHE COMMIT FILE NOT FOUND" -ForegroundColor Green
         } else {
@@ -286,7 +286,8 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
             Write-Host "CACHED COMMIT: $(Get-Content $cacheBuildCommitFilePath)" -ForegroundColor Green
             Write-Host "LATEST COMMIT: $pearaiCheckedOutCommitHash" -ForegroundColor Green
         }
-        Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+        Write-Host "WILL BUILD PEARAI-APP" -ForegroundColor Green
+        Write-Host "----------------------------------------"
     }
 
 
@@ -321,11 +322,13 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
     }
 
     $pearaiAppBuildStartTime = Get-Date
+    Write-Host "PEARAI-APP BUILD STARTED AT: $($pearaiAppBuildStartTime.ToString('hh:mm tt'))" -ForegroundColor Green
 	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
     cd $pearaiDir
 	yarn gulp vscode-win32-x64
     Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
     $pearaiAppBuildEndTime = Get-Date
+    Write-Host "PEARAI-APP BUILD COMPLETED AT: $($pearaiAppBuildEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
 	Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiCheckedOutCommitHash
     Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiCheckedOutCommitHash" -ForegroundColor Green
 } else {
@@ -343,14 +346,15 @@ if (-not $IS_GITHUB_ACTION) {
 cd $pearaiSubmoduleDir
 git checkout main
 $pearaiSubmoduleBuildStartTime = Get-Date
-Write-Host "PEARAI-SUBMODULE BUILD STARTED" -ForegroundColor Green
+Write-Host "PEARAI-SUBMODULE BUILD STARTED AT: $($pearaiSubmoduleBuildStartTime.ToString('hh:mm tt'))" -ForegroundColor Green
 $installAndBuildScript = Join-Path -Path $pearaiSubmoduleDir -ChildPath 'scripts\install-and-build.ps1'
 Invoke-Expression "powershell.exe -ExecutionPolicy Bypass -File $installAndBuildScript"
 $pearaiSubmoduleBuildEndTime = Get-Date
-Write-Host "PEARAI-SUBMODULE BUILD COMPLETED" -ForegroundColor Green
+Write-Host "PEARAI-SUBMODULE BUILD COMPLETED AT: $($pearaiSubmoduleBuildEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
+
 
 $extensionAndZipInstallStartTime = Get-Date
-Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING STARTED" -ForegroundColor Green
+Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING STARTED AT: $($extensionAndZipInstallStartTime.ToString('hh:mm tt'))" -ForegroundColor Green
 # copy .vsix to .zip
 $pearaiExtensionZipPath = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearai.pearai.zip"
 Copy-Item -Path $pearaiExtension -Destination $pearaiExtensionZipPath
@@ -404,7 +408,7 @@ Expand-Archive -Path $python2023ExtensionsZip -DestinationPath $builtAppPearAIEx
 Write-Host "Python 2023 extensions extracted to $builtAppPearAIExtensionDir"
 
 $extensionAndZipInstallEndTime = Get-Date
-Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING COMPLETED" -ForegroundColor Green
+Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING COMPLETED AT: $($extensionAndZipInstallEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
 
 if ($Input_CustomPearAppVersion) {
     # Don't serialize the JSON, it messes up the formatting, read it raw.
@@ -457,7 +461,7 @@ Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set 
 
 
 $innoSetupCompilerStartTime = Get-Date
-Write-Host "INNO SETUP COMPILER STARTED" -ForegroundColor Green
+Write-Host "INNO SETUP COMPILER STARTED AT: $($innoSetupCompilerStartTime.ToString('hh:mm tt'))" -ForegroundColor Green
 # make setup using Inno Setup Compiler
 $innoOutputDir = Join-Path -Path $desktopDir -ChildPath "inno-output"
 $innoSetupCompiler = Join-Path -Path $pearaiDir -ChildPath "build/win32/Inno Setup 6/ISCC.exe"
@@ -472,11 +476,12 @@ if ((Test-Path $innoOutputDir) -and (-not $IS_GITHUB_ACTION)) {
     explorer $innoOutputDir
 }
 $innoSetupCompilerEndTime = Get-Date
-Write-Host "INNO SETUP COMPILER COMPLETED" -ForegroundColor Green
+Write-Host "INNO SETUP COMPILER COMPLETED AT: $($innoSetupCompilerEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
 
 
 
 $scriptEndTime = Get-Date
+Write-Host "SCRIPT ENDED AT: $($scriptEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
 $totalScriptExecutionTime = $scriptEndTime - $scriptStartTime
 #  -----------------------------------------------
 # dummy time variables to test the time report output
