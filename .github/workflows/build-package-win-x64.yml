@@ -33,15 +33,20 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      # Step 1: Checkout the repository
+      - uses: actions/checkout@v4
+      # Setup Node.js environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      # Setup Python environment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      # Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Step 2: Setup Node.js environment
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
 
 
       # # Step 2: Set Build Path
