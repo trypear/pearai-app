@@ -322,6 +322,7 @@ if ($Input_ForceBuild -or -not $cacheCommitHit) {
 
     $pearaiAppBuildStartTime = Get-Date
 	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
+    cd $pearaiDir
 	yarn gulp vscode-win32-x64
     Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
     $pearaiAppBuildEndTime = Get-Date
