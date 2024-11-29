@@ -143,8 +143,8 @@ $pearaiBranchName = (git rev-parse --abbrev-ref HEAD).Trim()
 $pearaiCheckedOutCommitHash = (git rev-parse HEAD).Trim()
 $pearaiGitStatus = git status --porcelain
 
-if ($pearaiGitStatus.Trim() -eq "M extensions/pearai-submodule") {
-    # ignore submodule status
+if ("$($pearaiGitStatus.Trim())" -eq "M extensions/pearai-submodule") {
+    # ignore git status if submodule is the ONLY modified file
     $pearaiGitStatus = ""
 }
 
@@ -153,6 +153,11 @@ $pearaiSubmoduleOriginMainLatestCommitHash = (git rev-parse origin/main).Trim()
 $pearaiSubmoduleBranchName = (git rev-parse --abbrev-ref HEAD).Trim()
 $pearaiSubmoduleCheckedOutCommitHash = (git rev-parse HEAD).Trim()
 $pearaiSubmoduleGitStatus = git status --porcelain
+
+if ("$($pearaiSubmoduleGitStatus.Trim())" -eq "M extensions/vscode/continue_rc_schema.json M extensions/vscode/gui/index.html") {
+    # ignore submodule status if only continue_rc_schema.json and index.html are modified
+    $pearaiSubmoduleGitStatus = ""
+}
 
 Write-Host "----------------------------------------"
 Write-Host "PEARAI-APP       Version: $pearAIVersion" -ForegroundColor Green
