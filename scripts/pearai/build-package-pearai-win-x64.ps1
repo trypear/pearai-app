@@ -20,7 +20,6 @@
 # *                                *
 # ********** END INSTRUCTIONS ******
 
-$scriptStartTime = Get-Date
 
 # --------- GitHub Action Input Variables ---------
 param (
@@ -58,6 +57,10 @@ if ($Input_ForceBuild) {
 
 
 Write-Host "----------------------------------------------"
+
+
+$scriptStartTime = Get-Date
+
 
 # Function to execute a command and check its status
 function Invoke-CMD {
@@ -471,65 +474,87 @@ $innoSetupCompilerEndTime = Get-Date
 Write-Host "INNO SETUP COMPILER COMPLETED" -ForegroundColor Green
 
 
-for ($i = 0; $i -lt 2; $i++) {
-    Write-Host "Hello, World!"
-    Start-Sleep -Seconds 1
-}
 
 $scriptEndTime = Get-Date
 $totalScriptExecutionTime = $scriptEndTime - $scriptStartTime
+#  -----------------------------------------------
+# dummy time variables to test the time report output
+# for ($i = 0; $i -lt 2; $i++) {
+#     Write-Host "Hello, World!"
+#     Start-Sleep -Seconds 1
+# }
+# $pearaiAppBuildStartTime = Get-Date -Minute (Get-Random -Minimum 0 -Maximum 59)
+# $pearaiAppBuildEndTime = $pearaiAppBuildStartTime.AddMinutes((Get-Random -Minimum 1 -Maximum 60))
+# $pearaiSubmoduleBuildStartTime = Get-Date -Minute (Get-Random -Minimum 0 -Maximum 59)
+# $pearaiSubmoduleBuildEndTime = $pearaiSubmoduleBuildStartTime.AddMinutes((Get-Random -Minimum 1 -Maximum 60))
+# $extensionAndZipInstallStartTime = Get-Date -Minute (Get-Random -Minimum 0 -Maximum 59)
+# $extensionAndZipInstallEndTime = $extensionAndZipInstallStartTime.AddMinutes((Get-Random -Minimum 1 -Maximum 60))
+# $innoSetupCompilerStartTime = Get-Date -Minute (Get-Random -Minimum 0 -Maximum 59)
+# $innoSetupCompilerEndTime = $innoSetupCompilerStartTime.AddMinutes((Get-Random -Minimum 1 -Maximum 60))
+# $totalScriptExecutionTime = (Get-Date -Hour (Get-Random -Minimum 16 -Maximum 23) -Minute (Get-Random -Minimum 0 -Maximum 59)) - $scriptStartTime
+#  -----------------------------------------------
 
 Write-Host ""
 Write-Host "----------------------------------------"
 Write-Host "Execution Time Report" -ForegroundColor Black -BackgroundColor Cyan
 Write-Host "Date Started: $($scriptStartTime.ToString('dd MMM yyyy'))" -ForegroundColor Cyan
-Write-Host "Script started at: $($scriptStartTime.ToString('hh:mm tt'))"
-Write-Host "Script ended at: $($scriptEndTime.ToString('hh:mm tt'))"
+Write-Host "SCRIPT STARTED AT - $($scriptStartTime.ToString('hh:mm tt'))"
+Write-Host "SCRIPT ENDED AT - $($scriptEndTime.ToString('hh:mm tt'))"
+
+Write-Host ""
+
 if ($pearaiAppBuildStartTime -ne $null) {
-    Write-Host "PEARAI-APP BUILD STARTED AT: $($pearaiAppBuildStartTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-App Build Started At - $($pearaiAppBuildStartTime.ToString('hh:mm tt'))"
 }
 if ($pearaiAppBuildEndTime -ne $null) {
-    Write-Host "PEARAI-APP BUILD COMPLETED AT: $($pearaiAppBuildEndTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-App Build Completed At - $($pearaiAppBuildEndTime.ToString('hh:mm tt'))"
 }
 if ($pearaiSubmoduleBuildStartTime -ne $null) {
-    Write-Host "PEARAI-SUBMODULE BUILD STARTED AT: $($pearaiSubmoduleBuildStartTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-Submodule Build Started At - $($pearaiSubmoduleBuildStartTime.ToString('hh:mm tt'))"
 }
 if ($pearaiSubmoduleBuildEndTime -ne $null) {
-    Write-Host "PEARAI-SUBMODULE BUILD COMPLETED AT: $($pearaiSubmoduleBuildEndTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-Submodule Build Completed At - $($pearaiSubmoduleBuildEndTime.ToString('hh:mm tt'))"
 }
 if ($extensionAndZipInstallStartTime -ne $null) {
-    Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING STARTED AT: $($extensionAndZipInstallStartTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-Extension And Python Extensions Install/Copying Started At - $($extensionAndZipInstallStartTime.ToString('hh:mm tt'))"
 }
 if ($extensionAndZipInstallEndTime -ne $null) {
-    Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING COMPLETED AT: $($extensionAndZipInstallEndTime.ToString('hh:mm tt'))"
+    Write-Host "PearAI-Extension And Python Extensions Install/Copying Completed At - $($extensionAndZipInstallEndTime.ToString('hh:mm tt'))"
 }
 if ($innoSetupCompilerStartTime -ne $null) {
-    Write-Host "INNO SETUP COMPILER STARTED AT: $($innoSetupCompilerStartTime.ToString('hh:mm tt'))"
+    Write-Host "Inno Setup Compiler Started At - $($innoSetupCompilerStartTime.ToString('hh:mm tt'))"
 }
 if ($innoSetupCompilerEndTime -ne $null) {
-    Write-Host "INNO SETUP COMPILER COMPLETED AT: $($innoSetupCompilerEndTime.ToString('hh:mm tt'))"
+    Write-Host "Inno Setup Compiler Completed At - $($innoSetupCompilerEndTime.ToString('hh:mm tt'))"
 }
+
+Write-Host ""
+
 if ($pearaiAppBuildStartTime -ne $null -and $pearaiAppBuildEndTime -ne $null) {
-    Write-Host "PEARAI-APP BUILD TIME: $(($pearaiAppBuildEndTime - $pearaiAppBuildStartTime).ToString('hh:mm tt'))" -ForegroundColor Green
+    $buildTime = $pearaiAppBuildEndTime - $pearaiAppBuildStartTime
+    Write-Host "PEARAI-APP BUILD TIME - $($buildTime.Hours)h $($buildTime.Minutes)m $($buildTime.Seconds)s" -ForegroundColor Green
 }
 if ($pearaiSubmoduleBuildStartTime -ne $null -and $pearaiSubmoduleBuildEndTime -ne $null) {
-    Write-Host "PEARAI-SUBMODULE BUILD TIME: $(($pearaiSubmoduleBuildEndTime - $pearaiSubmoduleBuildStartTime).ToString('hh:mm tt'))" -ForegroundColor Green
+    $submoduleBuildTime = $pearaiSubmoduleBuildEndTime - $pearaiSubmoduleBuildStartTime
+    Write-Host "PEARAI-SUBMODULE BUILD TIME - $($submoduleBuildTime.Hours)h $($submoduleBuildTime.Minutes)m $($submoduleBuildTime.Seconds)s" -ForegroundColor Green
 }
 if ($extensionAndZipInstallStartTime -ne $null -and $extensionAndZipInstallEndTime -ne $null) {
-    Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING TIME: $(($extensionAndZipInstallEndTime - $extensionAndZipInstallStartTime).ToString('hh:mm tt'))" -ForegroundColor Green
+    $installTime = $extensionAndZipInstallEndTime - $extensionAndZipInstallStartTime
+    Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING TIME - $($installTime.Hours)h $($installTime.Minutes)m $($installTime.Seconds)s" -ForegroundColor Green
 }
 if ($innoSetupCompilerStartTime -ne $null -and $innoSetupCompilerEndTime -ne $null) {
-    Write-Host "INNO SETUP COMPILER TIME: $(($innoSetupCompilerEndTime - $innoSetupCompilerStartTime).ToString('hh:mm tt'))" -ForegroundColor Green
+    $compilerTime = $innoSetupCompilerEndTime - $innoSetupCompilerStartTime
+    Write-Host "INNO SETUP COMPILER TIME - $($compilerTime.Hours)h $($compilerTime.Minutes)m $($compilerTime.Seconds)s" -ForegroundColor Green
 }
 Write-Host "----------------------------------------"
 Write-Host ""
 Write-Host "----------------------------------------"
 Write-Host "SUCCESS: PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
 if ($totalScriptExecutionTime.Hours -eq 0) {
-    Write-Host "Total script execution time: $($totalScriptExecutionTime.Minutes) minutes, $($totalScriptExecutionTime.Seconds) seconds" -ForegroundColor Green
+    Write-Host "TOTAL SCRIPT EXECUTION TIME: $($totalScriptExecutionTime.Minutes) minutes, $($totalScriptExecutionTime.Seconds) seconds" -ForegroundColor Green
 } else {
-    Write-Host "Total script execution time: $($totalScriptExecutionTime.Hours) hours, $($totalScriptExecutionTime.Minutes) minutes, $($totalScriptExecutionTime.Seconds) seconds" -ForegroundColor Green
+    Write-Host "TOTAL SCRIPT EXECUTION TIME: $($totalScriptExecutionTime.Hours) hours, $($totalScriptExecutionTime.Minutes) minutes, $($totalScriptExecutionTime.Seconds) seconds" -ForegroundColor Green
 }
 Write-Host "----------------------------------------"
 
-# cd $pearaiDir
+cd $pearaiDir
