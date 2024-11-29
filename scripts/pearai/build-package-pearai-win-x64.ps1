@@ -152,7 +152,7 @@ cd $pearaiDir
 if ((git rev-parse --abbrev-ref HEAD) -eq "main") {
     Write-Host "ON MAIN BRANCH" -ForegroundColor Green
 } else {
-    Write-Host "WARNING: ** NOT ON MAIN BRANCH - $(git rev-parse --abbrev-ref HEAD) **" -ForegroundColor Yellow
+    Write-Host "WARNING: ** NOT ON MAIN BRANCH ** $(git rev-parse --abbrev-ref HEAD) **" -ForegroundColor Yellow
 }
 
 if (-not (git status --porcelain)) {
@@ -161,13 +161,19 @@ if (-not (git status --porcelain)) {
     Write-Host "WARNING: ** UNCOMMITTED CHANGES **" -ForegroundColor Yellow
 }
 
-try {
-    if ($Input_PearappCommitHash) {
+if ($Input_PearappCommitHash) {
+    try {
+        if (-not (git rev-parse --quiet --verify $Input_PearappCommitHash)) {
+            Write-Host "ERROR: PEARAPP COMMIT NOT FOUND - $Input_PearappCommitHash " -ForegroundColor Red
+            exit 1
+        }
+
         git checkout $Input_PearappCommitHash
+        Write-Host "CHECKED OUT PEARAI-APP COMMIT $Input_PearappCommitHash" -ForegroundColor Green
+    } catch {
+        Write-Host "ERROR: FAILED TO CHECKOUT PEARAI-APP COMMIT $Input_PearappCommitHash" -ForegroundColor Red
+        exit 1
     }
-} catch {
-    Write-Host "Error checking out PEARAI-APP commit $Input_PearappCommitHash" -ForegroundColor Red
-    exit 1
 }
 
 # # Remove pearai-ref directory if it exists
