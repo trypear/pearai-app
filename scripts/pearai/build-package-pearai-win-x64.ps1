@@ -149,198 +149,224 @@ if ($Input_CustomPearAppVersion) {
 }
 
 cd $pearaiDir
-# git checkout main
-
-# Remove pearai-ref directory if it exists
-if (Test-Path $pearaiRefDir) {
-	Write-Host "Removing pearai-ref directory"
-    Remove-Item $pearaiRefDir -Recurse -Force
-}
-
-# If you have not already, run ./scripts/pearai/setup-environment.[sh,ps1]
-# If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
-
-# Build the PEARAI app
-$cacheCommitHit = $false
-if (Test-Path $cacheBuildCommitFilePath) {
-    $cacheCommitHit = (Get-Content $cacheBuildCommitFilePath) -eq $pearaiLatestCommitHash
-}
-
-if ($Input_ForceBuild -or -not $cacheCommitHit) {
-    if ($Input_ForceBuild) {
-        Write-Host ""
-        Write-Host "----------------------------------------"
-        Write-Host "FORCE BUILD FLAG IS TRUE - BUILDING PEARAI-APP" -ForegroundColor Green
-        Write-Host "----------------------------------------"
-        Write-Host ""
-    } else {
-        Write-Host ""
-        Write-Host "----------------------------------------"
-        if (-not (Test-Path $cacheBuildCommitFilePath)) {
-            Write-Host "CACHE COMMIT FILE NOT FOUND" -ForegroundColor Green
-        } else {
-            Write-Host "CACHE COMMIT MISMATCH" -ForegroundColor Green
-            Write-Host "CACHED COMMIT: $(Get-Content $cacheBuildCommitFilePath)" -ForegroundColor Green
-            Write-Host "LATEST COMMIT: $pearaiLatestCommitHash" -ForegroundColor Green
-        }
-        Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
-    }
-
-
-    if (Test-Path $buildOutputDir) {
-        try {
-            $creationDate = (Get-Item $buildOutputDir).CreationTime
-        } catch {
-            $creationDate = Get-Date
-        }
-        $backupBuildOutputName = $creationDate.ToString("ddMMyyyy-HHmm") + "-" + (Get-Item $buildOutputDir).Name
-        Rename-Item -Path $buildOutputDir -NewName $backupBuildOutputName
-        Write-Host "PREVIOUS BUILD FOUND, RENAMED to $backupBuildOutputName" -ForegroundColor Green
-    } else {
-        Write-Host "NO PREVIOUS BUILD FOUND" -ForegroundColor Green
-    }
-
-    Write-Host "----------------------------------------"
-    Write-Host ""
-
-    if (-not $IS_GITHUB_ACTION) {
-        for ($i = 3; $i -gt 0; $i--) {
-            Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
-            Start-Sleep -Seconds 1
-        }
-    }
-
-	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
-	# yarn gulp vscode-win32-x64
-    Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
-	Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
-    Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiLatestCommitHash" -ForegroundColor Green
+if ((git rev-parse --abbrev-ref HEAD) -eq "main") {
+    Write-Host "ON MAIN BRANCH" -ForegroundColor Green
 } else {
-	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING PEARAI-APP BUILD" -ForegroundColor Green
-    Write-Host "----------------------------------------"
+    Write-Host "WARNING: ** NOT ON MAIN BRANCH - $(git rev-parse --abbrev-ref HEAD) **" -ForegroundColor Yellow
 }
 
+if (-not (git status --porcelain)) {
+    Write-Host "CLEAN GIT STATE" -ForegroundColor Green
+} else {
+    Write-Host "WARNING: ** UNCOMMITTED CHANGES **" -ForegroundColor Yellow
+}
 
-if (-not $IS_GITHUB_ACTION) {
-    for ($i = 3; $i -gt 0; $i--) {
-        Write-Host "PEARAI-SUBMODULE BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
-        Start-Sleep -Seconds 1
+try {
+    if ($Input_PearappCommitHash) {
+        git checkout $Input_PearappCommitHash
     }
-}
-# Build the PEARAI extension (Submodule)
-cd $pearaiSubmoduleDir
-git checkout main
-$installAndBuildScript = Join-Path -Path $pearaiSubmoduleDir -ChildPath 'scripts\install-and-build.ps1'
-Invoke-Expression "powershell.exe -ExecutionPolicy Bypass -File $installAndBuildScript"
-
-# copy .vsix to .zip
-$pearaiExtensionZipPath = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearai.pearai.zip"
-Copy-Item -Path $pearaiExtension -Destination $pearaiExtensionZipPath
-Write-Host "Copied $pearaiExtension to $pearaiExtensionZipPath"
-
-# Extract the PEARAI extension
-$extractDir = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearaiExtensionExtracted"
-if (Test-Path $extractDir) {
-    Write-Host "Deleting existing extract directory"
-    Remove-Item $extractDir -Recurse -Force
-}
-if (-not (Test-Path $extractDir)) {
-    New-Item -ItemType Directory -Path $extractDir
-}
-Expand-Archive -Path $pearaiExtensionZipPath -DestinationPath $extractDir -Force
-Write-Host "Extracted $pearaiExtension to $extractDir"
-if (Test-Path (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai")) {
-    Write-Host "Deleting existing pearai.pearai directory in built app"
-    Remove-Item (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai") -Recurse -Force
-}
-Copy-Item -Path (Join-Path -Path $extractDir -ChildPath "extension") -Destination (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai") -Recurse
-Write-Host "Extension copied to $builtAppPearAIExtensionDir"
-
-if (Test-Path $pearaiExtensionZipPath) {
-    Write-Host "Deleting PEARAI extension zip file"
-    Remove-Item $pearaiExtensionZipPath -Force
-}
-if (Test-Path $extractDir) {
-    Write-Host "Deleting extract directory"
-    Remove-Item $extractDir -Recurse -Force
+} catch {
+    Write-Host "Error checking out PEARAI-APP commit $Input_PearappCommitHash" -ForegroundColor Red
+    exit 1
 }
 
-# double check if pearai-ref directory exists
-$pearaiRefPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai-ref"
-if (Test-Path $pearaiRefPath) {
-    Write-Host "Removing pearai-ref directory"
-    Remove-Item $pearaiRefPath -Recurse -Force
-}
+# # Remove pearai-ref directory if it exists
+# if (Test-Path $pearaiRefDir) {
+# 	Write-Host "Removing pearai-ref directory"
+#     Remove-Item $pearaiRefDir -Recurse -Force
+# }
 
-# double check if pearai-submodule directory exists
-$pearaiSubmodulePath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai-submodule"
-if (Test-Path $pearaiSubmodulePath) {
-    Write-Host "Removing pearai-submodule directory"
-    Remove-Item $pearaiSubmodulePath -Recurse -Force
-}
+# # If you have not already, run ./scripts/pearai/setup-environment.[sh,ps1]
+# # If already ran that upon your first install, run ./scripts/pearai/install-dependencies.[sh,ps1]
 
+# # Build the PEARAI app
+# $cacheCommitHit = $false
+# if (Test-Path $cacheBuildCommitFilePath) {
+#     $cacheCommitHit = (Get-Content $cacheBuildCommitFilePath) -eq $pearaiLatestCommitHash
+# }
 
-# extract python 2023 extensions to the built app
-$python2023ExtensionsZip = Join-Path -Path $pearaiDir -ChildPath "extensions/windows-python-2023-extensions.zip"
-Expand-Archive -Path $python2023ExtensionsZip -DestinationPath $builtAppPearAIExtensionDir -Force
-Write-Host "Python 2023 extensions extracted to $builtAppPearAIExtensionDir"
-
-
-if ($Input_CustomPearAppVersion) {
-    # Don't serialize the JSON, it messes up the formatting, read it raw.
-    Write-Host "----------------------------------------"
-    Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, UPDATING VERSION INFO" -ForegroundColor Green
-
-    # Update product.json while preserving original formatting
-    $builtAppProductJsonPath = Join-Path -Path $buildOutputDir -ChildPath "resources/app/product.json"
-    $productJsonContent = Get-Content -Path $builtAppProductJsonPath -Raw
-    $productJsonContent = $productJsonContent -replace '"pearAIVersion"\s*:\s*"[^"]*"', "`"pearAIVersion`": `"$pearAIVersion`""
-    Set-Content -Path $builtAppProductJsonPath -Value $productJsonContent -NoNewline
-    Write-Host "Updated pearAIVersion in pearai-app product.json to $pearAIVersion" -ForegroundColor Green
-
-    # Update package.json while preserving original formatting
-    $builtExtensionPackageJsonPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai/package.json"
-    $packageJsonContent = Get-Content -Path $builtExtensionPackageJsonPath -Raw
-    $packageJsonContent = $packageJsonContent -replace '"version"\s*:\s*"[^"]*"', "`"version`": `"$extensionVersion`""
-    Set-Content -Path $builtExtensionPackageJsonPath -Value $packageJsonContent -NoNewline
-    Write-Host "Updated version in extension package.json to $extensionVersion" -ForegroundColor Green
-    Write-Host "----------------------------------------"
-}
+# if ($Input_ForceBuild -or -not $cacheCommitHit) {
+#     if ($Input_ForceBuild) {
+#         Write-Host ""
+#         Write-Host "----------------------------------------"
+#         Write-Host "FORCE BUILD FLAG IS TRUE - BUILDING PEARAI-APP" -ForegroundColor Green
+#         Write-Host "----------------------------------------"
+#         Write-Host ""
+#     } else {
+#         Write-Host ""
+#         Write-Host "----------------------------------------"
+#         if (-not (Test-Path $cacheBuildCommitFilePath)) {
+#             Write-Host "CACHE COMMIT FILE NOT FOUND" -ForegroundColor Green
+#         } else {
+#             Write-Host "CACHE COMMIT MISMATCH" -ForegroundColor Green
+#             Write-Host "CACHED COMMIT: $(Get-Content $cacheBuildCommitFilePath)" -ForegroundColor Green
+#             Write-Host "LATEST COMMIT: $pearaiLatestCommitHash" -ForegroundColor Green
+#         }
+#         Write-Host "CACHE COMMIT MISS - BUILDING PEARAI-APP" -ForegroundColor Green
+#     }
 
 
-# Set Version info for the built app
-$versionInfo = @{
-    'FileDescription' = 'PearAI';
-    'ProductName' = 'PearAI';
-	'InternalName' = 'PearAI';
-    'CompanyName' = 'PearAI, Inc.';
-    'FileVersion' = $pearAIVersion;
-    'ProductVersion' = $pearAIVersion;
-	'LegalCopyright' = 'Copyright (C) 2015 Microsoft, Inc. All rights reserved.';
-	'OriginalFilename' = 'PearAI.exe';
-}
+#     if (Test-Path $buildOutputDir) {
+#         try {
+#             $creationDate = (Get-Item $buildOutputDir).CreationTime
+#         } catch {
+#             $creationDate = Get-Date
+#         }
+#         $backupBuildOutputName = $creationDate.ToString("ddMMyyyy-HHmm") + "-" + (Get-Item $buildOutputDir).Name
+#         try {
+#             Rename-Item -Path $buildOutputDir -NewName $backupBuildOutputName
+#         } catch {
+#             Write-Host "Failed to backup/rename `"$buildOutputDir`" - TO - `"$backupBuildOutputName`"" -ForegroundColor Red
+#             Write-Host "Please close any apps using the directory or backup/rename the directory manually and re-run the script" -ForegroundColor Red
+#             Write-Host "Error: $_" -ForegroundColor Red
+#             exit 1
+#         }
+#         Write-Host "PREVIOUS BUILD FOUND, RENAMED to $backupBuildOutputName" -ForegroundColor Green
+#     } else {
+#         Write-Host "NO PREVIOUS BUILD FOUND" -ForegroundColor Green
+#     }
 
-$updateVersionInfoCommand = "$rceditExe `"$builtAppPearAIExePath`" " +
-    "--set-icon `"$pearIconPath`" " +
-    "--set-version-string `"FileDescription`" `"$($versionInfo['FileDescription'])`" " +
-    "--set-version-string `"ProductName`" `"$($versionInfo['ProductName'])`" " +
-    "--set-version-string `"InternalName`" `"$($versionInfo['InternalName'])`" " +
-    "--set-version-string `"CompanyName`" `"$($versionInfo['CompanyName'])`" " +
-    "--set-version-string `"FileVersion`" `"$($versionInfo['FileVersion'])`" " +
-    "--set-version-string `"ProductVersion`" `"$($versionInfo['ProductVersion'])`" " +
-    "--set-version-string `"LegalCopyright`" `"$($versionInfo['LegalCopyright'])`" " +
-    "--set-version-string `"OriginalFilename`" `"$($versionInfo['OriginalFilename'])`" " +
-	"--set-file-version `"$($versionInfo['FileVersion'])`" " +
-	"--set-product-version `"$($versionInfo['ProductVersion'])`" "
+#     Write-Host "----------------------------------------"
+#     Write-Host ""
 
-Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set icon and version info on EXE" -ErrorMessage "Failed to set icon and version info on EXE"
+#     if (-not $IS_GITHUB_ACTION) {
+#         for ($i = 3; $i -gt 0; $i--) {
+#             Write-Host "PEARAI-APP BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
+#             Start-Sleep -Seconds 1
+#         }
+#     }
+
+# 	Write-Host "PEARAI-APP BUILD STARTED" -ForegroundColor Green
+# 	# yarn gulp vscode-win32-x64
+#     Write-Host "PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
+# 	Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiLatestCommitHash
+#     Write-Host "PEARAI-APP BUILD COMMIT HASH CACHED - $pearaiLatestCommitHash" -ForegroundColor Green
+# } else {
+# 	Write-Host "PEARAI-APP CACHE COMMIT HIT, SKIPPING PEARAI-APP BUILD" -ForegroundColor Green
+#     Write-Host "----------------------------------------"
+# }
 
 
-# make setup using Inno Setup Compiler
-$innoSetupCompiler = Join-Path -Path $pearaiDir -ChildPath "build/win32/Inno Setup 6/ISCC.exe"
-Write-Host "Inno Setup Compiler: $innoSetupCompiler"
-$innoSetupScript = Join-Path -Path $pearaiDir -ChildPath "build/win32/pearai.iss"
-Write-Host "Inno Setup script: $innoSetupScript"
-& $innoSetupCompiler "/dMyAppVersion=$pearAIVersion" $innoSetupScript
+# if (-not $IS_GITHUB_ACTION) {
+#     for ($i = 3; $i -gt 0; $i--) {
+#         Write-Host "PEARAI-SUBMODULE BUILD STARTING IN $i SECONDS..." -ForegroundColor Green
+#         Start-Sleep -Seconds 1
+#     }
+# }
+# # Build the PEARAI extension (Submodule)
+# cd $pearaiSubmoduleDir
+# git checkout main
+# $installAndBuildScript = Join-Path -Path $pearaiSubmoduleDir -ChildPath 'scripts\install-and-build.ps1'
+# Invoke-Expression "powershell.exe -ExecutionPolicy Bypass -File $installAndBuildScript"
 
-cd $pearaiDir
+# # copy .vsix to .zip
+# $pearaiExtensionZipPath = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearai.pearai.zip"
+# Copy-Item -Path $pearaiExtension -Destination $pearaiExtensionZipPath
+# Write-Host "Copied $pearaiExtension to $pearaiExtensionZipPath"
+
+# # Extract the PEARAI extension
+# $extractDir = Join-Path -Path $pearaiExtensionBuildDir -ChildPath "pearaiExtensionExtracted"
+# if (Test-Path $extractDir) {
+#     Write-Host "Deleting existing extract directory"
+#     Remove-Item $extractDir -Recurse -Force
+# }
+# if (-not (Test-Path $extractDir)) {
+#     New-Item -ItemType Directory -Path $extractDir
+# }
+# Expand-Archive -Path $pearaiExtensionZipPath -DestinationPath $extractDir -Force
+# Write-Host "Extracted $pearaiExtension to $extractDir"
+# if (Test-Path (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai")) {
+#     Write-Host "Deleting existing pearai.pearai directory in built app"
+#     Remove-Item (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai") -Recurse -Force
+# }
+# Copy-Item -Path (Join-Path -Path $extractDir -ChildPath "extension") -Destination (Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai") -Recurse
+# Write-Host "Extension copied to $builtAppPearAIExtensionDir"
+
+# if (Test-Path $pearaiExtensionZipPath) {
+#     Write-Host "Deleting PEARAI extension zip file"
+#     Remove-Item $pearaiExtensionZipPath -Force
+# }
+# if (Test-Path $extractDir) {
+#     Write-Host "Deleting extract directory"
+#     Remove-Item $extractDir -Recurse -Force
+# }
+
+# # double check if pearai-ref directory exists
+# $pearaiRefPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai-ref"
+# if (Test-Path $pearaiRefPath) {
+#     Write-Host "Removing pearai-ref directory"
+#     Remove-Item $pearaiRefPath -Recurse -Force
+# }
+
+# # double check if pearai-submodule directory exists
+# $pearaiSubmodulePath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai-submodule"
+# if (Test-Path $pearaiSubmodulePath) {
+#     Write-Host "Removing pearai-submodule directory"
+#     Remove-Item $pearaiSubmodulePath -Recurse -Force
+# }
+
+
+# # extract python 2023 extensions to the built app
+# $python2023ExtensionsZip = Join-Path -Path $pearaiDir -ChildPath "extensions/windows-python-2023-extensions.zip"
+# Expand-Archive -Path $python2023ExtensionsZip -DestinationPath $builtAppPearAIExtensionDir -Force
+# Write-Host "Python 2023 extensions extracted to $builtAppPearAIExtensionDir"
+
+
+# if ($Input_CustomPearAppVersion) {
+#     # Don't serialize the JSON, it messes up the formatting, read it raw.
+#     Write-Host "----------------------------------------"
+#     Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, UPDATING VERSION INFO" -ForegroundColor Green
+
+#     # Update product.json while preserving original formatting
+#     $builtAppProductJsonPath = Join-Path -Path $buildOutputDir -ChildPath "resources/app/product.json"
+#     $productJsonContent = Get-Content -Path $builtAppProductJsonPath -Raw
+#     $productJsonContent = $productJsonContent -replace '"pearAIVersion"\s*:\s*"[^"]*"', "`"pearAIVersion`": `"$pearAIVersion`""
+#     Set-Content -Path $builtAppProductJsonPath -Value $productJsonContent -NoNewline
+#     Write-Host "Updated pearAIVersion in pearai-app product.json to $pearAIVersion" -ForegroundColor Green
+
+#     # Update package.json while preserving original formatting
+#     $builtExtensionPackageJsonPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai/package.json"
+#     $packageJsonContent = Get-Content -Path $builtExtensionPackageJsonPath -Raw
+#     $packageJsonContent = $packageJsonContent -replace '"version"\s*:\s*"[^"]*"', "`"version`": `"$extensionVersion`""
+#     Set-Content -Path $builtExtensionPackageJsonPath -Value $packageJsonContent -NoNewline
+#     Write-Host "Updated version in extension package.json to $extensionVersion" -ForegroundColor Green
+#     Write-Host "----------------------------------------"
+# }
+
+
+# # Set Version info for the built app
+# $versionInfo = @{
+#     'FileDescription' = 'PearAI';
+#     'ProductName' = 'PearAI';
+# 	'InternalName' = 'PearAI';
+#     'CompanyName' = 'PearAI, Inc.';
+#     'FileVersion' = $pearAIVersion;
+#     'ProductVersion' = $pearAIVersion;
+# 	'LegalCopyright' = 'Copyright (C) 2015 Microsoft, Inc. All rights reserved.';
+# 	'OriginalFilename' = 'PearAI.exe';
+# }
+
+# $updateVersionInfoCommand = "$rceditExe `"$builtAppPearAIExePath`" " +
+#     "--set-icon `"$pearIconPath`" " +
+#     "--set-version-string `"FileDescription`" `"$($versionInfo['FileDescription'])`" " +
+#     "--set-version-string `"ProductName`" `"$($versionInfo['ProductName'])`" " +
+#     "--set-version-string `"InternalName`" `"$($versionInfo['InternalName'])`" " +
+#     "--set-version-string `"CompanyName`" `"$($versionInfo['CompanyName'])`" " +
+#     "--set-version-string `"FileVersion`" `"$($versionInfo['FileVersion'])`" " +
+#     "--set-version-string `"ProductVersion`" `"$($versionInfo['ProductVersion'])`" " +
+#     "--set-version-string `"LegalCopyright`" `"$($versionInfo['LegalCopyright'])`" " +
+#     "--set-version-string `"OriginalFilename`" `"$($versionInfo['OriginalFilename'])`" " +
+# 	"--set-file-version `"$($versionInfo['FileVersion'])`" " +
+# 	"--set-product-version `"$($versionInfo['ProductVersion'])`" "
+
+# Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set icon and version info on EXE" -ErrorMessage "Failed to set icon and version info on EXE"
+
+
+# # make setup using Inno Setup Compiler
+# $innoSetupCompiler = Join-Path -Path $pearaiDir -ChildPath "build/win32/Inno Setup 6/ISCC.exe"
+# Write-Host "Inno Setup Compiler: $innoSetupCompiler"
+# $innoSetupScript = Join-Path -Path $pearaiDir -ChildPath "build/win32/pearai.iss"
+# Write-Host "Inno Setup script: $innoSetupScript"
+# & $innoSetupCompiler "/dMyAppVersion=$pearAIVersion" $innoSetupScript
+
+# cd $pearaiDir
