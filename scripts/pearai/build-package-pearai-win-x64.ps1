@@ -143,6 +143,11 @@ $pearaiBranchName = (git rev-parse --abbrev-ref HEAD).Trim()
 $pearaiCheckedOutCommitHash = (git rev-parse HEAD).Trim()
 $pearaiGitStatus = git status --porcelain
 
+if ($pearaiGitStatus.Trim() -eq "M extensions/pearai-submodule") {
+    # ignore submodule status
+    $pearaiGitStatus = ""
+}
+
 cd $pearaiSubmoduleDir
 $pearaiSubmoduleOriginMainLatestCommitHash = (git rev-parse origin/main).Trim()
 $pearaiSubmoduleBranchName = (git rev-parse --abbrev-ref HEAD).Trim()
