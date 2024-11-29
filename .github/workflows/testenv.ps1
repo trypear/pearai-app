@@ -40,20 +40,5 @@ Write-Host "force_build: $Input_ForceBuild"
 #     Write-Host "$($_.Name): $($_.Value)"
 # }
 
-
-
-if ($env:build_cache_hit -eq "true") {
-    Write-Host "Cache hit!"
-} else {
-    Write-Host "Cache miss!"
-}
-
-# Create dummy folder and file
-$username = [Environment]::UserName
-$dummyOutput = $env:build_path  # Access the environment variable directly
-mkdir -Force $dummyOutput
-Set-Content -Path "$dummyOutput\temp.txt" -Value "This is a temporary test file."
-
-Write-Host "Created dummy folder at: $dummyOutput"
-Write-Host "Created temp.txt inside the folder"
-
+cd $env:GITHUB_WORKSPACE
+yarn gulp vscode-win32-x64

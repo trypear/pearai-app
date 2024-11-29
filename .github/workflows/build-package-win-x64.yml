@@ -37,20 +37,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # # Step 2: Setup Node.js environment
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version-file: .nvmrc
+      # Step 2: Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
 
 
-      # Step 2: Set Build Path
-      - name: Set Build Path
-        id: set-path
-        run: |
-          $username = [Environment]::UserName
-          $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
-          echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
+      # # Step 2: Set Build Path
+      # - name: Set Build Path
+      #   id: set-path
+      #   run: |
+      #     $username = [Environment]::UserName
+      #     $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+      #     echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
       # # Step 3: Cache the build output
       # # sdf
