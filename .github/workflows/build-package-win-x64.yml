@@ -52,35 +52,23 @@ jobs:
           $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
           echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
 
-      # Step 3: Cache the build output
-      # sdf
-      - name: Cache Build Output
-        id: cache-restore
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.set-path.outputs.build_path }}
-          key: vscode-win-x64-build
-          restore-keys: |
-            vscode-win-x64-build
-          # key: vscode-win-x64-${{ github.sha }}
-          # restore-keys: |
-          #   vscode-win-x64-${{ github.sha }}
+      # # Step 3: Cache the build output
+      # # sdf
+      # - name: Cache Build Output
+      #   id: cache-restore
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ steps.set-path.outputs.build_path }}
+      #     key: vscode-win-x64-build
+      #     restore-keys: |
+      #       vscode-win-x64-build
+      #     # key: vscode-win-x64-${{ github.sha }}
+      #     # restore-keys: |
+      #     #   vscode-win-x64-${{ github.sha }}
 
-      # Optional: Debug step to check cache status
-      - name: Debug - Check Cache Status
-        run: |
-          $buildCacheHit = ${{ steps.cache-restore.outputs.cache-hit }}
-          Write-Host "Raw cache-hit value: $buildCacheHit"
-          echo "build_cache_hit=$buildCacheHit" >> $env:GITHUB_OUTPUT
-          if ($buildCacheHit -eq "true") {
-            Write-Host "Cache hit!"
-          } else {
-            Write-Host "Cache miss!"
-          }
-
+      # $buildCacheHit = ${{ steps.cache-restore.outputs.cache-hit }}
       # Step 5: Create a dummy folder and a temporary text file (if cache miss)
       - name: Create Dummy Folder for Testing
-        if: ${{ !steps.cache-restore.outputs.cache-hit }}
         run: |
           $pearappCommitHash = '${{ inputs.pearapp-commit-hash }}'
           $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
