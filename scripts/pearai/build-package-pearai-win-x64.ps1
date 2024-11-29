@@ -191,13 +191,13 @@ if ($Input_PearappCommitHash) {
         git checkout $Input_PearappCommitHash
         $pearaiCheckedOutCommitHash = $(git rev-parse HEAD).Trim() # using git rev-parse to get the commit to be sure.
         Write-Host "CUSTOM PEARAI-APP COMMIT HASH CHECKED OUT: $pearaiCheckedOutCommitHash" -ForegroundColor Green
+        Write-Host "----------------------------------------"
     } catch {
         Write-Host "ERROR: FAILED TO CHECKOUT CUSTOM PEARAI-APP COMMIT $Input_PearappCommitHash" -ForegroundColor Red
         exit 1
     }
 }
 
-Write-Host "----------------------------------------"
 
 if ($Input_SubmoduleCommitHash) {
     Write-Host "CUSTOM PEARAI-SUBMODULE COMMIT HASH SPECIFIED: $Input_SubmoduleCommitHash" -ForegroundColor Green
@@ -210,13 +210,13 @@ if ($Input_SubmoduleCommitHash) {
         git checkout $Input_SubmoduleCommitHash
         $pearaiSubmoduleCheckedOutCommitHash = $(git rev-parse HEAD).Trim() # using git rev-parse to get the commit to be sure.
         Write-Host "CUSTOM PEARAI-SUBMODULE COMMIT HASH CHECKED OUT: $pearaiSubmoduleCheckedOutCommitHash" -ForegroundColor Green
+        Write-Host "----------------------------------------"
     } catch {
         Write-Host "ERROR: FAILED TO CHECKOUT CUSTOM PEARAI-SUBMODULE COMMIT $Input_SubmoduleCommitHash" -ForegroundColor Red
         exit 1
     }
 }
 
-Write-Host "----------------------------------------"
 
 # Update cache commit file if custom version is specified
 if ($Input_CustomPearAppVersion) {
