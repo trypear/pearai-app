@@ -433,10 +433,21 @@ Invoke-CMD -Command $updateVersionInfoCommand -SuccessMessage "Successfully set 
 
 
 # make setup using Inno Setup Compiler
+$innoOutputDir = Join-Path -Path $desktopDir -ChildPath "inno-output"
 $innoSetupCompiler = Join-Path -Path $pearaiDir -ChildPath "build/win32/Inno Setup 6/ISCC.exe"
 Write-Host "Inno Setup Compiler: $innoSetupCompiler"
 $innoSetupScript = Join-Path -Path $pearaiDir -ChildPath "build/win32/pearai.iss"
 Write-Host "Inno Setup script: $innoSetupScript"
 & $innoSetupCompiler "/dMyAppVersion=$pearAIVersion" $innoSetupScript
+
+
+Write-Host "Inno Setup output directory: $innoOutputDir"
+if ((Test-Path $innoOutputDir) -and (-not $IS_GITHUB_ACTION)) {
+    explorer $innoOutputDir
+}
+
+Write-Host "----------------------------------------"
+Write-Host "SUCCESS: PEARAI-APP BUILD COMPLETED" -ForegroundColor Green
+Write-Host "----------------------------------------"
 
 cd $pearaiDir
