@@ -36,7 +36,7 @@
 	"quality": "stable",
 	"webviewContentExternalBaseUrlTemplate": "https://{{uuid}}.vscode-cdn.net/insider/ef65ac1ba57f57f2a3961bfe94aa20481caca4c6/out/vs/workbench/contrib/webview/browser/pre/",
 	"extensionsGallery": {
-		"serviceUrl": "https://walrus-backup-app-sgqep.ondigitalocean.app/pearai-backup-server-api/gallery",
+		"serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
 		"itemUrl": "https://walrus-backup-app-sgqep.ondigitalocean.app/pearai-backup-server-api/items"
 	},
 
