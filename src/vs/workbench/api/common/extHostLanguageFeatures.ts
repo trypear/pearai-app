@@ -147,6 +147,8 @@ class CodeLensAdapter {
 			return undefined;
 		}
 
+		console.dir('Resolving CodeLens:', lens); // Debug log
+
 		let resolvedLens: vscode.CodeLens | undefined | null;
 		if (typeof this._provider.resolveCodeLens !== 'function' || lens.isResolved) {
 			resolvedLens = lens;
@@ -166,6 +168,8 @@ class CodeLensAdapter {
 			return undefined;
 		}
 
+		console.dir('Resolved lens:', resolvedLens); // Debug log
+
 		if (!resolvedLens.command) {
 			const error = new Error('INVALID code lens resolved, lacks command: ' + this._extension.identifier.value);
 			this._extTelemetry.onExtensionError(this._extension.identifier, error);
@@ -174,6 +178,13 @@ class CodeLensAdapter {
 		}
 
 		symbol.command = this._commands.toInternal(resolvedLens.command, disposables);
+		// Preserve isButton property when converting command
+		if (resolvedLens.command.isButton) {
+			symbol.command.isButton = resolvedLens.command.isButton;
+		}
+
+		console.dir('Final symbol:', symbol); // Debug log
+
 		return symbol;
 	}
 

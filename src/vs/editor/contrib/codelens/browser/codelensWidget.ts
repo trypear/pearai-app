@@ -95,10 +95,30 @@ class CodeLensContentWidget implements IContentWidget {
 			}
 			hasSymbol = true;
 			if (lens.command) {
+				let isButton = false;
+				if (lens.command.title.startsWith('newButton.')) {
+					isButton = true;
+					// lens.command.title = lens.command.title.slice(10);
+				}
 				const title = renderLabelWithIcons(lens.command.title.trim());
+
 				if (lens.command.id) {
 					const id = `c${(CodeLensContentWidget._idPool++)}`;
-					children.push(dom.$('a', { id, title: lens.command.tooltip, role: 'button' }, ...title));
+
+					const a = dom.$('a', {
+						id,
+						title: lens.command.tooltip,
+						role: 'button',
+						class: isButton ? 'action-button' : 'codelens-decoration-link'
+					}, ...title);
+
+					if (isButton) {
+						a.classList.add('action-button');
+						a.classList.add('primary-action-button');
+						// a.classList.add('secondary-action-button');
+					}
+
+					children.push(a);
 					this._commands.set(id, lens.command);
 				} else {
 					children.push(dom.$('span', { title: lens.command.tooltip }, ...title));
@@ -210,6 +230,8 @@ export class CodeLensWidget {
 		this._editor = editor;
 		this._data = data;
 
+		// console.dir(this._data);
+
 		// create combined range, track all ranges with decorations,
 		// check if there is already something to render
 		this._decorationIds = [];
@@ -217,7 +239,6 @@ export class CodeLensWidget {
 		const lenses: CodeLens[] = [];
 
 		this._data.forEach((codeLensData, i) => {
-
 			if (codeLensData.symbol.command) {
 				lenses.push(codeLensData.symbol);
 			}

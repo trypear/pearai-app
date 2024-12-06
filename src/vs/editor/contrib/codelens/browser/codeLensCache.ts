@@ -72,6 +72,7 @@ export class CodeLensCache implements ICodeLensCache {
 		// create a copy of the model that is without command-ids
 		// but with comand-labels
 		const copyItems = data.lenses.map(item => {
+			console.dir(item);
 			return <CodeLens>{
 				range: item.symbol.range,
 				command: item.symbol.command && { id: '', title: item.symbol.command?.title },
@@ -113,6 +114,7 @@ export class CodeLensCache implements ICodeLensCache {
 	private _deserialize(raw: string): void {
 		try {
 			const data: Record<string, ISerializedCacheData> = JSON.parse(raw);
+			// console.dir(raw);
 			for (const key in data) {
 				const element = data[key];
 				const lenses: CodeLens[] = [];
