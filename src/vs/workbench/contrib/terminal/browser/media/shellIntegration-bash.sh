@@ -10,6 +10,9 @@ fi
 
 VSCODE_SHELL_INTEGRATION=1
 
+# Check if the system is NixOS if yes unset this var for fixing the error "Segmentation fault (core dumped)"
+[ -f /etc/NIXOS ] && unset LD_LIBRARY_PATH
+
 # Run relevant rc/profile only if shell integration has been injected, not when run manually
 if [ "$VSCODE_INJECTION" == "1" ]; then
 	if [ -z "$VSCODE_SHELL_LOGIN" ]; then
