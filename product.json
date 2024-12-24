@@ -1,7 +1,7 @@
 {
 	"nameShort": "PearAI",
 	"nameLong": "PearAI",
-	"pearAIVersion": "1.6.0",
+	"pearAIVersion": "1.6.1",
 	"applicationName": "PearAI",
 	"dataFolderName": ".pearai",
 	"win32MutexName": "pearai",
@@ -49,9 +49,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"csharp"
-					],
+					"languages": ["csharp"],
 					"important": true
 				},
 				{
@@ -66,9 +64,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"python"
-					],
+					"languages": ["python"],
 					"important": true
 				},
 				{
@@ -82,9 +78,7 @@
 					"pathGlob": "{**/*.py}",
 					"contentPattern": "^#\\s*%%$",
 					"important": true,
-					"whenInstalled": [
-						"ms-python.python"
-					]
+					"whenInstalled": ["ms-python.python"]
 				},
 				{
 					"pathGlob": "{**/*.ipynb}"
@@ -96,9 +90,7 @@
 				{
 					"pathGlob": "{**/*.ipynb}",
 					"contentPattern": "import\\s*pandas|from\\s*pandas",
-					"whenInstalled": [
-						"ms-toolsai.jupyter"
-					]
+					"whenInstalled": ["ms-toolsai.jupyter"]
 				}
 			]
 		},
@@ -109,9 +101,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"go"
-					],
+					"languages": ["go"],
 					"important": true
 				}
 			]
@@ -121,20 +111,12 @@
 				{
 					"pathGlob": "{**/*.java}",
 					"important": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				},
 				{
-					"languages": [
-						"java"
-					],
+					"languages": ["java"],
 					"important": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				}
 			]
 		},
@@ -145,9 +127,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"powershell"
-					],
+					"languages": ["powershell"],
 					"important": true
 				},
 				{
@@ -168,19 +148,12 @@
 				{
 					"pathGlob": "{**/*.c,**/*.cpp,**/*.cc,**/.cxx,**/*.hh,**/*.hpp,**/*.hxx,**/*.h}",
 					"important": true,
-					"whenNotInstalled": [
-						"llvm-vs-code-extensions.vscode-clangd"
-					]
+					"whenNotInstalled": ["llvm-vs-code-extensions.vscode-clangd"]
 				},
 				{
-					"languages": [
-						"c",
-						"cpp"
-					],
+					"languages": ["c", "cpp"],
 					"important": true,
-					"whenNotInstalled": [
-						"llvm-vs-code-extensions.vscode-clangd"
-					]
+					"whenNotInstalled": ["llvm-vs-code-extensions.vscode-clangd"]
 				}
 			]
 		},
@@ -191,9 +164,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"dockerfile"
-					],
+					"languages": ["dockerfile"],
 					"important": true
 				},
 				{
@@ -208,9 +179,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"vue"
-					],
+					"languages": ["vue"],
 					"important": true
 				}
 			]
@@ -222,9 +191,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"makefile"
-					],
+					"languages": ["makefile"],
 					"important": true
 				}
 			]
@@ -266,9 +233,7 @@
 				{
 					"pathGlob": "{**/*.bicep}",
 					"important": true,
-					"whenNotInstalled": [
-						"ms-azuretools.rad-vscode-bicep"
-					]
+					"whenNotInstalled": ["ms-azuretools.rad-vscode-bicep"]
 				}
 			]
 		},
@@ -311,9 +276,7 @@
 					"important": true
 				},
 				{
-					"languages": [
-						"r"
-					],
+					"languages": ["r"],
 					"important": true
 				}
 			]
@@ -636,10 +599,7 @@
 					"name": "Java",
 					"important": true,
 					"isExtensionPack": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				},
 				"vmware.vscode-boot-dev-pack": {
 					"name": "Spring Boot Extension Pack",
@@ -655,10 +615,7 @@
 					"name": "Java",
 					"important": true,
 					"isExtensionPack": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				}
 			}
 		},
@@ -1054,10 +1011,7 @@
 					"name": "Java",
 					"important": true,
 					"isExtensionPack": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				}
 			}
 		},
@@ -1068,10 +1022,7 @@
 					"name": "Java",
 					"important": true,
 					"isExtensionPack": true,
-					"whenNotInstalled": [
-						"ASF.apache-netbeans-java",
-						"Oracle.oracle-java"
-					]
+					"whenNotInstalled": ["ASF.apache-netbeans-java", "Oracle.oracle-java"]
 				}
 			}
 		},
@@ -1233,10 +1184,7 @@
 		"wsl": {
 			"friendlyName": "WSL",
 			"extensionId": "ms-vscode-remote.remote-wsl",
-			"supportedPlatforms": [
-				"Windows",
-				"Web"
-			],
+			"supportedPlatforms": ["Windows", "Web"],
 			"startEntry": {
 				"helpLink": "https://aka.ms/vscode-remote/wsl",
 				"startConnectLabel": "WSL",
@@ -1247,11 +1195,7 @@
 		"ssh-remote": {
 			"friendlyName": "Remote - SSH",
 			"extensionId": "ms-vscode-remote.remote-ssh",
-			"supportedPlatforms": [
-				"Windows",
-				"Linux",
-				"Mac"
-			],
+			"supportedPlatforms": ["Windows", "Linux", "Mac"],
 			"startEntry": {
 				"helpLink": "https://aka.ms/vscode-remote/ssh",
 				"startConnectLabel": "SSH ",
@@ -1262,11 +1206,7 @@
 		"dev-container": {
 			"friendlyName": "Dev Containers",
 			"extensionId": "ms-vscode-remote.remote-containers",
-			"supportedPlatforms": [
-				"Windows",
-				"Linux",
-				"Mac"
-			],
+			"supportedPlatforms": ["Windows", "Linux", "Mac"],
 			"startEntry": {
 				"helpLink": "https://aka.ms/vscode-remote/containers",
 				"startConnectLabel": "Dev Container",
@@ -1313,267 +1253,85 @@
 		"workbench.action.openIssueReporter"
 	],
 	"extensionKeywords": {
-		"md": [
-			"Markdown"
-		],
-		"js": [
-			"JavaScript"
-		],
-		"jsx": [
-			"JavaScript"
-		],
-		"es6": [
-			"JavaScript"
-		],
-		"html": [
-			"Html"
-		],
-		"ts": [
-			"TypeScript"
-		],
-		"tsx": [
-			"TypeScript"
-		],
-		"css": [
-			"CSS"
-		],
-		"scss": [
-			"SASS"
-		],
-		"txt": [
-			"Text"
-		],
-		"php": [
-			"PHP"
-		],
-		"php3": [
-			"PHP"
-		],
-		"php4": [
-			"PHP"
-		],
-		"ph3": [
-			"PHP"
-		],
-		"ph4": [
-			"PHP"
-		],
-		"xml": [
-			"XML"
-		],
-		"py": [
-			"Python"
-		],
-		"pyc": [
-			"Python"
-		],
-		"pyd": [
-			"Python"
-		],
-		"pyo": [
-			"Python"
-		],
-		"pyw": [
-			"Python"
-		],
-		"pyz": [
-			"Python"
-		],
-		"java": [
-			"Java"
-		],
-		"class": [
-			"Java"
-		],
-		"jar": [
-			"Java"
-		],
-		"c": [
-			"c",
-			"objective c",
-			"objective-c"
-		],
-		"m": [
-			"objective c",
-			"objective-c"
-		],
-		"mm": [
-			"objective c",
-			"objective-c"
-		],
-		"cpp": [
-			"cpp",
-			"c plus plus",
-			"c",
-			"c++"
-		],
-		"cc": [
-			"cpp",
-			"c plus plus",
-			"c",
-			"c++"
-		],
-		"cxx": [
-			"cpp",
-			"c plus plus",
-			"c++"
-		],
-		"hh": [
-			"cpp",
-			"c plus plus",
-			"c++"
-		],
-		"hpp": [
-			"cpp",
-			"c++"
-		],
-		"h": [
-			"cpp",
-			"c plus plus",
-			"c++",
-			"c",
-			"objective c",
-			"objective-c"
-		],
-		"sql": [
-			"sql"
-		],
-		"sh": [
-			"bash"
-		],
-		"bash": [
-			"bash"
-		],
-		"zsh": [
-			"bash",
-			"zshell"
-		],
-		"cs": [
-			"c#",
-			"csharp"
-		],
-		"csproj": [
-			"c#",
-			"csharp"
-		],
-		"sln": [
-			"c#",
-			"csharp"
-		],
-		"go": [
-			"go"
-		],
-		"sty": [
-			"latex"
-		],
-		"tex": [
-			"latex"
-		],
-		"ps": [
-			"powershell"
-		],
-		"ps1": [
-			"powershell"
-		],
-		"rs": [
-			"rust"
-		],
-		"rslib": [
-			"rust"
-		],
-		"hs": [
-			"haskell"
-		],
-		"lhs": [
-			"haskell"
-		],
-		"scm": [
-			"scheme"
-		],
-		"ss": [
-			"scheme"
-		],
-		"clj": [
-			"clojure"
-		],
-		"cljs": [
-			"clojure"
-		],
-		"cljc": [
-			"clojure"
-		],
-		"edn": [
-			"clojure"
-		],
-		"erl": [
-			"erlang"
-		],
-		"hrl": [
-			"erlang"
-		],
-		"scala": [
-			"scala"
-		],
-		"sc": [
-			"scala"
-		],
-		"pl": [
-			"perl"
-		],
-		"pm": [
-			"perl"
-		],
-		"t": [
-			"perl"
-		],
-		"pod": [
-			"perl"
-		],
-		"groovy": [
-			"groovy"
-		],
-		"swift": [
-			"swift"
-		],
-		"rb": [
-			"ruby"
-		],
-		"rbw": [
-			"ruby"
-		],
-		"jl": [
-			"julia"
-		],
-		"f": [
-			"fortran"
-		],
-		"for": [
-			"fortran"
-		],
-		"f90": [
-			"fortran"
-		],
-		"f95": [
-			"fortran"
-		],
-		"coffee": [
-			"CoffeeScript"
-		],
-		"litcoffee": [
-			"CoffeeScript"
-		],
-		"yaml": [
-			"yaml"
-		],
-		"yml": [
-			"yaml"
-		],
-		"dart": [
-			"dart"
-		],
-		"json": [
-			"json"
-		]
+		"md": ["Markdown"],
+		"js": ["JavaScript"],
+		"jsx": ["JavaScript"],
+		"es6": ["JavaScript"],
+		"html": ["Html"],
+		"ts": ["TypeScript"],
+		"tsx": ["TypeScript"],
+		"css": ["CSS"],
+		"scss": ["SASS"],
+		"txt": ["Text"],
+		"php": ["PHP"],
+		"php3": ["PHP"],
+		"php4": ["PHP"],
+		"ph3": ["PHP"],
+		"ph4": ["PHP"],
+		"xml": ["XML"],
+		"py": ["Python"],
+		"pyc": ["Python"],
+		"pyd": ["Python"],
+		"pyo": ["Python"],
+		"pyw": ["Python"],
+		"pyz": ["Python"],
+		"java": ["Java"],
+		"class": ["Java"],
+		"jar": ["Java"],
+		"c": ["c", "objective c", "objective-c"],
+		"m": ["objective c", "objective-c"],
+		"mm": ["objective c", "objective-c"],
+		"cpp": ["cpp", "c plus plus", "c", "c++"],
+		"cc": ["cpp", "c plus plus", "c", "c++"],
+		"cxx": ["cpp", "c plus plus", "c++"],
+		"hh": ["cpp", "c plus plus", "c++"],
+		"hpp": ["cpp", "c++"],
+		"h": ["cpp", "c plus plus", "c++", "c", "objective c", "objective-c"],
+		"sql": ["sql"],
+		"sh": ["bash"],
+		"bash": ["bash"],
+		"zsh": ["bash", "zshell"],
+		"cs": ["c#", "csharp"],
+		"csproj": ["c#", "csharp"],
+		"sln": ["c#", "csharp"],
+		"go": ["go"],
+		"sty": ["latex"],
+		"tex": ["latex"],
+		"ps": ["powershell"],
+		"ps1": ["powershell"],
+		"rs": ["rust"],
+		"rslib": ["rust"],
+		"hs": ["haskell"],
+		"lhs": ["haskell"],
+		"scm": ["scheme"],
+		"ss": ["scheme"],
+		"clj": ["clojure"],
+		"cljs": ["clojure"],
+		"cljc": ["clojure"],
+		"edn": ["clojure"],
+		"erl": ["erlang"],
+		"hrl": ["erlang"],
+		"scala": ["scala"],
+		"sc": ["scala"],
+		"pl": ["perl"],
+		"pm": ["perl"],
+		"t": ["perl"],
+		"pod": ["perl"],
+		"groovy": ["groovy"],
+		"swift": ["swift"],
+		"rb": ["ruby"],
+		"rbw": ["ruby"],
+		"jl": ["julia"],
+		"f": ["fortran"],
+		"for": ["fortran"],
+		"f90": ["fortran"],
+		"f95": ["fortran"],
+		"coffee": ["CoffeeScript"],
+		"litcoffee": ["CoffeeScript"],
+		"yaml": ["yaml"],
+		"yml": ["yaml"],
+		"dart": ["dart"],
+		"json": ["json"]
 	},
 	"extensionAllowedBadgeProviders": [
 		"api.bintray.com",
@@ -1676,13 +1434,9 @@
 		"github": "https://github.com/orgs/trypear/repositories",
 		"changelog": "https://trypear.ai/changelog"
 	},
-	"extensionsEnabledWithApiProposalVersion": [
-		"GitHub.copilot-chat"
-	],
+	"extensionsEnabledWithApiProposalVersion": ["GitHub.copilot-chat"],
 	"extensionEnabledApiProposals": {
-		"pearai.pearai": [
-			"editorInsets"
-		],
+		"pearai.pearai": ["editorInsets"],
 		"ms-vscode.vscode-selfhost-test-provider": [
 			"testObserver",
 			"attributableCoverage"
@@ -1710,9 +1464,7 @@
 			"workspaceTrust",
 			"tunnels"
 		],
-		"ms-toolsai.vscode-ai-remote": [
-			"resolvers"
-		],
+		"ms-toolsai.vscode-ai-remote": ["resolvers"],
 		"ms-python.python": [
 			"contribEditorContentMenu",
 			"quickPickSortByLabel",
@@ -1724,9 +1476,7 @@
 			"contribIssueReporter",
 			"terminalShellIntegration"
 		],
-		"ms-dotnettools.dotnet-interactive-vscode": [
-			"notebookMessaging"
-		],
+		"ms-dotnettools.dotnet-interactive-vscode": ["notebookMessaging"],
 		"GitHub.codespaces": [
 			"contribEditSessions",
 			"contribMenuBarHome",
@@ -1778,11 +1528,7 @@
 			"contribViewsRemote",
 			"telemetry"
 		],
-		"ms-vscode.remote-server": [
-			"resolvers",
-			"tunnels",
-			"contribViewsWelcome"
-		],
+		"ms-vscode.remote-server": ["resolvers", "tunnels", "contribViewsWelcome"],
 		"ms-vscode.remote-explorer": [
 			"contribRemoteHelp",
 			"contribViewsRemote",
@@ -1804,12 +1550,8 @@
 			"workspaceTrust",
 			"tunnels"
 		],
-		"ms-vscode.lsif-browser": [
-			"documentFiltersExclusive"
-		],
-		"ms-vscode.vscode-speech": [
-			"speech"
-		],
+		"ms-vscode.lsif-browser": ["documentFiltersExclusive"],
+		"ms-vscode.vscode-speech": ["speech"],
 		"GitHub.vscode-pull-request-github": [
 			"activeComment",
 			"codiconDecoration",
@@ -1834,12 +1576,8 @@
 			"tokenInformation",
 			"treeViewMarkdownMessage"
 		],
-		"GitHub.copilot": [
-			"inlineCompletionsAdditions"
-		],
-		"GitHub.copilot-nightly": [
-			"inlineCompletionsAdditions"
-		],
+		"GitHub.copilot": ["inlineCompletionsAdditions"],
+		"GitHub.copilot-nightly": ["inlineCompletionsAdditions"],
 		"GitHub.copilot-chat": [
 			"interactive",
 			"terminalDataWriteEvent",
@@ -1886,20 +1624,14 @@
 			"textSearchProvider",
 			"timeline"
 		],
-		"ms-python.gather": [
-			"notebookCellExecutionState"
-		],
-		"ms-python.vscode-pylance": [
-			"notebookCellExecutionState"
-		],
+		"ms-python.gather": ["notebookCellExecutionState"],
+		"ms-python.vscode-pylance": ["notebookCellExecutionState"],
 		"ms-python.debugpy": [
 			"portsAttributes",
 			"contribIssueReporter",
 			"debugVisualization"
 		],
-		"ms-toolsai.jupyter-renderers": [
-			"contribNotebookStaticPreloads"
-		],
+		"ms-toolsai.jupyter-renderers": ["contribNotebookStaticPreloads"],
 		"ms-toolsai.jupyter": [
 			"notebookDeprecated",
 			"notebookMessaging",
@@ -1916,38 +1648,20 @@
 			"notebookCellExecution",
 			"notebookVariableProvider"
 		],
-		"dbaeumer.vscode-eslint": [
-			"notebookCellExecutionState"
-		],
-		"ms-vscode.azure-sphere-tools-ui": [
-			"tunnels"
-		],
-		"ms-azuretools.vscode-azureappservice": [
-			"terminalDataWriteEvent"
-		],
-		"ms-azuretools.vscode-azureresourcegroups": [
-			"authGetSessions"
-		],
+		"dbaeumer.vscode-eslint": ["notebookCellExecutionState"],
+		"ms-vscode.azure-sphere-tools-ui": ["tunnels"],
+		"ms-azuretools.vscode-azureappservice": ["terminalDataWriteEvent"],
+		"ms-azuretools.vscode-azureresourcegroups": ["authGetSessions"],
 		"ms-azuretools.vscode-azure-github-copilot": [
 			"chatParticipantAdditions",
 			"embeddings",
 			"languageModelSystem"
 		],
-		"ms-vscode.anycode": [
-			"extensionsAny"
-		],
-		"ms-vscode.cpptools": [
-			"terminalDataWriteEvent"
-		],
-		"redhat.java": [
-			"documentPaste"
-		],
-		"ms-dotnettools.csdevkit": [
-			"inlineCompletionsAdditions"
-		],
-		"ms-dotnettools.vscodeintellicode-csharp": [
-			"inlineCompletionsAdditions"
-		],
+		"ms-vscode.anycode": ["extensionsAny"],
+		"ms-vscode.cpptools": ["terminalDataWriteEvent"],
+		"redhat.java": ["documentPaste"],
+		"ms-dotnettools.csdevkit": ["inlineCompletionsAdditions"],
+		"ms-dotnettools.vscodeintellicode-csharp": ["inlineCompletionsAdditions"],
 		"microsoft-IsvExpTools.powerplatform-vscode": [
 			"fileSearchProvider",
 			"textSearchProvider"
@@ -1967,54 +1681,23 @@
 		"assignmentContextTelemetryPropertyName": "abexp.assignmentcontext"
 	},
 	"extensionKind": {
-		"Shan.code-settings-sync": [
-			"ui"
-		],
-		"shalldie.background": [
-			"ui"
-		],
-		"techer.open-in-browser": [
-			"ui"
-		],
-		"CoenraadS.bracket-pair-colorizer-2": [
-			"ui"
-		],
-		"CoenraadS.bracket-pair-colorizer": [
-			"ui",
-			"workspace"
-		],
-		"hiro-sun.vscode-emacs": [
-			"ui",
-			"workspace"
-		],
-		"hnw.vscode-auto-open-markdown-preview": [
-			"ui",
-			"workspace"
-		],
-		"wayou.vscode-todo-highlight": [
-			"ui",
-			"workspace"
-		],
-		"aaron-bond.better-comments": [
-			"ui",
-			"workspace"
-		],
-		"vscodevim.vim": [
-			"ui"
-		],
-		"ollyhayes.colmak-vim": [
-			"ui"
-		]
+		"Shan.code-settings-sync": ["ui"],
+		"shalldie.background": ["ui"],
+		"techer.open-in-browser": ["ui"],
+		"CoenraadS.bracket-pair-colorizer-2": ["ui"],
+		"CoenraadS.bracket-pair-colorizer": ["ui", "workspace"],
+		"hiro-sun.vscode-emacs": ["ui", "workspace"],
+		"hnw.vscode-auto-open-markdown-preview": ["ui", "workspace"],
+		"wayou.vscode-todo-highlight": ["ui", "workspace"],
+		"aaron-bond.better-comments": ["ui", "workspace"],
+		"vscodevim.vim": ["ui"],
+		"ollyhayes.colmak-vim": ["ui"]
 	},
 	"extensionPointExtensionKind": {
-		"typescriptServerPlugins": [
-			"workspace"
-		]
+		"typescriptServerPlugins": ["workspace"]
 	},
 	"extensionSyncedKeys": {
-		"ritwickdey.liveserver": [
-			"liveServer.setup.version"
-		]
+		"ritwickdey.liveserver": ["liveServer.setup.version"]
 	},
 	"extensionVirtualWorkspacesSupport": {
 		"esbenp.prettier-vscode": {
@@ -2214,17 +1897,10 @@
 		"canSwitch": false,
 		"authenticationProviders": {
 			"github": {
-				"scopes": [
-					"user:email"
-				]
+				"scopes": ["user:email"]
 			},
 			"microsoft": {
-				"scopes": [
-					"openid",
-					"profile",
-					"email",
-					"offline_access"
-				]
+				"scopes": ["openid", "profile", "email", "offline_access"]
 			}
 		}
 	},
@@ -2232,17 +1908,10 @@
 		"url": "https://vscode-sync.trafficmanager.net/",
 		"authenticationProviders": {
 			"microsoft": {
-				"scopes": [
-					"openid",
-					"profile",
-					"email",
-					"offline_access"
-				]
+				"scopes": ["openid", "profile", "email", "offline_access"]
 			},
 			"github": {
-				"scopes": [
-					"user:email"
-				]
+				"scopes": ["user:email"]
 			}
 		}
 	},
@@ -2265,10 +1934,7 @@
 		},
 		"authenticationProviders": {
 			"github": {
-				"scopes": [
-					"user:email",
-					"read:org"
-				]
+				"scopes": ["user:email", "read:org"]
 			},
 			"microsoft": {
 				"scopes": [
