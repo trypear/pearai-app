@@ -298,6 +298,8 @@ export class CodeLensContribution implements IEditorContribution {
 		const groups: CodeLensItem[][] = [];
 		let lastGroup: CodeLensItem[] | undefined;
 
+		// console.dir(symbols.lenses);
+
 		for (const symbol of symbols.lenses) {
 			const line = symbol.symbol.range.startLineNumber;
 			if (line < 1 || line > maxLineNumber) {
@@ -327,6 +329,8 @@ export class CodeLensContribution implements IEditorContribution {
 				const helper = new CodeLensHelper();
 				let codeLensIndex = 0;
 				let groupsIndex = 0;
+
+				// console.dir(groups);
 
 				while (groupsIndex < groups.length && codeLensIndex < this._lenses.length) {
 
