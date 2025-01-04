@@ -1750,6 +1750,7 @@ export interface Command {
 	id: string;
 	title: string;
 	tooltip?: string;
+	isButton?: boolean;
 	arguments?: any[];
 }
 
@@ -1997,6 +1998,7 @@ export interface CodeLens {
 	range: IRange;
 	id?: string;
 	command?: Command;
+	isButton?: boolean;
 }
 
 export interface CodeLensList {
