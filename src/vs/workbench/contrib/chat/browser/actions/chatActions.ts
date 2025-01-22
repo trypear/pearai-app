@@ -527,38 +527,6 @@ const defaultChat = {
 	managePlanUrl: product.defaultChatAgent?.managePlanUrl ?? '',
 };
 
-MenuRegistry.appendMenuItem(MenuId.CommandCenter, {
-	submenu: MenuId.ChatCommandCenter,
-	title: localize('title4', "Chat"),
-	icon: Codicon.copilot,
-	when: ContextKeyExpr.and(
-		ContextKeyExpr.has('config.chat.commandCenter.enabled'),
-		ContextKeyExpr.or(
-			ContextKeyExpr.has('config.chat.experimental.offerSetup'),
-			ChatContextKeys.Setup.installed,
-			ChatContextKeys.panelParticipantRegistered
-		)
-	),
-	order: 10001,
-});
-
-registerAction2(class ToggleCopilotControl extends ToggleTitleBarConfigAction {
-	constructor() {
-		super(
-			'chat.commandCenter.enabled',
-			localize('toggle.chatControl', 'Copilot Controls'),
-			localize('toggle.chatControlsDescription', "Toggle visibility of the Copilot Controls in title bar"), 4, false,
-			ContextKeyExpr.and(
-				ContextKeyExpr.has('config.window.commandCenter'),
-				ContextKeyExpr.or(
-					ChatContextKeys.Setup.installed,
-					ContextKeyExpr.has('config.chat.experimental.offerSetup'),
-					ChatContextKeys.panelParticipantRegistered
-				)
-			)
-		);
-	}
-});
 
 export class ChatCommandCenterRendering extends Disposable implements IWorkbenchContribution {
 
