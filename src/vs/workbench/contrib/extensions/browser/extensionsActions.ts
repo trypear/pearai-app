@@ -139,22 +139,12 @@ export class PromptExtensionInstallFailureAction extends Action {
 			return;
 		}
 
+		// TODO: Handle signature failures better
+
 		if (ExtensionManagementErrorCode.PackageNotSigned === (<ExtensionManagementErrorCode>this.error.name)) {
-			await this.dialogService.prompt({
-				type: 'error',
-				message: localize('not signed', "'{0}' is an extension from an unknown source. Are you sure you want to install?", this.extension.displayName),
-				detail: getErrorMessage(this.error),
-				buttons: [{
-					label: localize('install anyway', "Install Anyway"),
-					run: () => {
-						const installAction = this.instantiationService.createInstance(InstallAction, { ...this.options, donotVerifySignature: true, });
-						installAction.extension = this.extension;
-						return installAction.run();
-					}
-				}],
-				cancelButton: true
-			});
-			return;
+			const installAction = this.instantiationService.createInstance(InstallAction, { ...this.options, donotVerifySignature: true, });
+			installAction.extension = this.extension;
+			return installAction.run();
 		}
 
 		if (ExtensionManagementErrorCode.SignatureVerificationFailed === (<ExtensionManagementErrorCode>this.error.name) || ExtensionManagementErrorCode.SignatureVerificationInternal === (<ExtensionManagementErrorCode>this.error.name)) {
