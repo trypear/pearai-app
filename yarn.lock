@@ -1621,10 +1621,10 @@
     bindings "^1.5.0"
     node-addon-api "^8.2.0"
 
-"@vscode/proxy-agent@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.npmjs.org/@vscode/proxy-agent/-/proxy-agent-0.23.0.tgz"
-  integrity sha512-6lgxRrzURdWwBkk6TaB0+EYYjIWQXxry6GlVO0toBN8amIyVd3I7hLPKU9Xf+SOrLIrbdU0CLkmTOBHpPJLf/g==
+"@vscode/proxy-agent@^0.27.0":
+  version "0.27.0"
+  resolved "https://registry.npmjs.org/@vscode/proxy-agent/-/proxy-agent-0.27.0.tgz"
+  integrity sha512-ID1MOlynRkVN121n85Hs1enjW16B5Z1O6bMDkSPqvAMVD6eHUOqmgPZuEkBbRI43PfA6boUEY9Ndjp+0wPKtsg==
   dependencies:
     "@tootallnate/once" "^3.0.0"
     agent-base "^7.0.1"
@@ -1632,6 +1632,7 @@
     http-proxy-agent "^7.0.0"
     https-proxy-agent "^7.0.2"
     socks-proxy-agent "^8.0.1"
+    undici "^6.20.1"
   optionalDependencies:
     "@vscode/windows-ca-certs" "^0.3.1"
 
@@ -4030,10 +4031,10 @@ electron-to-chromium@^1.5.28:
   resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.32.tgz"
   integrity sha512-M+7ph0VGBQqqpTT2YrabjNKSQ2fEl9PVx6AK3N558gDH9NO8O6XN9SXXFWRo9u9PbEg/bWq+tjXQr+eXmxubCw==
 
-electron@30.5.1:
-  version "30.5.1"
-  resolved "https://registry.npmjs.org/electron/-/electron-30.5.1.tgz"
-  integrity sha512-AhL7+mZ8Lg14iaNfoYTkXQ2qee8mmsQyllKdqxlpv/zrKgfxz6jNVtcRRbQtLxtF8yzcImWdfTQROpYiPumdbw==
+electron@32.2.6:
+  version "32.2.6"
+  resolved "https://registry.npmjs.org/electron/-/electron-32.2.6.tgz"
+  integrity sha512-aGG1MLvWCf+ECUFBCmaCF52F8312OPAJfph2D0FSsFmlbfnJuNevZCbty2lFzsiIMtU7/QRo6d0ksbgR4s7y3w==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^20.9.0"
@@ -11175,6 +11176,11 @@ undici-types@~5.26.4:
   version "5.26.5"
   resolved "https://registry.npmjs.org/undici-types/-/undici-types-5.26.5.tgz"
   integrity sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
+
+undici@^6.20.1:
+  version "6.21.1"
+  resolved "https://registry.npmjs.org/undici/-/undici-6.21.1.tgz"
+  integrity sha512-q/1rj5D0/zayJB2FraXdaWxbhWiNKDvu8naDT2dl1yTlvJp4BLtOcp2a5BvgGNQpYYJzau7tf1WgKv3b+7mqpQ==
 
 union-value@^1.0.0:
   version "1.0.1"
