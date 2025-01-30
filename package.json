@@ -10,6 +10,8 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "buildreact": "cd ./src/vs/workbench/contrib/pearai/browser/react/ && node build.js && cd ../../../../../../../",
+    "watchreact": "cd ./src/vs/workbench/contrib/pearai/browser/react/ && node build.js --watch && cd ../../../../../../../",
     "test": "echo Please run any of the test scripts from the scripts folder.",
     "test-browser": "npx playwright install && node test/unit/browser/index.js",
     "test-browser-no-install": "node test/unit/browser/index.js",
@@ -209,7 +211,7 @@
     "source-map": "0.6.1",
     "source-map-support": "^0.3.2",
     "style-loader": "^3.3.2",
-    "tailwindcss": "^4.0.1",
+    "tailwindcss": "^3.4.14",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.1",
     "tsec": "0.2.7",
