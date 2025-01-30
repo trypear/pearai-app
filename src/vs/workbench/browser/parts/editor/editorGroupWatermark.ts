@@ -24,7 +24,7 @@ import { isRecentFolder, IWorkspacesService } from '../../../../platform/workspa
 import { IExtensionService } from '../../../services/extensions/common/extensions.js';
 import { splitRecentLabel } from '../../../../base/common/labels.js';
 import { IWindowOpenable } from '../../../../platform/window/common/window.js';
-
+import { VOID_OPEN_SETTINGS_ACTION_ID } from '../../../contrib/void/browser/voidSettingsPane.js';
 interface WatermarkEntry {
 	readonly id: string;
 	readonly text: string;
@@ -95,6 +95,7 @@ export class EditorGroupWatermark extends Disposable {
 
 	private enabled = false;
 	private workbenchState = this.contextService.getWorkbenchState();
+
 
 	constructor(
 		container: HTMLElement,
@@ -202,6 +203,7 @@ export class EditorGroupWatermark extends Disposable {
 				label.set(keys);
 			}
 		};
+		this.keybindingService.lookupKeybinding(VOID_OPEN_SETTINGS_ACTION_ID);
 
 		update();
 		this.transientDisposables.add(this.keybindingService.onDidUpdateKeybindings(update));
