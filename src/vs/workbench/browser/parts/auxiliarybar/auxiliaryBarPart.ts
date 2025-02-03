@@ -36,6 +36,7 @@ import { HiddenItemStrategy, WorkbenchToolBar } from '../../../../platform/actio
 import { ActionViewItem, IActionViewItemOptions } from '../../../../base/browser/ui/actionbar/actionViewItems.js';
 import { CompositeMenuActions } from '../../actions.js';
 import { IHoverService } from '../../../../platform/hover/browser/hover.js';
+import { AuxiliaryTitleBar } from './auxiliaryTitleBar.js';
 
 export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 
@@ -224,22 +225,46 @@ export class AuxiliaryBarPart extends AbstractPaneCompositePart {
 
 	protected override createHeaderArea() {
 		const headerArea = super.createHeaderArea();
+
+		// Ensure header area has composite header class for styling
+		headerArea.classList.add('composite', 'header');
+
+		// Create and append the composite bar container first
+		const compositeBarContainer = $('.composite-bar-container');
+		headerArea.appendChild(compositeBarContainer);
+
+		// Create the global header container
 		const globalHeaderContainer = $('.auxiliary-bar-global-header');
+		headerArea.appendChild(globalHeaderContainer);
 
-		// Add auxillary header action
-		const menu = this.headerFooterCompositeBarDispoables.add(this.instantiationService.createInstance(CompositeMenuActions, MenuId.AuxiliaryBarHeader, undefined, undefined));
+		// Create our custom title bar container
+		const customTitleBarContainer = $('.custom-title-container');
+		headerArea.appendChild(customTitleBarContainer);
 
-		const toolBar = this.headerFooterCompositeBarDispoables.add(this.instantiationService.createInstance(WorkbenchToolBar, globalHeaderContainer, {
-			actionViewItemProvider: (action, options) => this.headerActionViewItemProvider(action, options),
-			orientation: ActionsOrientation.HORIZONTAL,
-			hiddenItemStrategy: HiddenItemStrategy.NoHide,
-			getKeyBinding: action => this.keybindingService.lookupKeybinding(action.id),
-		}));
+		// Create our custom title bar
+		this.headerFooterCompositeBarDispoables.add(
+			this.instantiationService.createInstance(AuxiliaryTitleBar, customTitleBarContainer)
+		);
+
+		// Add auxiliary header actions
+		const menu = this.headerFooterCompositeBarDispoables.add(
+			this.instantiationService.createInstance(CompositeMenuActions, MenuId.AuxiliaryBarHeader, undefined, undefined)
+		);
+
+		const toolBar = this.headerFooterCompositeBarDispoables.add(
+			this.instantiationService.createInstance(WorkbenchToolBar, globalHeaderContainer, {
+				actionViewItemProvider: (action, options) => this.headerActionViewItemProvider(action, options),
+				orientation: ActionsOrientation.HORIZONTAL,
+				hiddenItemStrategy: HiddenItemStrategy.NoHide,
+				getKeyBinding: action => this.keybindingService.lookupKeybinding(action.id),
+			})
+		);
 
 		toolBar.setActions(prepareActions(menu.getPrimaryActions()));
-		this.headerFooterCompositeBarDispoables.add(menu.onDidChange(() => toolBar.setActions(prepareActions(menu.getPrimaryActions()))));
+		this.headerFooterCompositeBarDispoables.add(menu.onDidChange(() =>
+			toolBar.setActions(prepareActions(menu.getPrimaryActions()))
+		));
 
-		headerArea.appendChild(globalHeaderContainer);
 		return headerArea;
 	}
 

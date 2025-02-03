@@ -94,3 +94,83 @@
 .monaco-workbench .auxiliarybar.pane-composite-part > .title.has-composite-bar > .title-actions .monaco-action-bar .action-item {
 	max-width: 150px;
 }
+
+.monaco-workbench .part.auxiliarybar .composite.header {
+	display: flex;
+	flex-direction: column;
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-bar-global-header {
+	order: 1;
+}
+
+.monaco-workbench .part.auxiliarybar .custom-title-container {
+	order: 2;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: var(--vscode-sideBar-background);
+	border-bottom: 1px solid var(--vscode-sideBar-border);
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-titlebar {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 4px 8px;
+	height: 35px;
+	box-sizing: border-box;
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-titlebar button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border: none;
+	background: none;
+	border-radius: 4px;
+	margin-left: 4px;
+	color: var(--vscode-sideBarTitle-foreground);
+	cursor: pointer;
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-titlebar button:hover {
+	background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-titlebar button:active {
+	background-color: var(--vscode-toolbar-activeBackground);
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-custom-titlebar {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 4px 8px;
+	height: 35px;
+	box-sizing: border-box;
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-custom-titlebar button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border: none;
+	background: none;
+	border-radius: 4px;
+	margin-left: 4px;
+	color: var(--vscode-sideBarTitle-foreground);
+	cursor: pointer;
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-custom-titlebar button:hover {
+	background-color: var(--vscode-toolbar-hoverBackground);
+}
+
+.monaco-workbench .part.auxiliarybar .auxiliary-custom-titlebar button:active {
+	background-color: var(--vscode-toolbar-activeBackground);
+}
