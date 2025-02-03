@@ -542,12 +542,12 @@ const registry = Registry.as<IConfigurationRegistry>(ConfigurationExtensions.Con
 				'type': 'string',
 				'enum': ['default', 'top', 'bottom', 'hidden'],
 				'default': 'default',
-				'markdownDescription': localize({ comment: ['This is the description for a setting'], key: 'activityBarLocation' }, "Controls the location of the Activity Bar relative to the Primary and Secondary Side Bars."),
+				'markdownDescription': localize({ comment: ['This is the description for a setting'], key: 'activityBarLocation' }, "Controls the location of the Activity Bar relative to the Primary and PearAI Side Bars."),
 				'enumDescriptions': [
-					localize('workbench.activityBar.location.default', "Show the Activity Bar on the side of the Primary Side Bar and on top of the Secondary Side Bar."),
-					localize('workbench.activityBar.location.top', "Show the Activity Bar on top of the Primary and Secondary Side Bars."),
-					localize('workbench.activityBar.location.bottom', "Show the Activity Bar at the bottom of the Primary and Secondary Side Bars."),
-					localize('workbench.activityBar.location.hide', "Hide the Activity Bar in the Primary and Secondary Side Bars.")
+					localize('workbench.activityBar.location.default', "Show the Activity Bar on the side of the Primary Side Bar and on top of the PearAI Side Bar."),
+					localize('workbench.activityBar.location.top', "Show the Activity Bar on top of the Primary and PearAI Side Bars."),
+					localize('workbench.activityBar.location.bottom', "Show the Activity Bar at the bottom of the Primary and PearAI Side Bars."),
+					localize('workbench.activityBar.location.hide', "Hide the Activity Bar in the Primary and PearAI Side Bars.")
 				],
 			},
 			'workbench.activityBar.iconClickBehavior': {
