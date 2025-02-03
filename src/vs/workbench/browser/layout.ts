@@ -262,6 +262,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private auxiliaryBarPartView!: ISerializableView;
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
+	private pearaiAuxiliaryBarPartView!: ISerializableView;
 	private pearOverlayPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
@@ -1488,6 +1489,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const auxiliaryBarPart = this.getPart(Parts.AUXILIARYBAR_PART);
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
+		const pearaiAuxiliaryBar = this.getPart(Parts.PEARAI_AUXILIARYBAR_PART);
 		const pearOverlayPart = this.getPart(Parts.PEAROVERLAY_PART);
 
 		// View references for all parts
@@ -1499,6 +1501,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.panelPartView = panelPart;
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
+		this.pearaiAuxiliaryBarPartView = pearaiAuxiliaryBar;
 		this.pearOverlayPartView = pearOverlayPart;
 
 		// Create a new container for PearOverlayPart
@@ -1525,6 +1528,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.SIDEBAR_PART]: this.sideBarPartView,
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
+			[Parts.PEARAI_AUXILIARYBAR_PART]: this.pearaiAuxiliaryBarPartView,
 			[Parts.PEAROVERLAY_PART]: this.pearOverlayPartView,
 		};
 

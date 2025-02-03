@@ -3,45 +3,43 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Codicon } from '../../../../base/common/codicons.js';
-import { localize, localize2 } from '../../../../nls.js';
-import { Action2, MenuId, MenuRegistry, registerAction2 } from '../../../../platform/actions/common/actions.js';
-import { ContextKeyExpr } from '../../../../platform/contextkey/common/contextkey.js';
-import { registerIcon } from '../../../../platform/theme/common/iconRegistry.js';
-import { Categories } from '../../../../platform/action/common/actionCommonCategories.js';
-import { AuxiliaryBarVisibleContext } from '../../../common/contextkeys.js';
-import { ViewContainerLocation, ViewContainerLocationToString } from '../../../common/views.js';
-import { IWorkbenchLayoutService, Parts } from '../../../services/layout/browser/layoutService.js';
-import { IPaneCompositePartService } from '../../../services/panecomposite/browser/panecomposite.js';
-import { ServicesAccessor } from '../../../../platform/instantiation/common/instantiation.js';
-import { KeybindingWeight } from '../../../../platform/keybinding/common/keybindingsRegistry.js';
-import { KeyCode, KeyMod } from '../../../../base/common/keyCodes.js';
-
-//import { KeyCode, KeyCodeUtils, KeyMod, KeyModUtils } from '../../../../base/common/keyCodes.js';
-import { SwitchCompositeViewAction } from '../compositeBarActions.js';
-import { mainWindow } from '../../../../base/browser/window.js';
-// import { ICommandService } from '../../../../platform/commands/common/commands.js';
-// import { IOpenerService } from '../../../../platform/opener/common/opener.js';
-// import { URI } from '../../../../base/common/uri.js';
-// import { IProductService } from '../../../../platform/product/common/productService.js';
+import { Codicon } from '../../../../../base/common/codicons.js';
+import { localize, localize2 } from '../../../../../nls.js';
+import { Action2, MenuId, MenuRegistry, registerAction2 } from '../../../../../platform/actions/common/actions.js';
+import { ContextKeyExpr } from '../../../../../platform/contextkey/common/contextkey.js';
+import { registerIcon } from '../../../../../platform/theme/common/iconRegistry.js';
+import { Categories } from '../../../../../platform/action/common/actionCommonCategories.js';
+import { PearAIAuxiliaryBarVisibleContext } from '../../../../common/contextkeys.js';
+import { ViewContainerLocation, ViewContainerLocationToString } from '../../../../common/views.js';
+import { IWorkbenchLayoutService, Parts } from '../../../../services/layout/browser/layoutService.js';
+import { IPaneCompositePartService } from '../../../../services/panecomposite/browser/panecomposite.js';
+import { ServicesAccessor } from '../../../../../platform/instantiation/common/instantiation.js';
+import { KeybindingWeight } from '../../../../../platform/keybinding/common/keybindingsRegistry.js';
+import { KeyCode, KeyCodeUtils, KeyMod, KeyModUtils } from '../../../../../base/common/keyCodes.js';
+import { SwitchCompositeViewAction } from '../../compositeBarActions.js';
+import { mainWindow } from '../../../../../base/browser/window.js';
+import { ICommandService } from '../../../../../platform/commands/common/commands.js';
+import { IOpenerService } from '../../../../../platform/opener/common/opener.js';
+import { URI } from '../../../../../base/common/uri.js';
+import { IProductService } from '../../../../../platform/product/common/productService.js';
 
 const auxiliaryBarRightIcon = registerIcon('auxiliarybar-right-layout-icon', Codicon.layoutSidebarRight, localize('toggleAuxiliaryIconRight', 'Icon to toggle the auxiliary bar off in its right position.'));
 const auxiliaryBarRightOffIcon = registerIcon('auxiliarybar-right-off-layout-icon', Codicon.layoutSidebarRightOff, localize('toggleAuxiliaryIconRightOn', 'Icon to toggle the auxiliary bar on in its right position.'));
 const auxiliaryBarLeftIcon = registerIcon('auxiliarybar-left-layout-icon', Codicon.layoutSidebarLeft, localize('toggleAuxiliaryIconLeft', 'Icon to toggle the auxiliary bar in its left position.'));
 const auxiliaryBarLeftOffIcon = registerIcon('auxiliarybar-left-off-layout-icon', Codicon.layoutSidebarLeftOff, localize('toggleAuxiliaryIconLeftOn', 'Icon to toggle the auxiliary bar on in its left position.'));
 
-export class ToggleAuxiliaryBarAction extends Action2 {
+export class TogglePearAIAuxiliaryBarAction extends Action2 {
 
-	static readonly ID = 'workbench.action.toggleAuxiliaryBar';
-	static readonly LABEL = localize2('toggleAuxiliaryBar', "Toggle Secondary Side Bar Visibility");
+	static readonly ID = 'workbench.action.togglePearAIAuxiliaryBar';
+	static readonly LABEL = localize2('togglePearAIAuxiliaryBar', "Toggle PearAI Side Bar Visibility");
 
 	constructor() {
 		super({
-			id: ToggleAuxiliaryBarAction.ID,
-			title: ToggleAuxiliaryBarAction.LABEL,
+			id: TogglePearAIAuxiliaryBarAction.ID,
+			title: TogglePearAIAuxiliaryBarAction.LABEL,
 			toggled: {
-				condition: AuxiliaryBarVisibleContext,
-				title: localize('secondary sidebar', "Secondary Side Bar"),
+				condition: PearAIAuxiliaryBarVisibleContext,
+				title: localize('secondary sidebar', "PearAI Side Bar"),
 				mnemonicTitle: localize({ key: 'secondary sidebar mnemonic', comment: ['&& denotes a mnemonic'] }, "Secondary Si&&de Bar"),
 			},
 
@@ -81,17 +79,17 @@ export class ToggleAuxiliaryBarAction extends Action2 {
 	}
 }
 
-registerAction2(ToggleAuxiliaryBarAction);
+registerAction2(TogglePearAIAuxiliaryBarAction);
 
-registerAction2(class FocusAuxiliaryBarAction extends Action2 {
+registerAction2(class FocusPearAIAuxiliaryBarAction extends Action2 {
 
-	static readonly ID = 'workbench.action.focusAuxiliaryBar';
-	static readonly LABEL = localize2('focusAuxiliaryBar', "Focus into Secondary Side Bar");
+	static readonly ID = 'workbench.action.focusPearAIAuxiliaryBar';
+	static readonly LABEL = localize2('focusPearAIAuxiliaryBar', "Focus into PearAI Side Bar");
 
 	constructor() {
 		super({
-			id: FocusAuxiliaryBarAction.ID,
-			title: FocusAuxiliaryBarAction.LABEL,
+			id: FocusPearAIAuxiliaryBarAction.ID,
+			title: FocusPearAIAuxiliaryBarAction.LABEL,
 			category: Categories.View,
 			f1: true,
 		});
@@ -118,9 +116,9 @@ MenuRegistry.appendMenuItems([
 		item: {
 			group: '2_pane_toggles',
 			command: {
-				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Secondary Side Bar"),
-				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarLeftIcon },
+				id: TogglePearAIAuxiliaryBarAction.ID,
+				title: localize('togglePearAISecondarySideBar', "Toggle PearAI Side Bar"),
+				toggled: { condition: PearAIAuxiliaryBarVisibleContext, icon: auxiliaryBarLeftIcon },
 				icon: auxiliaryBarLeftOffIcon,
 			},
 			when: ContextKeyExpr.and(ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')), ContextKeyExpr.equals('config.workbench.sideBar.location', 'right')),
@@ -131,9 +129,9 @@ MenuRegistry.appendMenuItems([
 		item: {
 			group: '2_pane_toggles',
 			command: {
-				id: ToggleAuxiliaryBarAction.ID,
-				title: localize('toggleSecondarySideBar', "Toggle Secondary Side Bar"),
-				toggled: { condition: AuxiliaryBarVisibleContext, icon: auxiliaryBarRightIcon },
+				id: TogglePearAIAuxiliaryBarAction.ID,
+				title: localize('togglePearAISecondarySideBar', "Toggle PearAI Side Bar"),
+				toggled: { condition: PearAIAuxiliaryBarVisibleContext, icon: auxiliaryBarRightIcon },
 				icon: auxiliaryBarRightOffIcon,
 			},
 			when: ContextKeyExpr.and(ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')), ContextKeyExpr.equals('config.workbench.sideBar.location', 'left')),
@@ -144,10 +142,10 @@ MenuRegistry.appendMenuItems([
 		item: {
 			group: '3_workbench_layout_move',
 			command: {
-				id: ToggleAuxiliaryBarAction.ID,
-				title: localize2('hideAuxiliaryBar', 'Hide Secondary Side Bar'),
+				id: TogglePearAIAuxiliaryBarAction.ID,
+				title: localize2('hidePearAIAuxiliaryBar', 'Hide PearAI Side Bar'),
 			},
-			when: ContextKeyExpr.and(AuxiliaryBarVisibleContext, ContextKeyExpr.equals('viewLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
+			when: ContextKeyExpr.and(PearAIAuxiliaryBarVisibleContext, ContextKeyExpr.equals('viewLocation', ViewContainerLocationToString(ViewContainerLocation.AuxiliaryBar))),
 			order: 2
 		}
 	}
@@ -156,8 +154,8 @@ MenuRegistry.appendMenuItems([
 registerAction2(class extends SwitchCompositeViewAction {
 	constructor() {
 		super({
-			id: 'workbench.action.previousAuxiliaryBarView',
-			title: localize2('previousAuxiliaryBarView', 'Previous Secondary Side Bar View'),
+			id: 'workbench.action.previousPearAIAuxiliaryBarView',
+			title: localize2('previousPearAIAuxiliaryBarView', 'Previous PearAI Side Bar View'),
 			category: Categories.View,
 			f1: true
 		}, ViewContainerLocation.AuxiliaryBar, -1);
@@ -167,8 +165,8 @@ registerAction2(class extends SwitchCompositeViewAction {
 registerAction2(class extends SwitchCompositeViewAction {
 	constructor() {
 		super({
-			id: 'workbench.action.nextAuxiliaryBarView',
-			title: localize2('nextAuxiliaryBarView', 'Next Secondary Side Bar View'),
+			id: 'workbench.action.nextPearAIAuxiliaryBarView',
+			title: localize2('nextPearAIAuxiliaryBarView', 'Next PearAI Side Bar View'),
 			category: Categories.View,
 			f1: true
 		}, ViewContainerLocation.AuxiliaryBar, 1);
@@ -176,8 +174,8 @@ registerAction2(class extends SwitchCompositeViewAction {
 });
 
 export class ResizeAuxiliaryBarWidthAction extends Action2 {
-	static readonly ID = 'workbench.action.resizeAuxiliaryBarWidth';
-	static readonly LABEL = localize2('resizeAuxiliaryBarWidth', "Resize Auxiliary Bar Width");
+	static readonly ID = 'workbench.action.resizePearAIAuxiliaryBarWidth';
+	static readonly LABEL = localize2('resizePearAIAuxiliaryBarWidth', "Resize Auxiliary Bar Width");
 
 	// Tracking the previous width of the aux bar and visibility of the left side bar
 	static _previousAuxiliaryBarWidth: number | null = null;
@@ -256,3 +254,86 @@ export class ResizeAuxiliaryBarWidthAction extends Action2 {
 }
 
 registerAction2(ResizeAuxiliaryBarWidthAction);
+
+class FocusPearAIExtensionAction extends Action2 {
+	static readonly ID = 'workbench.action.focusPearAIExtension';
+	static readonly LABEL = localize2(
+		"focusPearAIExtension",
+		"Focus into PearAI Extension",
+	);
+
+	constructor() {
+		super({
+			id: FocusPearAIExtensionAction.ID,
+			title: FocusPearAIExtensionAction.LABEL,
+			category: Categories.View,
+			f1: true,
+			// keybinding: do not add keybinding CTRL/CMD L here, it comes from pearai extension
+		});
+	}
+
+	override async run(accessor: ServicesAccessor): Promise<void> {
+		// focus pearai extension
+		const commandService = accessor.get(ICommandService);
+		commandService.executeCommand('pearai.focusContinueInput');
+	}
+}
+
+registerAction2(FocusPearAIExtensionAction);
+
+MenuRegistry.appendMenuItems([
+	{
+		id: MenuId.LayoutControlMenu,
+		item: {
+			group: '0_workbench_toggles',
+			command: {
+				id: FocusPearAIExtensionAction.ID,
+				title: `New Chat (${KeyModUtils.keyModToString(KeyMod.CtrlCmd)} + ${KeyCodeUtils.toString(KeyCode.KeyL)})`,
+			},
+			order: -1,
+		},
+	},
+]);
+
+// Following is a only PearAI related action, need to refactor these type of actions to separate file
+
+class OpenPearAIDocsAction extends Action2 {
+	static readonly ID = 'workbench.action.openPearAIDocs';
+	static readonly LABEL = localize2(
+		"openPearAIDocs",
+		"Open PearAI Documentation",
+	);
+
+	constructor() {
+		super({
+			id: OpenPearAIDocsAction.ID,
+			title: OpenPearAIDocsAction.LABEL,
+			category: Categories.Help,
+			f1: true,
+		});
+	}
+
+	override async run(accessor: ServicesAccessor): Promise<void> {
+		const openerService = accessor.get(IOpenerService);
+		const productService = accessor.get(IProductService);
+		if (!productService.pearAILinks?.docs) {
+			return;
+		}
+		await openerService.open(URI.parse(productService.pearAILinks?.docs));
+	}
+}
+
+registerAction2(OpenPearAIDocsAction);
+
+MenuRegistry.appendMenuItems([
+	{
+		id: MenuId.CommandCenter,
+		item: {
+			command: {
+				id: OpenPearAIDocsAction.ID,
+				title: 'Docs',
+			},
+			order: 20000,
+		},
+	},
+]);

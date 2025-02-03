@@ -139,6 +139,13 @@ export const ActiveAuxiliaryContext = new RawContextKey<string>('activeAuxiliary
 export const AuxiliaryBarFocusContext = new RawContextKey<boolean>('auxiliaryBarFocus', false, localize('auxiliaryBarFocus', "Whether the auxiliary bar has keyboard focus"));
 export const AuxiliaryBarVisibleContext = new RawContextKey<boolean>('auxiliaryBarVisible', false, localize('auxiliaryBarVisible', "Whether the auxiliary bar is visible"));
 
+//#region < --- PearAI Auxiliary Bar --- >
+
+export const ActivePearAIAuxiliaryContext = new RawContextKey<string>('activePearAIAuxiliary', '', localize('activePearAIAuxiliary', "The identifier of the active PearAI auxiliary panel"));
+export const PearAIAuxiliaryBarFocusContext = new RawContextKey<boolean>('pearAIAuxiliaryBarFocus', false, localize('pearAIAuxiliaryBarFocus', "Whether the PearAI auxiliary bar has keyboard focus"));
+export const PearAIAuxiliaryBarVisibleContext = new RawContextKey<boolean>('pearAIAuxiliaryBarVisible', false, localize('pearAIAuxiliaryBarVisible', "Whether the PearAI auxiliary bar is visible"));
+
+
 //#endregion
 
 

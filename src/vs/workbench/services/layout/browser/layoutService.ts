@@ -27,6 +27,7 @@ export const enum Parts {
 	AUXILIARYBAR_PART = 'workbench.parts.auxiliarybar',
 	EDITOR_PART = 'workbench.parts.editor',
 	STATUSBAR_PART = 'workbench.parts.statusbar',
+	PEARAI_AUXILIARYBAR_PART = 'workbench.parts.pearaiauxiliarybar',
 	PEAROVERLAY_PART = 'workbench.parts.pearoverlay'
 }
 

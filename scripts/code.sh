@@ -2,9 +2,9 @@
 
 set -e
 
-cd extensions/pearai-submodule
-./scripts/install-and-build.sh
-cd ../..
+# cd extensions/pearai-submodule
+# ./scripts/install-and-build.sh
+# cd ../..
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
 	realpath() { [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"; }
