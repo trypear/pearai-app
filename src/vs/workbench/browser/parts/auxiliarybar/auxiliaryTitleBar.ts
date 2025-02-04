@@ -7,9 +7,8 @@ export class AuxiliaryTitleBar extends Disposable {
     private container: HTMLElement;
     private readonly iconLabels = [
         { icon: Codicon.layoutPanel, title: 'Toggle Panel', command: 'workbench.action.togglePanel' },
-        { icon: Codicon.layoutSidebarRight, title: 'Toggle Secondary Sidebar', command: 'workbench.action.toggleAuxiliaryBar' },
+        { icon: Codicon.layoutSidebarRight, title: 'Toggle PearAI  Sidebar', command: 'workbench.action.toggleAuxiliaryBar' },
         { icon: Codicon.layoutCentered, title: 'Toggle Centered Layout', command: 'workbench.action.toggleCenteredLayout' },
-        // { icon: Codicon.layoutActivitybarRight, title: 'Toggle Actions', command: 'workbench.action.toggleActivityBarVisibility' }
     ];
 
     constructor(
