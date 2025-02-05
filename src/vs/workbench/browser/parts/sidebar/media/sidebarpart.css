@@ -6,6 +6,12 @@
 .monaco-workbench.nosidebar > .part.sidebar {
 	display: none !important;
 	visibility: hidden !important;
+	margin-top: 10px;
+}
+
+.monaco-workbench .part.sidebar {
+	margin: 10px;
+	/* height: calc(100% - 10px); */
 }
 
 .monaco-workbench .part.sidebar .title-actions .actions-container {

@@ -4,14 +4,20 @@
  *--------------------------------------------------------------------------------------------*/
 
 /* Container */
-
+.monaco-workbench .part.editor {
+	/* border: 10px solid blue; */
+	margin-top: 10px;
+}
 .monaco-workbench .part.editor > .content .editor-group-container {
-	height: 100%;
+	/* height: 100%; */
+	/* border: 10px solid red; */
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container.empty  {
 	opacity: 0.5; /* dimmed to indicate inactive state */
+	height: calc(100% - 10px);
 }
+
 
 .monaco-workbench .part.editor > .content .editor-group-container.empty.active,
 .monaco-workbench .part.editor > .content .editor-group-container.empty.dragged-over {
