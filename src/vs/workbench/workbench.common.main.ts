@@ -162,6 +162,8 @@ registerSingleton(IContextKeyService, ContextKeyService, InstantiationType.Delay
 registerSingleton(ITextResourceConfigurationService, TextResourceConfigurationService, InstantiationType.Delayed);
 registerSingleton(IDownloadService, DownloadService, InstantiationType.Delayed);
 registerSingleton(IOpenerService, OpenerService, InstantiationType.Delayed);
+registerSingleton(IViewDescriptorService, CustomViewDescriptorService, InstantiationType.Delayed);
+
 
 //#endregion
 
@@ -402,6 +404,8 @@ import './contrib/inlineCompletions/browser/inlineCompletions.contribution.js';
 // Drop or paste into
 import './contrib/dropOrPasteInto/browser/dropOrPasteInto.contribution.js';
 import { AllowedExtensionsService } from '../platform/extensionManagement/common/allowedExtensionsService.js';
+import { IViewDescriptorService } from './common/views.js';
+import { CustomViewDescriptorService } from './services/views/pearai/pearaiViews.js';
 
 
 //#endregion
