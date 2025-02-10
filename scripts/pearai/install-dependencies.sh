@@ -21,6 +21,7 @@ execute "./scripts/install-and-build.sh" "Failed to install dependencies for the
 execute "cd ../../" "Failed to change back to the root directory"
 
 # Install dependencies using yarn
+# Adding a comment to test github checks
 execute "yarn" "Failed to install dependencies using yarn"
 
 # Success message
