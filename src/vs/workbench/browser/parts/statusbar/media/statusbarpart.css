@@ -11,6 +11,7 @@
 	font-size: 12px;
 	display: flex;
 	overflow: hidden;
+	margin-top: 10px;
 }
 
 .monaco-workbench:not(.reduce-motion) .part.statusbar {
