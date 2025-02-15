@@ -11,6 +11,7 @@ import { $, getActiveWindow } from "../../../../base/browser/dom.js";
 import { CancellationTokenSource } from "../../../../base/common/cancellation.js";
 import { IInstantiationService } from "../../../../platform/instantiation/common/instantiation.js";
 import { WebviewExtensionDescription } from "../../../../workbench/contrib/webview/browser/webview.js";
+import { mountOverlay } from "../../../../workbench/contrib/void/browser/react/out/overlay-tsx/index.js";
 
 import {
 	IWebviewViewService,
@@ -160,6 +161,13 @@ export class PearOverlayPart extends Part {
 		this.popupAreaOverlay.style.left = "0";
 		this.popupAreaOverlay.style.right = "0";
 		this.popupAreaOverlay.style.bottom = "0";
+
+		// Mount React component
+		const disposables = this._instantiationService.invokeFunction(accessor => {
+			return mountOverlay(this.popupAreaOverlay!, accessor);
+		});
+		disposables?.forEach((d: any) => this._register(d));
+
 		this.element.appendChild(this.popupAreaOverlay);
 
 		// if both content and webview are ready, end loading state and open
