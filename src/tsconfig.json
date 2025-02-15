@@ -23,7 +23,9 @@
 				"name": "tsec",
 				"exemptionConfig": "./tsec.exemptions.json"
 			}
-		]
+		],
+		"jsx": "react",
+		"jsxImportSource": "react"
 	},
 	"include": [
 		"./*.ts",

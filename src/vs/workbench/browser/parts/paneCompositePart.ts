@@ -41,6 +41,11 @@ import { getActionBarActions } from '../../../platform/actions/browser/menuEntry
 import { IHoverService } from '../../../platform/hover/browser/hover.js';
 import { HiddenItemStrategy, WorkbenchToolBar } from '../../../platform/actions/browser/toolbar.js';
 
+// import ReactDOM from 'react-dom';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { ReactComponent } from './reactPanel/ReactComponent.jsx';
+
 export enum CompositeBarPosition {
 	TOP,
 	TITLE,
@@ -417,8 +422,14 @@ export abstract class AbstractPaneCompositePart extends CompositePart<PaneCompos
 				throw new Error('Invalid composite bar state when creating the new composite bar');
 			}
 
+			const temp = $('.react-component');
 			newCompositeBarContainer.classList.add('has-composite-bar');
+			// this.paneCompositeBarContainer = prepend(newCompositeBarContainer, $('.composite-bar-container'));
 			this.paneCompositeBarContainer = prepend(newCompositeBarContainer, $('.composite-bar-container'));
+			prepend(this.paneCompositeBarContainer, temp);
+			const root = createRoot(temp);
+			root.render(React.createElement(ReactComponent));
+			// ReactDOM.render(React.createElement(ReactComponent), temp);
 			this.paneCompositeBar.value = this.createCompositeBar();
 			this.paneCompositeBar.value.create(this.paneCompositeBarContainer);
 

@@ -17,6 +17,8 @@ const { DefinePlugin, optimize } = require('webpack');
 const tsLoaderOptions = {
 	compilerOptions: {
 		'sourceMap': true,
+		'jsx': 'react',
+		'jsxImportSource': 'react',
 	},
 	onlyCompileBundledFiles: true,
 };
