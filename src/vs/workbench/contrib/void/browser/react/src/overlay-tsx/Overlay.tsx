@@ -25,6 +25,35 @@ export const Overlay = () => {
         }}>
             <h2 style={{ marginBottom: '16px' }}>Overlay Component</h2>
             <p>This is a basic React component rendered in the overlay.</p>
+            <button
+                style={{
+                    padding: '10px 20px',
+                    margin: '16px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    backgroundColor: 'var(--vscode-button-background)',
+                    color: 'var(--vscode-button-foreground)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    position: 'relative',
+                    overflow: 'hidden'
+                }}
+                onMouseEnter={(e) => {
+                    const target = e.currentTarget;
+                    target.style.width = '300px';
+                    target.style.height = '100px';
+                    target.innerHTML = 'This is the expanded content with more text that appears on hover!';
+                }}
+                onMouseLeave={(e) => {
+                    const target = e.currentTarget;
+                    target.style.width = 'auto';
+                    target.style.height = 'auto';
+                    target.innerHTML = 'Hover me!';
+                }}
+				className='hover:bg-red-500 hover:text-white'
+            >
+                Hover me!
+            </button>
         </div>
     );
 };
