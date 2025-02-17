@@ -9,6 +9,12 @@ The build system has been modernized and structured to support multiple platform
 4. Cross-platform Build Support
 5. npm install inside the 2 modules of PearAI after moving them from vscode/extenstions or pearai/extenstions and then npm run gulp vscode-linux-x64
 
+# Fix for compiling on Linux
+1. Download / clone pearai-app
+2. Continue with regular procedure
+3. go to extentions/pearai.pearai.* modules folder and do npm install inside both of them
+4. go back to the root directory of the project and do: npm run gulp vscode-linux-x64
+
 ## Key Changes
 
 ### 1. Gulp Configuration
@@ -21,14 +27,14 @@ The build system is organized into several key areas:
 #### CLI Build Support
 - Dedicated pipeline configurations for CLI builds
 - Support for multiple platforms (Windows, Darwin, Linux, Alpine)
-- Rust toolchain integration for CLI components
+- Rust toolchain integration for CLI components - Reverted back to gulp
 
 #### Platform-Specific Builds
 - Separate build configurations for:
   - Alpine Linux
   - Windows
   - macOS (Darwin)
-  - Standard Linux
+  - Standard Linux - More focused on Linux didn't change anything on other OSs.
 
 #### Build Caching
 - Implementation of smart caching mechanisms:
