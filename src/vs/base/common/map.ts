@@ -157,13 +157,13 @@ export class ResourceSet implements Set<URI> {
 	private readonly _map: ResourceMap<URI>;
 
 	constructor(toKey?: ResourceMapKeyFn);
-	constructor(entries: readonly URI[], toKey?: ResourceMapKeyFn);
-	constructor(entriesOrKey?: readonly URI[] | ResourceMapKeyFn, toKey?: ResourceMapKeyFn) {
+	constructor(entries?: readonly URI[], toKey?: ResourceMapKeyFn);
+	constructor(entriesOrKey?: ResourceMapKeyFn | readonly URI[], toKey?: ResourceMapKeyFn) {
 		if (!entriesOrKey || typeof entriesOrKey === 'function') {
-			this._map = new ResourceMap(entriesOrKey);
+			this._map = new ResourceMap<URI>(entriesOrKey as ResourceMapKeyFn);
 		} else {
-			this._map = new ResourceMap(toKey);
-			entriesOrKey.forEach(this.add, this);
+			this._map = new ResourceMap<URI>(toKey);
+			(entriesOrKey as readonly URI[]).forEach(uri => this.add(uri));
 		}
 	}
 

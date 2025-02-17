@@ -393,37 +393,37 @@ export class Delayer<T> implements IDisposable {
 			});
 		}
 
-		const fn = () => {
-			this.deferred = null;
-			this.doResolve?.(null);
-		};
-
-		this.deferred = delay === MicrotaskDelay ? microtaskDeferred(fn) : timeoutDeferred(delay, fn);
-
-		return this.completionPromise;
-	}
-
-	isTriggered(): boolean {
-		return !!this.deferred?.isTriggered();
-	}
-
-	cancel(): void {
-		this.cancelTimeout();
-
-		if (this.completionPromise) {
-			this.doReject?.(new CancellationError());
-			this.completionPromise = null;
-		}
-	}
-
-	private cancelTimeout(): void {
-		this.deferred?.dispose();
+	const fn = () => {
 		this.deferred = null;
-	}
+		this.doResolve?.(null);
+	};
 
-	dispose(): void {
-		this.cancel();
+	this.deferred = delay === MicrotaskDelay ? microtaskDeferred(fn) : timeoutDeferred(delay, fn);
+
+	return this.completionPromise;
+}
+
+isTriggered(): boolean {
+	return !!this.deferred?.isTriggered();
+}
+
+cancel(): void {
+	this.cancelTimeout();
+
+	if (this.completionPromise) {
+		this.doReject?.(new CancellationError());
+		this.completionPromise = null;
 	}
+}
+
+private cancelTimeout(): void {
+	this.deferred?.dispose();
+	this.deferred = null;
+}
+
+dispose(): void {
+	this.cancel();
+}
 }
 
 /**
@@ -788,12 +788,13 @@ export class LimitedQueue {
 	private tasks = 0;
 
 	queue(factory: ITask<Promise<void>>): Promise<void> {
+		const promise = factory();
 		if (!this.sequentializer.isRunning()) {
-			return this.sequentializer.run(this.tasks++, factory());
+			return this.sequentializer.run(this.tasks++, promise, undefined);
 		}
 
 		return this.sequentializer.queue(() => {
-			return this.sequentializer.run(this.tasks++, factory());
+			return this.sequentializer.run(this.tasks++, promise, undefined);
 		});
 	}
 }

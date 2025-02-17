@@ -192,10 +192,10 @@ export class URI implements UriComponents {
 	 * of UNC paths. See the below sample of a file-uri with an authority (UNC path).
 	 *
 	 * ```ts
-		const u = URI.parse('file://server/c$/folder/file.txt')
-		u.authority === 'server'
-		u.path === '/shares/c$/file.txt'
-		u.fsPath === '\\server\c$\folder\file.txt'
+	const u = URI.parse('file://server/c$/folder/file.txt')
+	u.authority === 'server'
+	u.path === '/shares/c$/file.txt'
+	u.fsPath === '\\server\c$\folder\file.txt'
 	```
 	 *
 	 * Using `URI#path` to read a file (using fs-apis) would not be enough because parts of the path,
@@ -407,7 +407,7 @@ export class URI implements UriComponents {
 		} else if (data instanceof URI) {
 			return data;
 		} else {
-			const result = new Uri(data);
+			const result = new Uri(data.scheme || '', data.authority || '', data.path || '', data.query || '', data.fragment || '');
 			result._formatted = (<UriState>data).external ?? null;
 			result._fsPath = (<UriState>data)._sep === _pathSepMarker ? (<UriState>data).fsPath ?? null : null;
 			return result;
