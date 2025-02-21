@@ -39,6 +39,8 @@ export class PearOverlayPart extends Part {
 
 	private state: "loading" | "open" | "closed" = "loading";
 	private _isLocked: boolean = false;
+	private loadingOverlay: HTMLElement | undefined;
+	private isExtensionReady: boolean = false;
 
 	constructor(
 		@IThemeService themeService: IThemeService,
@@ -162,6 +164,34 @@ export class PearOverlayPart extends Part {
 		this.popupAreaOverlay.style.bottom = "0";
 		this.element.appendChild(this.popupAreaOverlay);
 
+		// Create loading overlay
+		this.loadingOverlay = $('div.pearai-loading-overlay');
+		this.loadingOverlay.style.position = 'absolute';
+		this.loadingOverlay.style.top = '0';
+		this.loadingOverlay.style.left = '0';
+		this.loadingOverlay.style.right = '0';
+		this.loadingOverlay.style.bottom = '0';
+		this.loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+		this.loadingOverlay.style.zIndex = '2000'; // Higher than webview container
+		this.loadingOverlay.style.display = 'flex';
+		this.loadingOverlay.style.alignItems = 'center';
+		this.loadingOverlay.style.justifyContent = 'center';
+
+		const loadingText = $('div.loading-text');
+		loadingText.textContent = 'Pear is getting ready for first launch...';
+		loadingText.style.color = 'white';
+		loadingText.style.fontSize = '20px';
+
+		this.loadingOverlay.appendChild(loadingText);
+		this.element.appendChild(this.loadingOverlay);
+
+		// // Add message listener to webview for extension ready event
+		// this.webviewView?.webview.onMessage(message => {
+		// 	if (message.type === 'extension-ready') {
+		// 		this.hideLoadingOverlay();
+		// 	}
+		// });
+
 		// if both content and webview are ready, end loading state and open
 		if (this.popupAreaOverlay && this.webviewView) {
 			//this.webviewView?.webview.layoutWebviewOverElement(this.popupAreaOverlay);
@@ -213,6 +243,12 @@ export class PearOverlayPart extends Part {
 		const container = this.webviewView!.webview.container;
 		container.style.display = "flex";
 		container.style.zIndex = "1000";
+
+		// Show loading overlay if extension is not ready
+		if (!this.isExtensionReady && this.loadingOverlay) {
+			this.loadingOverlay.style.display = "flex";
+		}
+
 		this.fullScreenOverlay?.addEventListener("click", () => {
 			// TODO: If we are in the tutorial, don't close
 			this.close();
@@ -291,6 +327,18 @@ export class PearOverlayPart extends Part {
 
 	public get isLocked(): boolean {
 		return this._isLocked;
+	}
+
+	private hideLoadingOverlay(): void {
+		if (this.loadingOverlay) {
+			this.loadingOverlay.style.animation = "pearaiFadeOut 0.2s ease-out";
+			setTimeout(() => {
+				if (this.loadingOverlay) {
+					this.loadingOverlay.style.display = "none";
+					this.isExtensionReady = true;
+				}
+			}, 200);
+		}
 	}
 
 	toJSON(): object {
