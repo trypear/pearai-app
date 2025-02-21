@@ -1,5 +1,14 @@
 /* eslint-disable header/header */
 
+// @Himanshu: This Overlay layout is messed up.
+// its not maintainable and iterable.
+// Simplyfy this.
+// why open and show are two different functions?
+// extract out the styles into css files.
+// fullscreen? container? webview? popupAreaOverlay? should just one thing.
+// display, opacity, z-index, transition, etc.
+// this should be just skeleton, full control should be inside submodule for layout.
+
 import { Part } from "../../../../workbench/browser/part.js";
 import {
 	IWorkbenchLayoutService,
@@ -138,6 +147,11 @@ export class PearOverlayPart extends Part {
 			// hide stuff while we load
 			this.webviewView!.webview.container.style.display = "none";
 		}
+
+		// hide webview container initially
+		webview.container.style.display = "none";
+		webview.container.style.opacity = "0";
+		webview.container.style.transition = "opacity 0.3s ease-in";
 	}
 
 	protected override createContentArea(element: HTMLElement): HTMLElement {
@@ -164,23 +178,27 @@ export class PearOverlayPart extends Part {
 		this.popupAreaOverlay.style.bottom = "0";
 		this.element.appendChild(this.popupAreaOverlay);
 
-		// Create loading overlay
+		// Create loading overlay with higher z-index and pointer-events handling
 		this.loadingOverlay = $('div.pearai-loading-overlay');
-		this.loadingOverlay.style.position = 'absolute';
+		this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning
 		this.loadingOverlay.style.top = '0';
 		this.loadingOverlay.style.left = '0';
 		this.loadingOverlay.style.right = '0';
 		this.loadingOverlay.style.bottom = '0';
-		this.loadingOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-		this.loadingOverlay.style.zIndex = '2000'; // Higher than webview container
+		this.loadingOverlay.style.backgroundColor = 'var(--vscode-editor-background)';
+		this.loadingOverlay.style.zIndex = '9999'; // Much higher z-index
 		this.loadingOverlay.style.display = 'flex';
 		this.loadingOverlay.style.alignItems = 'center';
 		this.loadingOverlay.style.justifyContent = 'center';
+		this.loadingOverlay.style.pointerEvents = 'all'; // Ensure it blocks interactions
 
 		const loadingText = $('div.loading-text');
 		loadingText.textContent = 'Pear is getting ready for first launch...';
 		loadingText.style.color = 'white';
 		loadingText.style.fontSize = '20px';
+		// loadingText.addEventListener('click', () => {
+		// 	this.hideOverlayLoadingMessage();
+		// });
 
 		this.loadingOverlay.appendChild(loadingText);
 		this.element.appendChild(this.loadingOverlay);
@@ -243,6 +261,8 @@ export class PearOverlayPart extends Part {
 		const container = this.webviewView!.webview.container;
 		container.style.display = "flex";
 		container.style.zIndex = "1000";
+		container.style.display = 'flex';
+		container.style.opacity = '1';
 
 		// Show loading overlay if extension is not ready
 		if (!this.isExtensionReady && this.loadingOverlay) {
@@ -329,15 +349,35 @@ export class PearOverlayPart extends Part {
 		return this._isLocked;
 	}
 
-	private hideLoadingOverlay(): void {
+	public hideOverlayLoadingMessage(): void {
 		if (this.loadingOverlay) {
-			this.loadingOverlay.style.animation = "pearaiFadeOut 0.2s ease-out";
+			// Start fade out of loading overlay
+			this.loadingOverlay.style.transition = 'all 0.3s ease-out';
+			this.loadingOverlay.style.opacity = '0';
+			this.loadingOverlay.style.pointerEvents = 'none';
+
+			// Only show webview if we're in the "open" state
+			const container = this.webviewView!.webview.container;
+			if (this.state === "open") {
+				container.style.display = 'flex';
+				container.style.opacity = '0';
+				container.style.transition = 'opacity 0.3s ease-in';
+
+				setTimeout(() => {
+					container.style.opacity = '1';
+				}, 50);
+			} else {
+				container.style.display = 'none';
+				container.style.opacity = '0';
+			}
+
+			// Clean up after animations complete
 			setTimeout(() => {
 				if (this.loadingOverlay) {
-					this.loadingOverlay.style.display = "none";
+					this.loadingOverlay.style.display = 'none';
 					this.isExtensionReady = true;
 				}
-			}, 200);
+			}, 300);
 		}
 	}
 
