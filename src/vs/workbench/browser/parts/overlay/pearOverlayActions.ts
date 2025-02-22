@@ -64,25 +64,25 @@ export class MarkPearAIFirstLaunchCompleteAction extends Action2 {
 
 	run(accessor: ServicesAccessor): void {
 		const storageService = accessor.get(IStorageService);
-		const notificationService = accessor.get(INotificationService);
-		const commandService = accessor.get(ICommandService);  // Get command service early
 		storageService.store(PEARAI_FIRST_LAUNCH_KEY, true, 0, 0);
-		notificationService.notify({
-			severity: Severity.Info,
-			message: 'Successfully marked PearAI first launch Key complete',
-			actions: {
-				primary: [{
-					id: 'reloadWindow',
-					label: 'Reload Window',
-					tooltip: 'Reload Window',
-					class: '',
-					enabled: true,
-					run: () => {
-						commandService.executeCommand('workbench.action.reloadWindow');
-					}
-				}]
-			}
-		});
+		// const notificationService = accessor.get(INotificationService);
+		// const commandService = accessor.get(ICommandService);  // Get command service early
+		// notificationService.notify({
+		// 	severity: Severity.Info,
+		// 	message: 'Successfully marked PearAI first launch Key complete',
+		// 	actions: {
+		// 		primary: [{
+		// 			id: 'reloadWindow',
+		// 			label: 'Reload Window',
+		// 			tooltip: 'Reload Window',
+		// 			class: '',
+		// 			enabled: true,
+		// 			run: () => {
+		// 				commandService.executeCommand('workbench.action.reloadWindow');
+		// 			}
+		// 		}]
+		// 	}
+		// });
 	}
 }
 
