@@ -206,30 +206,32 @@ export class PearOverlayPart extends Part {
 		this.popupAreaOverlay.style.bottom = "0";
 		this.element.appendChild(this.popupAreaOverlay);
 
-		// Create loading overlay with higher z-index and pointer-events handling
-		this.loadingOverlay = $('div.pearai-loading-overlay');
-		this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning
-		this.loadingOverlay.style.top = '0';
-		this.loadingOverlay.style.left = '0';
-		this.loadingOverlay.style.right = '0';
-		this.loadingOverlay.style.bottom = '0';
-		this.loadingOverlay.style.backgroundColor = 'var(--vscode-editor-background)';
-		this.loadingOverlay.style.zIndex = '9999'; // Much higher z-index
-		this.loadingOverlay.style.display = 'flex';
-		this.loadingOverlay.style.alignItems = 'center';
-		this.loadingOverlay.style.justifyContent = 'center';
-		this.loadingOverlay.style.pointerEvents = 'all'; // Ensure it blocks interactions
+		if (this.isFirstLaunch) {
+			// Create loading overlay with higher z-index and pointer-events handling
+			this.loadingOverlay = $('div.pearai-loading-overlay');
+			this.loadingOverlay.style.position = 'fixed'; // Change to fixed positioning
+			this.loadingOverlay.style.top = '0';
+			this.loadingOverlay.style.left = '0';
+			this.loadingOverlay.style.right = '0';
+			this.loadingOverlay.style.bottom = '0';
+			this.loadingOverlay.style.backgroundColor = 'var(--vscode-editor-background)';
+			this.loadingOverlay.style.zIndex = '9999'; // Much higher z-index
+			this.loadingOverlay.style.display = 'flex';
+			this.loadingOverlay.style.alignItems = 'center';
+			this.loadingOverlay.style.justifyContent = 'center';
+			this.loadingOverlay.style.pointerEvents = 'all'; // Ensure it blocks interactions
 
-		const loadingText = $('div.loading-text');
-		loadingText.textContent = 'Pear is getting ready for first launch...';
-		loadingText.style.color = 'white';
-		loadingText.style.fontSize = '20px';
-		// loadingText.addEventListener('click', () => {
-		// 	this.hideOverlayLoadingMessage();
-		// });
+			const loadingText = $('div.loading-text');
+			loadingText.textContent = 'Pear is getting ready for first launch...';
+			loadingText.style.color = 'white';
+			loadingText.style.fontSize = '20px';
+			// loadingText.addEventListener('click', () => {
+			// 	this.hideOverlayLoadingMessage();
+			// });
 
-		this.loadingOverlay.appendChild(loadingText);
-		this.element.appendChild(this.loadingOverlay);
+			this.loadingOverlay.appendChild(loadingText);
+			this.element.appendChild(this.loadingOverlay);
+		}
 
 		// // Add message listener to webview for extension ready event
 		// this.webviewView?.webview.onMessage(message => {
