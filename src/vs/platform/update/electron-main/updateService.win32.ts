@@ -149,6 +149,7 @@ export class Win32UpdateService extends AbstractUpdateService implements IRelaun
 				this.nativeHostMainService.openExternal(undefined, state.update.url);
 			}
 			this.setState(State.Idle(getUpdateType()));
+			return;
 		}
 
 		if (this.state.type !== StateType.AvailableForDownload)
