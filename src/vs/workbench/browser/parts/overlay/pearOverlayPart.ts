@@ -222,7 +222,7 @@ export class PearOverlayPart extends Part {
 			this.loadingOverlay.style.pointerEvents = 'all'; // Ensure it blocks interactions
 
 			const loadingText = $('div.loading-text');
-			loadingText.textContent = 'Pear is getting ready for first launch...';
+			loadingText.textContent = 'Getting ready to make something great...';
 			loadingText.style.color = 'white';
 			loadingText.style.fontSize = '20px';
 			// loadingText.addEventListener('click', () => {
