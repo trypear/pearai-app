@@ -7,7 +7,7 @@ The build system has been modernized and structured to support multiple platform
 2. Structured Pipeline Organization
 3. Enhanced CLI Support
 4. Cross-platform Build Support
-5. npm install inside the 2 modules of PearAI after moving them from vscode/extenstions or pearai/extenstions and then npm run gulp vscode-linux-x64
+5. npm install inside the 2 modules of PearAI after moving them from vscode/extensions or pearai/extensions and then npm run gulp vscode-linux-x64
 
 # Fix for compiling on Linux
 1. Download / clone pearai-app
