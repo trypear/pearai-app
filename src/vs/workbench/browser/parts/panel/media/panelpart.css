@@ -98,3 +98,43 @@
 	display: inline-block;
 	transform: rotate(180deg);
 }
+
+
+/* TABS STYLING */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item {
+	padding-left: 8px;
+	padding-right: 8px;
+	margin-right: 2px;
+	font-size: 12px;
+	text-transform: none;
+	transition: all 0.2s ease;
+}
+
+/* Style the tab labels to be bubbly */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label {
+	border-radius: 12px;
+	padding: 2px 16px;
+	margin: 1px 0;
+	border: none !important;
+	box-shadow: 0 1px 2px rgba(105, 105, 105, 0.144), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* HOVERED TABS */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:hover .action-label {
+	background-color: rgba(255, 255, 255, 0.05) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 1px 3px rgba(155, 155, 155, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ACTIVE TABS */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .action-label {
+	background-color: rgba(255, 255, 255, 0.05) !important;
+	border-radius: 12px !important;
+	box-shadow: 0 1px 3px rgba(74, 74, 74, 0.188), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* REMOVE ACTIVE TAB INDICATOR */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .active-item-indicator:before {
+	border-top: none !important;
+	height: 0 !important;
+}
