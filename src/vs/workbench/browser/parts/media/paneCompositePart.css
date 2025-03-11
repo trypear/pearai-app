@@ -71,8 +71,8 @@
 
 .monaco-workbench .pane-composite-part > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item.icon,
 .monaco-workbench .pane-composite-part > .header-or-footer > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item.icon {
-	height: 35px; /* matches height of composite container */
-	padding: 0 3px;
+	padding: 3px;
+	background-color: rgba(255, 250, 250, 0.1);
 }
 
 
