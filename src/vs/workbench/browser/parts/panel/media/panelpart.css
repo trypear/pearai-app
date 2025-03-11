@@ -141,5 +141,13 @@
 }
 
 .tab.tab-actions-right.sizing-fit.has-icon {
-	border-radius: 8px
+	border-radius: 8px;
+	background-color: var(--vscode-tab-activeBackground);
 }
+
+.title .tabs.show-file-icons {
+	background: transparent !important;
+}
+
+
+
