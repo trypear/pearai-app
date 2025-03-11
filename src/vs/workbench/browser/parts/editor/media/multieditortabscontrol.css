@@ -77,6 +77,8 @@
 	display: flex;
 	height: var(--editor-group-tab-height);
 	scrollbar-width: none; /* Firefox: hide scrollbar */
+	gap: 6px;
+	padding: 0 6px;
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container.scroll {

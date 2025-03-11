@@ -139,3 +139,7 @@
 	border-top: none !important;
 	height: 0 !important;
 }
+
+.tab.tab-actions-right.sizing-fit.has-icon {
+	border-radius: 8px
+}
