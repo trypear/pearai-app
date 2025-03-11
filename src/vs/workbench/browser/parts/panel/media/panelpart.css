@@ -116,7 +116,7 @@
 	padding: 2px 10px;
 	margin: 1px 0;
 	border: none !important;
-	background: rgb(255 255 255 / 4%) !important;
+	background: var(--vscode-tab-inactiveBackground) !important;
 }
 
 /* HOVERED TABS */
@@ -141,7 +141,7 @@
 }
 
 .tab.tab-actions-right.sizing-fit.has-icon {
-	border-radius: 8px;
+	border-radius: 10px;
 	background-color: var(--vscode-tab-activeBackground);
 }
 
