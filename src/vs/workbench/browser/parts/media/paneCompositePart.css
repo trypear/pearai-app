@@ -346,3 +346,10 @@
 	margin: 12px;
 	text-align: center;
 }
+
+ul.actions-container.highlight-toggled {
+	border: 1px rgba(255, 255, 255, 0.1) solid;
+	border-radius: 8px;
+	padding: 0px;
+	height: fit-content;
+}
