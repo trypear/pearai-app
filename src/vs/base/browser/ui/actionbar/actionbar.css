@@ -6,6 +6,8 @@
 .monaco-action-bar {
 	white-space: nowrap;
 	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .monaco-action-bar .actions-container {
