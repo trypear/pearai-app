@@ -344,8 +344,7 @@ class LoginToPearAIAction extends Action2 {
 
 	override async run(accessor: ServicesAccessor): Promise<void> {
 		const openerService = accessor.get(IOpenerService);
-		// Use vscode-insiders:// scheme for insiders build compatibility
-		const callbackUri = URI.parse('vscode-insiders://pearai.pearai/auth');
+		const callbackUri = URI.parse('pearai://pearai.pearai/auth');
 
 		await openerService.open(
 			URI.parse(
