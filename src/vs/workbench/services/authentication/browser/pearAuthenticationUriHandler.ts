@@ -65,6 +65,9 @@ dispose(): void {
 }
 }
 
+// TODO: I think file isnt beeing registered, idk why
+
+console.dir("I AM A REGISTERED OFFENDER")
 // Register the URI handler as a workbench contribution
 Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench)
 	.registerWorkbenchContribution(PearAuthenticationUriHandler, LifecyclePhase.Restored);
