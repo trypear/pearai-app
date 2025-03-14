@@ -6,6 +6,7 @@
 .monaco-workbench .part {
 	box-sizing: border-box;
 	overflow: hidden;
+	border-top: 1px #c6c6c62e solid;
 }
 
 .monaco-workbench .part > .drop-block-overlay.visible {
