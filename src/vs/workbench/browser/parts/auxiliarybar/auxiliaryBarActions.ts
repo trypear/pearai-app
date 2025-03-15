@@ -22,6 +22,7 @@ import { ICommandService } from '../../../../platform/commands/common/commands.j
 import { IOpenerService } from '../../../../platform/opener/common/opener.js';
 import { URI } from '../../../../base/common/uri.js';
 import { IProductService } from '../../../../platform/product/common/productService.js';
+// import { IEnvironmentService } from '../../../../platform/environment/common/environment.js';
 
 const auxiliaryBarRightIcon = registerIcon('auxiliarybar-right-layout-icon', Codicon.layoutSidebarRight, localize('toggleAuxiliaryIconRight', 'Icon to toggle the auxiliary bar off in its right position.'));
 const auxiliaryBarRightOffIcon = registerIcon('auxiliarybar-right-off-layout-icon', Codicon.layoutSidebarRightOff, localize('toggleAuxiliaryIconRightOn', 'Icon to toggle the auxiliary bar on in its right position.'));
@@ -309,15 +310,59 @@ class OpenPearAIDocsAction extends Action2 {
 	}
 }
 
-registerAction2(OpenPearAIDocsAction);
+// registerAction2(OpenPearAIDocsAction);
+
+// MenuRegistry.appendMenuItems([
+// 	{
+// 		id: MenuId.CommandCenter,
+// 		item: {
+// 			command: {
+// 				id: OpenPearAIDocsAction.ID,
+// 				title: 'Docs',
+// 			},
+// 			order: 20000,
+// 		},
+// 	},
+// ]);
+
+
+class LoginToPearAIAction extends Action2 {
+	static readonly ID = 'workbench.action.loginToPearAI';
+	static readonly LABEL = localize2(
+		"loginToPearAI",
+		"Login To PearAI App",
+	);
+
+	constructor() {
+		super({
+			id: LoginToPearAIAction.ID,
+			title: LoginToPearAIAction.LABEL,
+			category: Categories.Help,
+			f1: true,
+		});
+	}
+
+	override async run(accessor: ServicesAccessor): Promise<void> {
+		const openerService = accessor.get(IOpenerService);
+		const callbackUri = URI.parse('pearai://pearai.pearai/auth');
+
+		await openerService.open(
+			URI.parse(
+				`https://trypear.ai/signin?callback=${callbackUri.toString()}`
+			)
+		);
+	}
+}
+
+registerAction2(LoginToPearAIAction);
 
 MenuRegistry.appendMenuItems([
 	{
 		id: MenuId.CommandCenter,
 		item: {
 			command: {
-				id: OpenPearAIDocsAction.ID,
-				title: 'Docs',
+				id: LoginToPearAIAction.ID,
+				title: 'Login To PearAI',
 			},
 			order: 20000,
 		},
