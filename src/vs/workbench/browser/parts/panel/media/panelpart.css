@@ -7,11 +7,11 @@
 	display: none !important;
 	visibility: hidden !important;
 }
-
+/*
 .monaco-workbench .part.panel.bottom .composite.title {
 	border-top-width: 1px;
 	border-top-style: solid;
-}
+} */
 
 .monaco-workbench.nomaineditorarea .part.panel.bottom .composite.title {
 	border-top-width: 0; /* no border when main editor area is hiden */
@@ -98,3 +98,56 @@
 	display: inline-block;
 	transform: rotate(180deg);
 }
+
+
+/* TABS STYLING - styling for the container of the tabs */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item {
+	margin-right: 2px;
+	padding: 0 2px;
+	font-size: 12px;
+	text-transform: uppercase;
+	transition: all 0.2s ease;
+	background: transparent;
+}
+
+/* Style the tab labels to be bubbly */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item .action-label {
+	border-radius: 10px;
+	padding: 2px 10px;
+	margin: 1px 0;
+	border: none !important;
+	background: var(--vscode-tab-inactiveBackground) !important;
+}
+
+/* HOVERED TABS */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item:hover .action-label {
+	/* box-shadow: 0 1px 3px rgba(155, 155, 155, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.1); */
+
+}
+.monaco-workbench .panel {
+	padding: 6px;
+}
+
+/* ACTIVE TABS */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .action-label {
+	background: rgba(0, 0, 0, 0.135) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* REMOVE ACTIVE TAB INDICATOR */
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked .active-item-indicator:before {
+	border-top: none !important;
+	height: 0 !important;
+}
+
+.tab.tab-actions-right.sizing-fit.has-icon {
+	border-radius: 10px;
+	background-color: var(--vscode-tab-activeBackground);
+}
+
+.title .tabs.show-file-icons {
+	background: transparent !important;
+}
+
+
+

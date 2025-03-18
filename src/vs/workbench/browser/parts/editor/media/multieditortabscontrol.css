@@ -44,6 +44,7 @@
 .monaco-workbench .part.editor > .content .editor-group-container > .title > .tabs-and-actions-container {
 	display: flex;
 	position: relative; /* position tabs border bottom or editor actions (when tabs wrap) relative to this container */
+	margin: 6px 0px;
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title > .tabs-and-actions-container.empty {
@@ -77,6 +78,8 @@
 	display: flex;
 	height: var(--editor-group-tab-height);
 	scrollbar-width: none; /* Firefox: hide scrollbar */
+	gap: 6px;
+	padding: 0 6px;
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container.scroll {
@@ -116,9 +119,6 @@
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab.active {
 	background-color: var(--vscode-tab-unfocusedActiveBackground);
 }
-.monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab.active {
-	background-color: var(--vscode-tab-activeBackground);
-}
 
 /* Tab Foreground Color in/active group/tab */
 .monaco-workbench .part.editor > .content .editor-group-container > .title .tabs-container > .tab {
@@ -132,6 +132,8 @@
 }
 .monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab.active {
 	color: var(--vscode-tab-activeForeground);
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	background-color: rgba(0, 0, 0, 0.135) !important;
 }
 
 .monaco-workbench .part.editor > .content .editor-group-container.active > .title .tabs-container > .tab.selected:not(.active) {
