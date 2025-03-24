@@ -639,13 +639,14 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 				}
 			}
 
-			// --- Global Actions
-			const globalToolbarActions = this.globalToolbarMenu.getActions();
-			this.hasGlobalToolbarEntries = globalToolbarActions.length > 0;
-			fillInActionBarActions(
-				globalToolbarActions,
-				actions
-			);
+			// --- Activity Actions
+			if (this.activityActionsEnabled) {
+				if (isAccountsActionVisible(this.storageService)) {
+					actions.primary.push(ACCOUNTS_ACTIVITY_TILE_ACTION);
+				}
+				// this is settings icon, replaced by pearai settings icon in layout actions.
+				// actions.primary.push(GLOBAL_ACTIVITY_TITLE_ACTION);
+			}
 
 			// --- Layout Actions
 			if (this.layoutToolbarMenu) {
