@@ -648,31 +648,31 @@ const defaultChat = {
 	providerSetting: product.defaultChatAgent?.providerSetting ?? '',
 };
 
-// Add next to the command center if command center is disabled
-MenuRegistry.appendMenuItem(MenuId.CommandCenter, {
-	submenu: MenuId.ChatTitleBarMenu,
-	title: localize('title4', "Copilot"),
-	icon: Codicon.copilot,
-	when: ContextKeyExpr.and(
-		ChatContextKeys.supported,
-		ContextKeyExpr.has('config.chat.commandCenter.enabled')
-	),
-	order: 10001 // to the right of command center
-});
+// // Add next to the command center if command center is disabled
+// MenuRegistry.appendMenuItem(MenuId.CommandCenter, {
+// 	submenu: MenuId.ChatTitleBarMenu,
+// 	title: localize('title4', "Copilot"),
+// 	icon: Codicon.copilot,
+// 	when: ContextKeyExpr.and(
+// 		ChatContextKeys.supported,
+// 		ContextKeyExpr.has('config.chat.commandCenter.enabled')
+// 	),
+// 	order: 10001 // to the right of command center
+// });
 
-// Add to the global title bar if command center is disabled
-MenuRegistry.appendMenuItem(MenuId.TitleBar, {
-	submenu: MenuId.ChatTitleBarMenu,
-	title: localize('title4', "Copilot"),
-	group: 'navigation',
-	icon: Codicon.copilot,
-	when: ContextKeyExpr.and(
-		ChatContextKeys.supported,
-		ContextKeyExpr.has('config.chat.commandCenter.enabled'),
-		ContextKeyExpr.has('config.window.commandCenter').negate(),
-	),
-	order: 1
-});
+// // Add to the global title bar if command center is disabled
+// MenuRegistry.appendMenuItem(MenuId.TitleBar, {
+// 	submenu: MenuId.ChatTitleBarMenu,
+// 	title: localize('title4', "Copilot"),
+// 	group: 'navigation',
+// 	icon: Codicon.copilot,
+// 	when: ContextKeyExpr.and(
+// 		ChatContextKeys.supported,
+// 		ContextKeyExpr.has('config.chat.commandCenter.enabled'),
+// 		ContextKeyExpr.has('config.window.commandCenter').negate(),
+// 	),
+// 	order: 1
+// });
 
 registerAction2(class ToggleCopilotControl extends ToggleTitleBarConfigAction {
 	constructor() {
