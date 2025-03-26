@@ -19,9 +19,9 @@ import { KeyCode, KeyMod } from '../../../../base/common/keyCodes.js';
 import { SwitchCompositeViewAction } from '../compositeBarActions.js';
 import { mainWindow } from '../../../../base/browser/window.js';
 import { ICommandService } from '../../../../platform/commands/common/commands.js';
-import { IOpenerService } from '../../../../platform/opener/common/opener.js';
-import { URI } from '../../../../base/common/uri.js';
-import { IProductService } from '../../../../platform/product/common/productService.js';
+// import { IOpenerService } from '../../../../platform/opener/common/opener.js';
+// import { URI } from '../../../../base/common/uri.js';
+// import { IProductService } from '../../../../platform/product/common/productService.js';
 import { closeIcon } from '../panel/panelActions.js';
 
 const auxiliaryBarRightIcon = registerIcon('auxiliarybar-right-layout-icon', Codicon.layoutSidebarRight, localize('toggleAuxiliaryIconRight', 'Icon to toggle the auxiliary bar off in its right position.'));
@@ -307,44 +307,3 @@ class FocusPearAIExtensionAction extends Action2 {
 registerAction2(FocusPearAIExtensionAction);
 
 // Following is a only PearAI related action, need to refactor these type of actions to separate file
-
-class OpenPearAIDocsAction extends Action2 {
-	static readonly ID = 'workbench.action.openPearAIDocs';
-	static readonly LABEL = localize2(
-		"openPearAIDocs",
-		"Open PearAI Documentation",
-	);
-
-	constructor() {
-		super({
-			id: OpenPearAIDocsAction.ID,
-			title: OpenPearAIDocsAction.LABEL,
-			category: Categories.Help,
-			f1: true,
-		});
-	}
-
-	override async run(accessor: ServicesAccessor): Promise<void> {
-		const openerService = accessor.get(IOpenerService);
-		const productService = accessor.get(IProductService);
-		if (!productService.pearAILinks?.docs) {
-			return;
-		}
-		await openerService.open(URI.parse(productService.pearAILinks?.docs));
-	}
-}
-
-registerAction2(OpenPearAIDocsAction);
-
-MenuRegistry.appendMenuItems([
-	{
-		id: MenuId.CommandCenter,
-		item: {
-			command: {
-				id: OpenPearAIDocsAction.ID,
-				title: 'Docs',
-			},
-			order: 20000,
-		},
-	},
-]);
