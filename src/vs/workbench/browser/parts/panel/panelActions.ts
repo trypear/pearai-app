@@ -14,8 +14,8 @@ import { ContextKeyExpr, ContextKeyExpression } from '../../../../platform/conte
 import { Codicon } from '../../../../base/common/codicons.js';
 import { registerIcon } from '../../../../platform/theme/common/iconRegistry.js';
 import { ServicesAccessor } from '../../../../editor/browser/editorExtensions.js';
-import { ViewContainerLocationToString, ViewContainerLocation, IViewDescriptorService } from '../../../common/views.js';
 import { PearAIChatExtensionId, PearAISearchExtensionId, PearAIMemoryExtensionId, PearAIRooExtensionId, PearAIView, PEARAI_VIEWS} from '../../../services/views/pearai/pearaiViewsShared.js';
+import { ViewContainerLocation, IViewDescriptorService } from '../../../common/views.js';
 import { IViewsService } from '../../../services/views/common/viewsService.js';
 import { IPaneCompositePartService } from '../../../services/panecomposite/browser/panecomposite.js';
 import { INotificationService } from '../../../../platform/notification/common/notification.js';
@@ -25,7 +25,7 @@ import { SwitchCompositeViewAction } from '../compositeBarActions.js';
 
 const maximizeIcon = registerIcon('panel-maximize', Codicon.chevronUp, localize('maximizeIcon', 'Icon to maximize a panel.'));
 const restoreIcon = registerIcon('panel-restore', Codicon.chevronDown, localize('restoreIcon', 'Icon to restore a panel.'));
-const closeIcon = registerIcon('panel-close', Codicon.close, localize('closeIcon', 'Icon to close a panel.'));
+export const closeIcon = registerIcon('panel-close', Codicon.close, localize('closeIcon', 'Icon to close a panel.'));
 const panelIcon = registerIcon('panel-layout-icon', Codicon.layoutPanel, localize('togglePanelOffIcon', 'Icon to toggle the panel off when it is on.'));
 const panelOffIcon = registerIcon('panel-layout-icon-off', Codicon.layoutPanelOff, localize('togglePanelOnIcon', 'Icon to toggle the panel on when it is off.'));
 
@@ -65,11 +65,16 @@ export class TogglePanelAction extends Action2 {
 			title: TogglePanelAction.LABEL,
 			toggled: {
 				condition: PanelVisibleContext,
-				title: localize('toggle panel', "Panel"),
+				title: localize('closePanel', 'Hide Panel'),
+				icon: closeIcon,
 				mnemonicTitle: localize({ key: 'toggle panel mnemonic', comment: ['&& denotes a mnemonic'] }, "&&Panel"),
 			},
+			icon: closeIcon, // Ensures no flickering when using toggled.icon
 			f1: true,
 			category: Categories.View,
+			metadata: {
+				description: localize('openAndClosePanel', 'Open/Show and Close/Hide Panel'),
+			},
 			keybinding: { primary: KeyMod.CtrlCmd | KeyCode.KeyJ, weight: KeybindingWeight.WorkbenchContrib },
 			menu: [
 				{
@@ -80,7 +85,11 @@ export class TogglePanelAction extends Action2 {
 					id: MenuId.LayoutControlMenuSubmenu,
 					group: '0_workbench_layout',
 					order: 4
-				},
+				}, {
+					id: MenuId.PanelTitle,
+					group: 'navigation',
+					order: 2
+				}
 			]
 		});
 	}
@@ -372,17 +381,6 @@ MenuRegistry.appendMenuItems([
 			},
 			when: ContextKeyExpr.or(ContextKeyExpr.equals('config.workbench.layoutControl.type', 'toggles'), ContextKeyExpr.equals('config.workbench.layoutControl.type', 'both')),
 			order: 1
-		}
-	}, {
-		id: MenuId.ViewTitleContext,
-		item: {
-			group: '3_workbench_layout_move',
-			command: {
-				id: TogglePanelAction.ID,
-				title: localize2('hidePanel', 'Hide Panel'),
-			},
-			when: ContextKeyExpr.and(PanelVisibleContext, ContextKeyExpr.equals('viewLocation', ViewContainerLocationToString(ViewContainerLocation.Panel))),
-			order: 2
 		}
 	}
 ]);
