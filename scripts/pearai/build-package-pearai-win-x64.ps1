@@ -26,14 +26,11 @@ param (
 	[bool]$IS_GITHUB_ACTION = $false,
     [string]$Input_PearappCommitHash = $null,
     [string]$Input_SubmoduleCommitHash = $null,
-	[string]$Input_CustomPearAppVersion = $null
 )
 
 $printInputs = $IS_GITHUB_ACTION -or
               $Input_PearappCommitHash -or
-              $Input_SubmoduleCommitHash -or
-              $Input_CustomPearAppVersion
-
+              $Input_SubmoduleCommitHash
 
 if ($printInputs) {
     Write-Host "-----------------INPUTS-----------------------"
@@ -47,10 +44,6 @@ if ($Input_PearappCommitHash) {
 if ($Input_SubmoduleCommitHash) {
 	Write-Host "Input_SubmoduleCommitHash: $Input_SubmoduleCommitHash"
 }
-if ($Input_CustomPearAppVersion) {
-	Write-Host "Input_CustomPearAppVersion: $Input_CustomPearAppVersion"
-}
-
 
 $scriptStartTime = Get-Date
 Write-Host "SCRIPT STARTED AT: $scriptStartTime" -ForegroundColor Green
@@ -226,29 +219,6 @@ if ($Input_SubmoduleCommitHash) {
     }
 }
 
-
-# Update cache commit file if custom version is specified
-if ($Input_CustomPearAppVersion) {
-    Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED: $Input_CustomPearAppVersion" -ForegroundColor Green
-    $pearAIVersion = $Input_CustomPearAppVersion
-    Write-Host "CUSTOM PEARAI-APP VERSION: $pearAIVersion" -ForegroundColor Green
-    $extensionVersion = $Input_CustomPearAppVersion
-    Write-Host "CUSTOM PEARAI-EXTENSION VERSION: $extensionVersion" -ForegroundColor Green
-    # Update cache commit file to ensure build is skipped
-    if (Test-Path $buildOutputDir) {
-        if (Test-Path $cacheBuildCommitFilePath) {
-            Remove-Item $cacheBuildCommitFilePath -Force
-        }
-        Set-Content -Path $cacheBuildCommitFilePath -Value $pearaiCheckedOutCommitHash
-        Write-Host "Updated cache commit file to skip build" -ForegroundColor Green
-        Write-Host "CACHE COMMIT BYPASSED, CACHE COMMIT WILL HIT" -ForegroundColor Green
-    } else {
-        Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, BUT NO PREVIOUS BUILD FOUND, WILL BUILD PEARAI-APP" -ForegroundColor Green
-        Write-Host "CACHE COMMIT WILL MISS" -ForegroundColor Green
-    }
-    Write-Host "----------------------------------------"
-}
-
 # Remove pearai-ref directory if it exists
 if (Test-Path $pearaiRefDir) {
 	Write-Host "Removing pearai-ref directory"
@@ -392,34 +362,12 @@ if (Test-Path $pearaiSubmodulePath) {
 
 
 # extract python 2023 extensions to the built app
-$python2023ExtensionsZip = Join-Path -Path $pearaiDir -ChildPath "extensions/windows-python-2023-extensions.zip"
+$python2023ExtensionsZip = Join-Path -Path $pearaiDir -ChildPath "build/win32/windows-python-2023-extensions.zip"
 Expand-Archive -Path $python2023ExtensionsZip -DestinationPath $builtAppPearAIExtensionDir -Force
 Write-Host "Python 2023 extensions extracted to $builtAppPearAIExtensionDir"
 
 $extensionAndZipInstallEndTime = Get-Date
 Write-Host "PEARAI-EXTENSION AND PYTHON EXTENSIONS INSTALL/COPYING COMPLETED AT: $($extensionAndZipInstallEndTime.ToString('hh:mm tt'))" -ForegroundColor Green
-
-if ($Input_CustomPearAppVersion) {
-    # Don't serialize the JSON, it messes up the formatting, read it raw.
-    Write-Host "----------------------------------------"
-    Write-Host "CUSTOM PEARAI-APP VERSION SPECIFIED, UPDATING VERSION INFO" -ForegroundColor Green
-
-    # Update product.json while preserving original formatting
-    $builtAppProductJsonPath = Join-Path -Path $buildOutputDir -ChildPath "resources/app/product.json"
-    $productJsonContent = Get-Content -Path $builtAppProductJsonPath -Raw
-    $productJsonContent = $productJsonContent -replace '"pearAIVersion"\s*:\s*"[^"]*"', "`"pearAIVersion`": `"$pearAIVersion`""
-    Set-Content -Path $builtAppProductJsonPath -Value $productJsonContent -NoNewline
-    Write-Host "Updated pearAIVersion in pearai-app product.json to $pearAIVersion" -ForegroundColor Green
-
-    # Update package.json while preserving original formatting
-    $builtExtensionPackageJsonPath = Join-Path -Path $builtAppPearAIExtensionDir -ChildPath "pearai.pearai/package.json"
-    $packageJsonContent = Get-Content -Path $builtExtensionPackageJsonPath -Raw
-    $packageJsonContent = $packageJsonContent -replace '"version"\s*:\s*"[^"]*"', "`"version`": `"$extensionVersion`""
-    Set-Content -Path $builtExtensionPackageJsonPath -Value $packageJsonContent -NoNewline
-    Write-Host "Updated version in extension package.json to $extensionVersion" -ForegroundColor Green
-    Write-Host "----------------------------------------"
-}
-
 
 # Set Version info for the built app
 $versionInfo = @{
