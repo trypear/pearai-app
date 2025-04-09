@@ -25,7 +25,7 @@
 param (
 	[bool]$IS_GITHUB_ACTION = $false,
     [string]$Input_PearappCommitHash = $null,
-    [string]$Input_SubmoduleCommitHash = $null,
+    [string]$Input_SubmoduleCommitHash = $null
 )
 
 $printInputs = $IS_GITHUB_ACTION -or
