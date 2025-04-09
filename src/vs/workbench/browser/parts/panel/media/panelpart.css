@@ -15,11 +15,13 @@
 
 .monaco-workbench.nomaineditorarea .part.panel.bottom .composite.title {
 	border-top-width: 0; /* no border when main editor area is hiden */
+	border: 1px solid red;
 }
 
 .monaco-workbench .part.panel.top {
 	border-bottom-width: 1px;
 	border-bottom-style: solid;
+	border: 1px solid blue;
 }
 
 .monaco-workbench.nomaineditorarea .part.panel.top {
@@ -65,6 +67,45 @@
 .monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:focus .action-label,
 .monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .action-item:hover .action-label {
 	color: var(--vscode-panelTitle-activeForeground) !important;
+}
+
+.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar {
+	line-height: 18px;
+	height: 24px;
+}
+
+.monaco-workbench .part.panel > .title > .composite-bar-container >.composite-bar > .monaco-action-bar .actions-container {
+	margin-top: 8px;
+	/* border: 1px solid red; */
+}
+
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked {
+	background-color: var(--vscode-list-highlightForeground);
+	border-radius: 8px;
+	border: none !important;
+	/* border: 1px solid rgb(13, 255, 0); */
+}
+
+.monaco-workbench .part.panel > .title > .composite-bar-container > .composite-bar > .monaco-action-bar .action-item.checked > .action-label {
+	border: none !important;
+}
+
+.monaco-workbench .part.panel > .title > .title-actions > .monaco-toolbar > .monaco-action-bar > .actions-container {
+	/* height: auto; */
+	height: 24px;
+	border-radius: 8px 0px 0px 8px;
+	background-color: var(--vscode-list-highlightForeground);
+	/* border: 1px solid red; */
+	margin-top: 8px;
+}
+.monaco-workbench .part.panel > .title > .global-actions > .monaco-toolbar > .monaco-action-bar > .actions-container {
+	/* height: auto; */
+	height: 24px;
+	border-radius: 8px;
+	border-radius: 0px 8px 8px 0px;
+	background-color: var(--vscode-list-highlightForeground);
+	/* border: 1px solid red; */
+	margin-top: 8px;
 }
 
 .monaco-workbench .part.panel .monaco-inputbox {

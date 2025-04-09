@@ -130,7 +130,7 @@
 
 .settings-editor > .settings-header > .settings-header-controls .settings-tabs-widget > .monaco-action-bar .action-item .action-label:not(.checked):not(:focus) {
 	/* Still maintain a border for alignment, but keep it transparent */
-	border-bottom: 1px solid transparent;
+	border-bottom: 5px solid transparent;
 }
 
 .settings-editor > .settings-body {
