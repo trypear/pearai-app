@@ -60,6 +60,7 @@
 		"list.activeSelectionBackground": "#E8E8E8",
 		"list.activeSelectionForeground": "#000000",
 		"list.activeSelectionIconForeground": "#000000",
+		"list.highlightForeground": "#d7d7d7",
 		"list.hoverBackground": "#F2F2F2",
 		"list.focusAndSelectionOutline": "#000000",
 		"menu.border": "#CECECE",

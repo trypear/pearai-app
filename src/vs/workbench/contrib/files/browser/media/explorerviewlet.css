@@ -7,10 +7,12 @@
 .explorer-folders-view,
 .explorer-folders-view {
 	height: 100%;
+	padding: 0 8px;
 }
 
 .explorer-folders-view .monaco-list-row {
-	padding-left: 4px; /* align top level twistie with `Explorer` title label */
+	padding-left: 0px; /* align top level twistie with `Explorer` title label */
+	border-radius: 4px;
 }
 
 .explorer-folders-view .explorer-folders-view.highlight .monaco-list .explorer-item:not(.explorer-item-edited),
@@ -76,7 +78,7 @@
 }
 
 .explorer-folders-view .explorer-item .monaco-icon-name-container.multiple > .label-name.drop-target > .monaco-highlighted-label {
-	background-color: var(--vscode-list-dropBackground);
+	background-color: red;
 }
 
 .explorer-folders-view .explorer-item.align-nest-icon-with-parent-icon {
@@ -110,3 +112,10 @@
 .monaco-workbench.context-menu-visible .explorer-folders-view.highlight .monaco-list-row {
 	outline: none !important;
 }
+
+/* Override hover background color for explorer rows
+.explorer-folders-view .monaco-list-row:hover:not(.selected):not(.focused) {
+	border: 1px solid red;
+	background-color: red !important;
+}
+ */

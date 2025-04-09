@@ -15,6 +15,7 @@
 	height: 100%;
 	width: 100%;
 	align-items: center;
+	/* border: 1px solid red; */
 }
 
 .monaco-action-bar.vertical .actions-container {

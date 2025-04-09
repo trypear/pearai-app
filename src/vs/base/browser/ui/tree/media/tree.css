@@ -135,7 +135,6 @@
 	width: 100%;
 	opacity: 1 !important; /* Settings editor uses opacity < 1 */
 	overflow: hidden;
-
 	/* Backup color in case the tree does not provide the background color */
 	background-color: var(--vscode-sideBar-background);
 }

@@ -108,9 +108,9 @@
 .settings-tabs-widget > .monaco-action-bar .action-item .action-label.checked,
 .settings-tabs-widget > .monaco-action-bar .action-item .action-label:hover {
 	color: var(--vscode-panelTitle-activeForeground);
-	border-bottom: 1px solid var(--vscode-panelTitle-activeBorder);
-	outline: 1px solid var(--vscode-contrastActiveBorder, transparent);
-	outline-offset: -1px;
+	border-bottom: 3px solid var(--vscode-panelTitle-activeBorder);
+	outline: 3px solid var(--vscode-contrastActiveBorder, transparent);
+	outline-offset: 3px;
 }
 
 .settings-tabs-widget > .monaco-action-bar .action-item .action-label:focus {
