@@ -11,7 +11,6 @@ import { ThemeIcon } from '../../../../base/common/themables.js';
 import * as resources from '../../../../base/common/resources.js';
 import { IExtensionDescription } from '../../../../platform/extensions/common/extensions.js';
 import { extname, posix } from '../../../../base/common/path.js';
-import { fontCharacterRegex } from './productIconThemeSchema.js';
 
 interface IIconExtensionPoint {
 	[id: string]: {
@@ -54,16 +53,14 @@ const iconConfigurationExtPoint = ExtensionsRegistry.registerExtensionPoint<IIco
 								},
 								fontCharacter: {
 									description: nls.localize('contributes.icon.default.fontCharacter', 'The character for the icon in the icon font.'),
-									type: 'string',
-									pattern: fontCharacterRegex,
-									patternErrorMessage: nls.localize('schema.fontCharacter.formatError', 'The fontCharacter must be a single letter or a backslash followed by unicode code points in hexadecimal.')
+									type: 'string'
 								}
 							},
 							required: ['fontPath', 'fontCharacter'],
 							defaultSnippets: [{ body: { fontPath: '${1:myiconfont.woff}', fontCharacter: '${2:\\\\E001}' } }]
 						}
 					],
-					description: nls.localize('contributes.icon.default', 'The default of the icon. Either a reference to an extisting ThemeIcon or an icon in an icon font.'),
+					description: nls.localize('contributes.icon.default', 'The default of the icon. Either a reference to an existing ThemeIcon or an icon in an icon font.'),
 				}
 			},
 			required: ['description', 'default'],
