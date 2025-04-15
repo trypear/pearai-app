@@ -384,7 +384,7 @@
 }
 
 .extension-editor > .body > .navbar > .monaco-action-bar > .actions-container > .action-item > .action-label.checked {
-	border-bottom: 1px solid var(--vscode-panelTitle-activeBorder);
+	border-bottom: 5px solid var(--vscode-panelTitle-activeBorder);
 	color: var(--vscode-panelTitle-activeForeground);
 }
 
