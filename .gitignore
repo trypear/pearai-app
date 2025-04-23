@@ -27,3 +27,4 @@ extensions/pearai.*
 .prompts
 .aider*
 .env
+eslint.config.js.bck
