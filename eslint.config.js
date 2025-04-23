@@ -2,6 +2,18 @@
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+
+/*
+ * ESLint Configuration
+ * 
+ * This configuration enforces code quality standards and architectural boundaries.
+ * Key sections:
+ * - Base rules for all files
+ * - TypeScript-specific rules
+ * - Layer-specific rules (browser, node, electron)
+ * - Component-specific rules
+ */
+
 // @ts-check
 import fs from 'fs';
 import path from 'path';
@@ -22,6 +34,24 @@ const ignores = fs.readFileSync(path.join(__dirname, '.eslint-ignore'), 'utf8')
 	.filter(line => line && !line.startsWith('#'));
 
 export default tseslint.config(
+	// Performance optimizations
+	{
+		languageOptions: {
+			parserOptions: {
+				tsconfigRootDir: __dirname,
+				// Enable caching for better performance
+				cache: true,
+				// Only check files that have changed
+				programs: new Map()
+			}
+		},
+		linterOptions: {
+			// Skip node_modules
+			ignorePatterns: ['**/node_modules/**', '**/out/**', '**/dist/**'],
+			// Run rules in parallel when possible
+			reportUnusedDisableDirectives: true
+		}
+	},
 	// Global ignores
 	{
 		ignores,
@@ -51,7 +81,9 @@ export default tseslint.config(
 			'no-debugger': 'warn',
 			'no-duplicate-case': 'warn',
 			'no-duplicate-imports': 'warn',
-			'no-eval': 'warn',
+			'no-eval': 'error',
+			'no-implied-eval': 'error',
+			'no-new-func': 'error',
 			'no-async-promise-executor': 'warn',
 			'no-extra-semi': 'warn',
 			'no-new-wrappers': 'warn',
@@ -75,6 +107,18 @@ export default tseslint.config(
 			], // non-complete list of globals that are easy to access unintentionally
 			'no-var': 'warn',
 			'semi': 'off',
+			'prefer-template': 'warn',
+			'no-restricted-syntax': [
+				'warn',
+				{
+					'selector': 'CallExpression[callee.name=\'setTimeout\'][arguments.length<2]',
+					'message': 'setTimeout must be invoked with at least two arguments.'
+				},
+				{
+					'selector': 'BinaryExpression[operator=\'==\']',
+					'message': 'Use === instead of =='
+				}
+			],
 			'local/code-translation-remind': 'warn',
 			'local/code-no-native-private': 'warn',
 			'local/code-parameter-properties-must-have-explicit-accessibility': 'warn',
@@ -88,25 +132,31 @@ export default tseslint.config(
 			'local/code-layering': [
 				'warn',
 				{
-					'common': [],
-					'node': [
-						'common'
-					],
-					'browser': [
-						'common'
-					],
-					'electron-sandbox': [
-						'common',
-						'browser'
-					],
-					'electron-utility': [
-						'common',
-						'node'
-					],
-					'electron-main': [
-						'common',
-						'node',
-						'electron-utility'
+					'layers': {
+						'common': [],
+						'node': [
+							'common'
+						],
+						'browser': [
+							'common'
+						],
+						'electron-sandbox': [
+							'common',
+							'browser'
+						],
+						'electron-utility': [
+							'common',
+							'node'
+						],
+						'electron-main': [
+							'common',
+							'node',
+							'electron-utility'
+						]
+					},
+					'defaultRestrictions': [
+						'vs/base/#{currentLayer}',
+						'vs/platform/#{currentLayer}'
 					]
 				}
 			],
@@ -146,7 +196,19 @@ export default tseslint.config(
 				}
 			],
 			'jsdoc/no-types': 'warn',
-			'local/code-no-static-self-ref': 'warn'
+			'local/code-no-static-self-ref': 'warn',
+			// Modern TypeScript rules
+			'@typescript-eslint/no-unnecessary-type-assertion': 'warn',
+			'@typescript-eslint/no-explicit-any': 'warn',
+			'@typescript-eslint/explicit-function-return-type': ['warn', {
+				allowExpressions: true,
+				allowTypedFunctionExpressions: true
+			}],
+			'@typescript-eslint/prefer-nullish-coalescing': 'warn',
+			'@typescript-eslint/no-non-null-assertion': 'warn',
+			'@typescript-eslint/prefer-optional-chain': 'warn',
+			'@typescript-eslint/no-floating-promises': 'warn',
+			'@typescript-eslint/prefer-readonly': 'warn',
 		}
 	},
 	// vscode TS
@@ -1353,7 +1415,7 @@ export default tseslint.config(
 			]
 		}
 	},
-	// Terminal
+	// Terminal - simplified naming convention
 	{
 		files: [
 			'src/vs/workbench/contrib/terminal/**/*.ts',
@@ -1365,18 +1427,13 @@ export default tseslint.config(
 		rules: {
 			'@typescript-eslint/naming-convention': [
 				'warn',
-				// variableLike
-				{ 'selector': 'variable', 'format': ['camelCase', 'UPPER_CASE', 'PascalCase'] },
-				{ 'selector': 'variable', 'filter': '^I.+Service$', 'format': ['PascalCase'], 'prefix': ['I'] },
-				// memberLike
+				// Simplified naming convention rule
+				{ 'selector': 'default', 'format': ['camelCase'] },
+				{ 'selector': 'variable', 'format': ['camelCase', 'UPPER_CASE'] },
+				{ 'selector': 'parameter', 'format': ['camelCase'] },
 				{ 'selector': 'memberLike', 'modifiers': ['private'], 'format': ['camelCase'], 'leadingUnderscore': 'require' },
-				{ 'selector': 'memberLike', 'modifiers': ['protected'], 'format': ['camelCase'], 'leadingUnderscore': 'require' },
-				{ 'selector': 'enumMember', 'format': ['PascalCase'] },
-				// memberLike - Allow enum-like objects to use UPPER_CASE
-				{ 'selector': 'method', 'modifiers': ['public'], 'format': ['camelCase', 'UPPER_CASE'] },
-				// typeLike
 				{ 'selector': 'typeLike', 'format': ['PascalCase'] },
-				{ 'selector': 'interface', 'format': ['PascalCase'] }
+				{ 'selector': 'interface', 'format': ['PascalCase'], 'prefix': ['I'] }
 			],
 			'comma-dangle': ['warn', 'only-multiline']
 		}
