@@ -1,0 +1,34 @@
+{
+  "packages": [
+    "nodejs@20.18.1",
+    "python311Full",
+    "rustc",
+    "cargo",
+    "gcc",
+    "gnumake",
+    "cmake",
+    "pkg-config",
+    "git",
+    "curl",
+    "openssl",
+    "libuv",
+    "xorg.libX11",
+    "xorg.libxkbfile",
+    "xorg.libXrandr",
+    "xorg.libXinerama",
+    "xorg.libXcursor",
+    "xorg.libXi",
+    "xorg.libXext"
+  ],
+  "shell": {
+    "init_hook": [
+      "alias node181=$(which nodejs-20.18.1)",
+      "alias npm181=$(dirname $(which nodejs-20_18_1))/npm",
+      "alias python=python3.11",
+      "alias pip=pip3.11",
+      "export NPM_CONFIG_PREFIX=$HOME/.npm-global",
+      "export PATH=$HOME/.npm-global/bin:$PATH",
+      "echo 'Available: node180, node181, node183, python, pip, cargo, gcc, make, etc.'"
+    ]
+  }
+}

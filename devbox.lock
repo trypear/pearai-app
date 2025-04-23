@@ -1,0 +1,144 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "cargo": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#cargo",
+      "source": "nixpkg"
+    },
+    "cmake": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#cmake",
+      "source": "nixpkg"
+    },
+    "curl": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#curl",
+      "source": "nixpkg"
+    },
+    "gcc": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#gcc",
+      "source": "nixpkg"
+    },
+    "git": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#git",
+      "source": "nixpkg"
+    },
+    "gnumake": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#gnumake",
+      "source": "nixpkg"
+    },
+    "libuv": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#libuv",
+      "source": "nixpkg"
+    },
+    "nodejs@20.18.1": {
+      "last_modified": "2025-01-19T08:16:51Z",
+      "plugin_version": "0.0.2",
+      "resolved": "github:NixOS/nixpkgs/50165c4f7eb48ce82bd063e1fb8047a0f515f8ce#nodejs_20",
+      "source": "devbox-search",
+      "version": "20.18.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3m2ls02m9saryyfzgmpa4931v6zqwsa1-nodejs-20.18.1",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/gp5cn9v1w8dhrhln0hzakj9yks0apnb6-nodejs-20.18.1-libv8"
+            }
+          ],
+          "store_path": "/nix/store/3m2ls02m9saryyfzgmpa4931v6zqwsa1-nodejs-20.18.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/9zv75vg1ca6h8hmkqz26mrs9bc890jfv-nodejs-20.18.1",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/6q3i53q3hhqjjab40ari4ifmjy26djq4-nodejs-20.18.1-libv8"
+            }
+          ],
+          "store_path": "/nix/store/9zv75vg1ca6h8hmkqz26mrs9bc890jfv-nodejs-20.18.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/b8hyl1920fxqv1gmphx766ablrc64rj8-nodejs-20.18.1",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/0s6zkr34k1isj4annpr8qrarfgs6mkhi-nodejs-20.18.1-libv8"
+            }
+          ],
+          "store_path": "/nix/store/b8hyl1920fxqv1gmphx766ablrc64rj8-nodejs-20.18.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/864nd9lys37waw3i5wxy42lp4as51x5s-nodejs-20.18.1",
+              "default": true
+            },
+            {
+              "name": "libv8",
+              "path": "/nix/store/nqj2gr66cd2wan2pn510ymrz1p20xcsg-nodejs-20.18.1-libv8"
+            }
+          ],
+          "store_path": "/nix/store/864nd9lys37waw3i5wxy42lp4as51x5s-nodejs-20.18.1"
+        }
+      }
+    },
+    "openssl": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#openssl",
+      "source": "nixpkg"
+    },
+    "pkg-config": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#pkg-config",
+      "source": "nixpkg"
+    },
+    "python311Full": {
+      "plugin_version": "0.0.4",
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#python311Full",
+      "source": "nixpkg"
+    },
+    "rustc": {
+      "plugin_version": "0.0.1",
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#rustc",
+      "source": "nixpkg"
+    },
+    "xorg.libX11": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libX11",
+      "source": "nixpkg"
+    },
+    "xorg.libXcursor": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libXcursor",
+      "source": "nixpkg"
+    },
+    "xorg.libXext": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libXext",
+      "source": "nixpkg"
+    },
+    "xorg.libXi": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libXi",
+      "source": "nixpkg"
+    },
+    "xorg.libXinerama": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libXinerama",
+      "source": "nixpkg"
+    },
+    "xorg.libXrandr": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libXrandr",
+      "source": "nixpkg"
+    },
+    "xorg.libxkbfile": {
+      "resolved": "github:NixOS/nixpkgs/75a52265bda7fd25e06e3a67dee3f0354e73243c#xorg.libxkbfile",
+      "source": "nixpkg"
+    }
+  }
+}
