@@ -28,3 +28,4 @@ extensions/pearai.*
 .aider*
 .env
 eslint.config.js.bck
+.venv/*
