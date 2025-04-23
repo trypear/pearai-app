@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./buildcache/.tsbuildinfo",
+    "skipLibCheck": true
+  }
+}

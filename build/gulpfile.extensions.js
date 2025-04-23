@@ -6,6 +6,7 @@
 // Increase max listeners for event emitters
 require('events').EventEmitter.defaultMaxListeners = 100;
 
+const minimist = require('minimist');
 const gulp = require('gulp');
 const path = require('path');
 const nodeUtil = require('util');
@@ -80,7 +81,7 @@ const tasks = compilations.map(function (tsconfigFile) {
 	const relativeDirname = path.dirname(tsconfigFile.replace(/^(.*\/)?extensions\//i, ''));
 
 	const overrideOptions = {};
-	overrideOptions.sourceMap = true;
+	overrideOptions.sourceMap = !process.argv.includes('--no-source-maps'); // Respect the --no-source-maps flag
 
 	const name = relativeDirname.replace(/\//g, '-');
 
@@ -102,16 +103,29 @@ const tasks = compilations.map(function (tsconfigFile) {
 		headerOut = relativeDirname.substr(index + 1) + '/out';
 	}
 
-	function createPipeline(build, emitError, transpileOnly) {
+	function createPipeline(build, emitError) { // Removed transpileOnly parameter, will determine internally
 		const tsb = require('./lib/tsb');
 		const sourcemaps = require('gulp-sourcemaps');
+		// Parse command line arguments using minimist
+		const options = minimist(process.argv.slice(2));
+		const isFast = !!options.parallel; // Check for --parallel flag
+		const noSourceMaps = options['source-maps'] === false; // Check for --no-source-maps
+		const useTranspileOnly = isFast ? { esbuild: true } : false; // Use esbuild for speed in fast mode
 
 		const reporter = createReporter('extensions');
 
 		overrideOptions.inlineSources = Boolean(build);
+		// Update overrideOptions based on flags
+		overrideOptions.sourceMap = !noSourceMaps;
 		overrideOptions.base = path.dirname(absolutePath);
 
-		const compilation = tsb.create(absolutePath, overrideOptions, { verbose: false, transpileOnly, transpileOnlyIncludesDts: transpileOnly, transpileWithSwc: true }, err => reporter(err.toString()));
+		// Pass the determined transpileOnly value to tsb.create
+		const compilation = tsb.create(absolutePath, overrideOptions, {
+			verbose: false,
+			transpileOnly: useTranspileOnly,
+			transpileOnlyIncludesDts: !!useTranspileOnly, // Ensure boolean type if needed
+			transpileWithSwc: true // Assuming SWC is desired/configured
+		}, err => reporter(err.toString()));
 
 		const pipeline = function () {
 			const input = es.through();
