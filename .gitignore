@@ -29,3 +29,8 @@ extensions/pearai.*
 .env
 eslint.config.js.bck
 .venv/*
+distrobox.ini
+nodesource_setup.sh
+resources/linux/flatpak/
+scripts/pearai/setup-environment-new.sh
+
