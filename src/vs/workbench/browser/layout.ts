@@ -263,6 +263,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 	private editorPartView!: ISerializableView;
 	private statusBarPartView!: ISerializableView;
 	private pearOverlayPartView!: ISerializableView;
+	private agentOverlayPartView!: ISerializableView;
 
 	private environmentService!: IBrowserWorkbenchEnvironmentService;
 	private extensionService!: IExtensionService;
@@ -1489,6 +1490,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		const sideBar = this.getPart(Parts.SIDEBAR_PART);
 		const statusBar = this.getPart(Parts.STATUSBAR_PART);
 		const pearOverlayPart = this.getPart(Parts.PEAROVERLAY_PART);
+		const agentOverlayPart = this.getPart(Parts.AGENTOVERLAY_PART);
 
 		// View references for all parts
 		this.titleBarPartView = titleBar;
@@ -1500,6 +1502,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.auxiliaryBarPartView = auxiliaryBarPart;
 		this.statusBarPartView = statusBar;
 		this.pearOverlayPartView = pearOverlayPart;
+		this.agentOverlayPartView = agentOverlayPart;
 
 		// Create a new container for PearOverlayPart
 		const pearOverlayPartContainer = document.createElement("div");
@@ -1516,6 +1519,21 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 		this.mainContainer.appendChild(pearOverlayPartContainer);
 		pearOverlayPart.create(pearOverlayPartContainer);
 
+		// Create a new container for AgentOverlayPart
+		const agentOverlayPartContainer = document.createElement("div");
+		agentOverlayPartContainer.style.position = "absolute";
+		agentOverlayPartContainer.style.top = "0";
+		agentOverlayPartContainer.style.left = "0";
+		agentOverlayPartContainer.style.right = "0";
+		agentOverlayPartContainer.style.bottom = "0";
+		agentOverlayPartContainer.style.zIndex = "-10";
+		agentOverlayPartContainer.style.display = "absolute";
+		agentOverlayPartContainer.classList.add("pearoverlay-part-container");
+		agentOverlayPartContainer.style.backgroundColor = 'transparent';
+
+		this.mainContainer.appendChild(agentOverlayPartContainer);
+		agentOverlayPart.create(agentOverlayPartContainer);
+
 		const viewMap = {
 			[Parts.ACTIVITYBAR_PART]: this.activityBarPartView,
 			[Parts.BANNER_PART]: this.bannerPartView,
@@ -1526,6 +1544,7 @@ export abstract class Layout extends Disposable implements IWorkbenchLayoutServi
 			[Parts.STATUSBAR_PART]: this.statusBarPartView,
 			[Parts.AUXILIARYBAR_PART]: this.auxiliaryBarPartView,
 			[Parts.PEAROVERLAY_PART]: this.pearOverlayPartView,
+			[Parts.AGENTOVERLAY_PART]: this.agentOverlayPartView
 		};
 
 		const fromJSON = ({ type }: { type: Parts }) => viewMap[type];
