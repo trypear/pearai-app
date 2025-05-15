@@ -1,0 +1,32 @@
+/* Theme compatibility styles to ensure text visibility */
+:root {
+  --pear-text-primary: #ffffff;
+  --pear-text-secondary: rgba(255, 255, 255, 0.7);
+  --pear-background-primary: #1e1e1e;
+  --pear-background-secondary: #2d2d2d;
+}
+
+/* Force text colors in critical UI elements */
+.pear-text {
+  color: var(--pear-text-primary) !important;
+}
+
+.pear-text-secondary {
+  color: var(--pear-text-secondary) !important;
+}
+
+/* Ensure contrast with background */
+.pear-container {
+  background-color: var(--pear-background-primary);
+}
+
+.pear-container-secondary {
+  background-color: var(--pear-background-secondary);
+}
+
+/* High contrast overrides for better accessibility */
+[data-theme="high-contrast"] .pear-text,
+[data-theme="high-contrast"] .pear-text-secondary {
+  color: #ffffff !important;
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+}
