@@ -266,6 +266,8 @@
 	height: 24px;
 	font-size: 12px;
 	flex: 1;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 8px;
 }
 
 .pane-header .viewpane-filter-container > .viewpane-filter .monaco-inputbox .monaco-inputbox {
