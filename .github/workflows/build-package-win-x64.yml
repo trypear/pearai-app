@@ -1,0 +1,143 @@
+name: Build Package Download Win x64
+
+# Manual trigger
+on:
+  workflow_dispatch:
+    inputs:
+      pearapp-commit-hash:
+        description: 'PearApp commit hash to build (optional)'
+        required: false
+      submodule-commit-hash:
+        description: 'Submodule commit hash to build (optional)'
+        required: false
+      roo-code-hash:
+        description: 'Roo code commit hash to build (optional)'
+        required: false
+# for testing
+# on:
+#   push:
+#     branches:
+#       - him/build-package-windows
+
+jobs:
+  windows:
+    name: Build VSCode for Windows x64
+    runs-on: windows-2022
+    timeout-minutes: 120
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 10
+          submodules: recursive
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # # initialize and fetch submodules with a shallow clone of 10 commits
+      # - name: Initialize and Update Submodules (Shallow)
+      #   run: |
+      #     ls
+      #     git submodule status
+      #     ls ./extensions/
+      #     cd ./extensions/pearai-submodule
+
+      # Setup Python environment
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      # Setup Node.js environment
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      # - name: Cache node modules
+      #   id: cache-node-modules
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: '**/node_modules'
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
+
+      # - name: Cache Yarn dependencies
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: '**/node_modules'
+      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-yarn-
+
+      - name: Setup Environment
+        run: |
+          .\scripts\pearai\setup-environment.ps1
+
+      # # Step 2: Set Build Path
+      # - name: Set Build Path
+      #   id: set-path
+      #   run: |
+      #     $username = [Environment]::UserName
+      #     $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+      #     echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT
+
+      # # Step 3: Cache the build output
+      # # sdf
+      # - name: Cache Build Output
+      #   id: cache-restore
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ steps.set-path.outputs.build_path }}
+      #     key: vscode-win-x64-build
+      #     restore-keys: |
+      #       vscode-win-x64-build
+      #     # key: vscode-win-x64-${{ github.sha }}
+      #     # restore-keys: |
+      #     #   vscode-win-x64-${{ github.sha }}
+
+      # $buildCacheHit = ${{ steps.cache-restore.outputs.cache-hit }}
+      # Step 5: Create a dummy folder and a temporary text file (if cache miss)
+      - name: Create Dummy Folder for Testing
+        run: |
+          $pearappCommitHash = '${{ inputs.pearapp-commit-hash }}'
+          $submoduleCommitHash = '${{ inputs.submodule-commit-hash }}'
+          Write-Host "pearappCommitHash: $pearappCommitHash"
+          Write-Host "submoduleCommitHash: $submoduleCommitHash"
+
+
+
+          .\.github\workflows\testenv.ps1 `
+            -IS_GITHUB_ACTION $true `
+            -Input_PearappCommitHash $pearappCommitHash `
+            -Input_SubmoduleCommitHash $submoduleCommitHash
+
+      # Step 6: Verify Build Output and Set Output Variable
+      - name: Verify Build Output
+        id: verify-output
+        run: |
+          $username = [Environment]::UserName  # Get the current user's name
+          $buildOutput = "C:\Users\$username\Desktop\vscode-win32-x64"
+          if (-Not (Test-Path $buildOutput)) {
+            Write-Error "Build output not found at $buildOutput"
+            exit 1  # Exit with an error to stop the job
+          } else {
+            Write-Host "Build output found at $buildOutput"
+            echo "build_path=$buildOutput" >> $env:GITHUB_OUTPUT  # Set the output variable
+          }
+
+      # Step 7: Upload the Build Output (Zipped)
+      - name: Upload Build Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: vscode-win32-x64
+          path: ${{ steps.verify-output.outputs.build_path }}
+
+      # Optional: Debug step to verify file
+      - name: Debug - Check File Existence
+        run: |
+          $filepath = "${{ steps.verify-output.outputs.build_path }}\temp.txt"
+          if (Test-Path $filepath) {
+            Write-Host "File exists at: $filepath"
+          } else {
+            Write-Host "File not found at: $filepath"
+          }
