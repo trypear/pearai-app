@@ -377,7 +377,6 @@ export function packageAllLocalExtensionsStream(forWeb: boolean, disableMangle: 
 		packageNativeLocalExtensionsStream(forWeb, disableMangle)
 	]);
 }
-
 /**
  * @param forWeb build the extensions that have web targets
  * @param disableMangle disable the mangler
@@ -385,6 +384,7 @@ export function packageAllLocalExtensionsStream(forWeb: boolean, disableMangle: 
  */
 function doPackageLocalExtensionsStream(forWeb: boolean, disableMangle: boolean, native: boolean): Stream {
 	const nativeExtensionsSet = new Set(nativeExtensions);
+	const excludedPaths = ['pearai', 'PearAI'];
 	const localExtensionsDescriptions = (
 		(<string[]>glob.sync('extensions/*/package.json'))
 			.map(manifestPath => {
@@ -393,6 +393,7 @@ function doPackageLocalExtensionsStream(forWeb: boolean, disableMangle: boolean,
 				const extensionName = path.basename(extensionPath);
 				return { name: extensionName, path: extensionPath, manifestPath: absoluteManifestPath };
 			})
+			.filter(({ name }) => !excludedPaths.includes(name))
 			.filter(({ name }) => native ? nativeExtensionsSet.has(name) : !nativeExtensionsSet.has(name))
 			.filter(({ name }) => excludedExtensions.indexOf(name) === -1)
 			.filter(({ name }) => builtInExtensions.every(b => b.name !== name))
@@ -406,7 +407,6 @@ function doPackageLocalExtensionsStream(forWeb: boolean, disableMangle: boolean,
 			})
 		)
 	);
-
 	let result: Stream;
 	if (forWeb) {
 		result = localExtensionsStream;
