@@ -547,7 +547,7 @@ export class CreatorOverlayPart extends Part {
 
 			// Wait briefly for a response + send another ping if it was lost
 			for (let i = 0; i < 100; i++) {
-				if (messageReceived) break;
+				if (messageReceived) {break;}
 				this.webviewElement.postMessage({ messageType: "ping" });
 				await new Promise((resolve) => setTimeout(resolve, 5));
 			}
@@ -882,6 +882,9 @@ export class CreatorOverlayPart extends Part {
 		const topOfBodyElement = this.getTopOfBodyElement();
 		const blurryElement = this.getBlurOverlayElement();
 
+		// Ensure transition is set
+		topOfBodyElement.style.transition = "height 500ms cubic-bezier(0.4, 0, 0.2, 1)";
+
 		// Set initial height based on current state
 		const currentHeight = topOfBodyElement.style.height;
 		topOfBodyElement.style.height = currentHeight || "0";
@@ -892,6 +895,11 @@ export class CreatorOverlayPart extends Part {
 		// Apply the state styles
 		Object.assign(topOfBodyElement.style, stateConfig.topOfBody);
 		Object.assign(blurryElement.style, stateConfig.blurElement);
+
+		// Apply webview container styles if they exist
+		if (stateConfig.webview && this.overlayContainer) {
+			Object.assign(this.overlayContainer.style, stateConfig.webview);
+		}
 
 		// Update the enter creator button if it exists
 		const enterCreatorButton = document.querySelector(
