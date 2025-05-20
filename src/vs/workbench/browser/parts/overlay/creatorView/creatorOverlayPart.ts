@@ -536,26 +536,27 @@ export class CreatorOverlayPart extends Part {
 			this.webviewElement.onMessage((e) => {
 				// console.log("Received message from webview:", e.message);
 				if (
-					e.message.messageType === "loaded" ||
-					e.message.messageType === "pong"
+					e.message.messageType === "overlayStateListenerRegistered" || e.message.messageType === "stateUpdatePong"
 				) {
 					messageReceived = true;
 				}
 			});
 
-			this.webviewElement.postMessage({ messageType: "ping" });
+			this.webviewElement.postMessage({ messageType: "stateUpdate", payload: { ping: true } });
 
-			// Wait briefly for a response + send another ping if it was lost
-			for (let i = 0; i < 100; i++) {
+			// Wait briefly for a response + send another ping if it was lost - 2.5s max
+			for (let i = 0; i < 500; i++) {
 				if (messageReceived) break;
-				this.webviewElement.postMessage({ messageType: "ping" });
+				this.webviewElement.postMessage({ messageType: "stateUpdate", payload: { ping: true } });
 				await new Promise((resolve) => setTimeout(resolve, 5));
 			}
 
-			console.log(
-				"Webview readiness check completed, messageReceived:",
-				messageReceived,
-			);
+			if(!messageReceived) {
+				console.warn("No response from webview after 2.5s, resetting, reinitializing, reopening");
+				this.resetState();
+				this.open();
+				return;
+			}
 
 			console.log("Sending theme colors to webview");
 			this.sendThemeColorsToWebview();
