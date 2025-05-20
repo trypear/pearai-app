@@ -800,12 +800,12 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 		);
 
 		this.updateCreatorButtonColors(creatorModeButton);
-		creatorModeButton.style.padding = "4px 6px";
-		creatorModeButton.style.margin = "6px";
+		creatorModeButton.style.padding = isWindows ? "0": "4px 6px";
+		creatorModeButton.style.margin = isWindows ? "0px" : "6px";
 		creatorModeButton.style.borderRadius = "8px";
 		creatorModeButton.style.border = "none";
 		creatorModeButton.style.cursor = "pointer";
-		creatorModeButton.style.fontSize = isWindows ? "1.5em" : "14px";
+		creatorModeButton.style.fontSize = isWindows ? "12px" : "14px";
 		creatorModeButton.style.display = "inline-flex";
 		creatorModeButton.style.alignItems = "center";
 		creatorModeButton.style.justifyContent = "center";
@@ -837,13 +837,14 @@ export class BrowserTitlebarPart extends Part implements ITitlebarPart {
 		const visibleCreatorModeButton = creatorModeButton.cloneNode(
 			true,
 		) as HTMLDivElement;
-		document.body.appendChild(visibleCreatorModeButton);
+		this.actionToolBarElement.appendChild(visibleCreatorModeButton);
 
 		// Setting the opacity of the original button to 0 so we don't see it but it still makes space
 		creatorModeButton.style.opacity = "0";
 		visibleCreatorModeButton.style.position = "fixed";
 		visibleCreatorModeButton.style.top = "0";
-		visibleCreatorModeButton.style.right = isWindows ? "12vw" : "0";
+		visibleCreatorModeButton.style.right = isWindows ? "138px" : "0";
+		visibleCreatorModeButton.style.marginTop = isWindows ? "4px": "0";
 		visibleCreatorModeButton.style.zIndex = "999";
 		visibleCreatorModeButton.style.cursor = "pointer";
 
