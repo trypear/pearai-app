@@ -1,0 +1,294 @@
+name: 🚀 Package & Release PearAI
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 1.2.3) — leave blank to use package.json'
+        required: false
+        type: string
+      dry_run:
+        description: 'Dry run (build only, skip upload)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write   # needed to create GitHub Releases and upload assets
+
+env:
+  NODE_VERSION: '20'
+
+# ---------------------------------------------------------------------------
+# Matrix: each entry runs on the OS it needs and produces the correct artifact
+# ---------------------------------------------------------------------------
+jobs:
+  # ── 0. Derive the release version once, share it with all jobs ───────────
+  meta:
+    name: 📋 Release metadata
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      tag:     ${{ steps.ver.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version
+        id: ver
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION="$(node -p "require('./package.json').version")"
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}"    >> "$GITHUB_OUTPUT"
+          echo "🏷️  Building version ${VERSION}"
+
+  # ── 1. Cross-platform build matrix ───────────────────────────────────────
+  build:
+    name: 📦 ${{ matrix.name }}
+    needs: meta
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # ---- macOS (Intel) -----------------------------------------------
+          - name:     macOS x64
+            runner:   macos-13          # Intel runner
+            platform: darwin
+            arch:     x64
+            gulp_target: vscode-darwin-x64
+            artifact_ext: '.dmg'
+
+          # ---- macOS (Apple Silicon) ----------------------------------------
+          - name:     macOS arm64
+            runner:   macos-14          # M1 runner (free tier)
+            platform: darwin
+            arch:     arm64
+            gulp_target: vscode-darwin-arm64
+            artifact_ext: '.dmg'
+
+          # ---- Windows x64 -------------------------------------------------
+          - name:     Windows x64
+            runner:   windows-latest
+            platform: win32
+            arch:     x64
+            gulp_target: vscode-win32-x64
+            artifact_ext: '.exe'
+
+          # ---- Linux x64 ---------------------------------------------------
+          - name:     Linux x64
+            runner:   ubuntu-latest
+            platform: linux
+            arch:     x64
+            gulp_target: vscode-linux-x64
+            artifact_ext: '.deb'
+
+          # ---- Linux arm64 -------------------------------------------------
+          - name:     Linux arm64
+            runner:   ubuntu-latest    # cross-compile via qemu
+            platform: linux
+            arch:     arm64
+            gulp_target: vscode-linux-arm64
+            artifact_ext: '.deb'
+
+    steps:
+      # ── Checkout ──────────────────────────────────────────────────────────
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Node.js + cache ───────────────────────────────────────────────────
+      - name: Setup Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: yarn
+
+      # ── Python (VSCode build requires python for node-gyp) ────────────────
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ── Linux: system deps + QEMU for arm64 cross-compile ─────────────────
+      - name: Install Linux system dependencies
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y \
+            build-essential pkg-config \
+            libx11-dev libxkbfile-dev libsecret-1-dev \
+            libkrb5-dev rpm fakeroot \
+            snapd
+
+          # arm64 cross-compilation toolchain
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            sudo apt-get install -y \
+              gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+              libc6-dev-arm64-cross
+          fi
+
+      # ── macOS: import code-signing certificate ────────────────────────────
+      - name: Import macOS signing certificate
+        if: matrix.platform == 'darwin' && env.MACOS_CERT_P12 != ''
+        env:
+          MACOS_CERT_P12:      ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: bash .github/scripts/import-macos-cert.sh
+
+      # ── Windows: import code-signing certificate ──────────────────────────
+      - name: Import Windows signing certificate
+        if: matrix.platform == 'win32' && env.WINDOWS_CERT_P12 != ''
+        env:
+          WINDOWS_CERT_P12:      ${{ secrets.WINDOWS_CERT_P12 }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        shell: pwsh
+        run: |
+          $bytes = [System.Convert]::FromBase64String($env:WINDOWS_CERT_P12)
+          [System.IO.File]::WriteAllBytes("certificate.pfx", $bytes)
+          echo "WINDOWS_CERT_FILENAME=certificate.pfx" >> $env:GITHUB_ENV
+
+      # ── Install Node dependencies ─────────────────────────────────────────
+      - name: Install Node dependencies
+        run: yarn install --frozen-lockfile
+
+      # ── Compile TypeScript / generate assets ──────────────────────────────
+      - name: Compile (transpile + minify)
+        run: yarn gulp compile-build
+
+      # ── Download & bundle Electron ────────────────────────────────────────
+      - name: Bundle Electron
+        run: yarn gulp ${{ matrix.gulp_target }}
+        env:
+          npm_config_arch: ${{ matrix.arch }}
+          # macOS notarisation credentials
+          APPLE_ID:          ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID:     ${{ secrets.APPLE_TEAM_ID }}
+          # Windows signing
+          WINDOWS_CERT_FILENAME: ${{ env.WINDOWS_CERT_FILENAME }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+
+      # ── Build installer / archive ─────────────────────────────────────────
+      - name: Create installer (macOS .dmg)
+        if: matrix.platform == 'darwin'
+        run: yarn gulp vscode-darwin-${{ matrix.arch }}-build-dmg
+        env:
+          APPLE_ID:          ${{ secrets.APPLE_ID }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+          APPLE_TEAM_ID:     ${{ secrets.APPLE_TEAM_ID }}
+
+      - name: Create installer (Windows NSIS .exe)
+        if: matrix.platform == 'win32'
+        run: yarn gulp vscode-win32-${{ matrix.arch }}-setup
+        env:
+          WINDOWS_CERT_FILENAME: ${{ env.WINDOWS_CERT_FILENAME }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+
+      - name: Create packages (Linux .deb + .rpm)
+        if: matrix.platform == 'linux'
+        run: |
+          yarn gulp vscode-linux-${{ matrix.arch }}-prepare-deb
+          yarn gulp vscode-linux-${{ matrix.arch }}-build-deb
+          yarn gulp vscode-linux-${{ matrix.arch }}-prepare-rpm
+          yarn gulp vscode-linux-${{ matrix.arch }}-build-rpm
+
+      # ── Collect artifacts for upload ──────────────────────────────────────
+      - name: Collect build artifacts
+        shell: bash
+        run: |
+          mkdir -p dist-artifacts
+          # macOS
+          find . -path "*/dist/*.dmg"      -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          find . -path "*/dist/*.zip"      -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          # Windows
+          find . -path "*/dist/*.exe"      -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          # Linux
+          find . -path "*/dist/*.deb"      -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          find . -path "*/dist/*.rpm"      -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          find . -path "*/dist/*.tar.gz"   -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+          find . -path "*/dist/*.AppImage" -exec cp {} dist-artifacts/ \; 2>/dev/null || true
+
+          echo "── Artifacts to upload ──────────────────"
+          ls -lh dist-artifacts/
+
+      - name: Upload artifacts to workflow run
+        uses: actions/upload-artifact@v4
+        with:
+          name: pearai-${{ matrix.platform }}-${{ matrix.arch }}
+          path: dist-artifacts/
+          if-no-files-found: error
+          retention-days: 5
+
+  # ── 2. Create GitHub Release and attach every platform's assets ───────────
+  release:
+    name: 🎉 Publish GitHub Release
+    needs: [meta, build]
+    runs-on: ubuntu-latest
+    if: ${{ !inputs.dry_run }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts/
+          pattern: pearai-*
+          merge-multiple: true
+
+      - name: Display collected artifacts
+        run: ls -lhR all-artifacts/
+
+      - name: Generate release notes
+        id: notes
+        run: |
+          VERSION="${{ needs.meta.outputs.version }}"
+          cat <<EOF > release_notes.md
+          ## PearAI $VERSION
+
+          ### Downloads
+
+          | Platform | Architecture | Installer |
+          |----------|-------------|-----------|
+          | macOS    | Intel (x64) | \`.dmg\`  |
+          | macOS    | Apple Silicon (arm64) | \`.dmg\` |
+          | Windows  | x64 | \`.exe\` (NSIS installer) |
+          | Linux    | x64 | \`.deb\` / \`.rpm\` / \`.tar.gz\` |
+          | Linux    | arm64 | \`.deb\` / \`.rpm\` |
+
+          ### Verifying your download
+          SHA-256 checksums are provided in the release assets (\`SHA256SUMS\`).
+
+          > Built automatically by GitHub Actions — no manual packaging steps required.
+          EOF
+
+      - name: Generate SHA-256 checksums
+        run: |
+          cd all-artifacts
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name:   ${{ needs.meta.outputs.tag }}
+          name:       "PearAI ${{ needs.meta.outputs.version }}"
+          body_path:  release_notes.md
+          draft:      false
+          prerelease: ${{ contains(needs.meta.outputs.version, '-') }}
+          files: |
+            all-artifacts/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
