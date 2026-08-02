@@ -1,0 +1,139 @@
+name: Package and Release PearAI
+
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build for ${{ matrix.os }} (${{ matrix.target }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: linux-x64
+            script_ext: sh
+          - os: ubuntu-latest
+            target: linux-arm64
+            script_ext: sh
+          - os: macos-13
+            target: darwin-x64
+            script_ext: sh
+          - os: macos-latest
+            target: darwin-arm64
+            script_ext: sh
+          - os: windows-latest
+            target: win32-x64
+            script_ext: ps1
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Linux Dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxkbfile-dev pkg-config libkrb5-dev libxss1 dbus xvfb libgtk-3-0 libgbm1 unzip zip
+
+      - name: Setup MacOS Environment
+        if: runner.os == 'macOS'
+        run: softwareupdate --install-rosetta --agree-to-license || true
+
+      - name: Setup Environment Script
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            powershell.exe -ExecutionPolicy Bypass -File .\scripts\pearai\setup-environment.ps1
+          else
+            chmod +x ./scripts/pearai/setup-environment.sh
+            ./scripts/pearai/setup-environment.sh
+          fi
+
+      - name: Install Dependencies
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            yarn
+          else
+            chmod +x ./scripts/pearai/install-dependencies.sh
+            ./scripts/pearai/install-dependencies.sh
+          fi
+
+      - name: Build PearAI Editor
+        run: yarn gulp vscode-${{ matrix.target }}-min --max-old-space-size=8192
+
+      - name: Package PearAI Submodule
+        shell: bash
+        run: |
+          cd extensions/pearai-submodule
+          if [ "${{ runner.os }}" == "Windows" ]; then
+            yarn
+            yarn run build
+          else
+            chmod +x ./scripts/install-and-build.sh
+            ./scripts/install-and-build.sh
+          fi
+          cd extensions/vscode
+          npm run package
+
+      - name: Integrate Extension into Build
+        shell: bash
+        run: |
+          cd extensions/pearai-submodule/extensions/vscode/build
+          VSIX_FILE=$(ls *.vsix | head -n 1)
+          echo "Found VSIX: $VSIX_FILE"
+          
+          mkdir -p extracted_extension
+          unzip "$VSIX_FILE" "extension/*" -d extracted_extension
+          
+          # Move to the correct app folder
+          if [ "${{ runner.os }}" == "macOS" ]; then
+            APP_EXT_DIR="../../../../../../VSCode-darwin-${{ matrix.target == 'darwin-x64' && 'x64' || 'arm64' }}/PearAI.app/Contents/Resources/app/extensions"
+          elif [ "${{ runner.os }}" == "Windows" ]; then
+            APP_EXT_DIR="../../../../../../VSCode-win32-x64/resources/app/extensions"
+          else
+            APP_EXT_DIR="../../../../../../VSCode-linux-${{ matrix.target == 'linux-x64' && 'x64' || 'arm64' }}/resources/app/extensions"
+          fi
+          
+          # Remove existing stub if any
+          rm -rf "$APP_EXT_DIR/pearai-submodule"
+          # Copy our extracted extension
+          cp -r extracted_extension/extension "$APP_EXT_DIR/pearai-submodule"
+
+      - name: Compress Release (macOS / Linux)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          if [ "${{ runner.os }}" == "macOS" ]; then
+            zip -ryq PearAI-${{ matrix.target }}.zip VSCode-darwin-*
+          else
+            tar -czf PearAI-${{ matrix.target }}.tar.gz VSCode-linux-*
+          fi
+
+      - name: Compress Release (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path VSCode-win32-x64\* -DestinationPath PearAI-win32-x64.zip
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PearAI-${{ matrix.target }}
+          path: |
+            PearAI-*.zip
+            PearAI-*.tar.gz

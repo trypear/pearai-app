@@ -20,8 +20,7 @@ jobs:
           node-version-file: .nvmrc
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
-          python-version: "3.x"
+          python-version: "3.11"
 
       - name: Cache node modules
         id: cache-node-modules
@@ -93,6 +92,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       # TODO: rename azure-pipelines/linux/xvfb.init to github-actions
       - name: Setup Build Environment
@@ -186,6 +188,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       - name: Setup MacOS Environment
         run: softwareupdate --install-rosetta --agree-to-license
@@ -260,6 +265,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
 
       - name: Install system dependencies
         run: |
