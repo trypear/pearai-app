@@ -7,6 +7,17 @@ VS Code / PearAI to “Install vsix as Extension”**.
 - Workflow: [`.github/workflows/package-release.yml`](./workflows/package-release.yml)
 - Issue: [trypear/pearai-app#44](https://github.com/trypear/pearai-app/issues/44)
 
+## Reviewer map
+
+| Read first | Why |
+|---|---|
+| `scripts/pearai/embed-vsix.sh` | The hard #44 step: unpack `.vsix` → `publisher.name-version`, delete stubs |
+| `scripts/pearai/clone-packaging-extensions.sh` | `.gitmodules` has no gitlink SHAs; `submodules: recursive` clones nothing |
+| This file (secrets + gulp paths) | What maintainers must add vs the unsigned CI path |
+| `CONTRIBUTING.md` § Packaging | Local fallback; same scripts as CI |
+
+Offline tests (no Electron): `scripts/pearai/embed-vsix-test.sh` and `scripts/pearai/collect-release-artifacts-test.sh`. The `validate` job on this workflow runs both.
+
 ## Why not “one machine builds all OS”?
 
 Issue #44 asked for a single machine to produce every OS build. That is not a
@@ -17,7 +28,7 @@ honest Electron / VS Code-fork path:
 | Native modules in `pearai-submodule` | The vsix validates `onnxruntime`, `sqlite3`, `lancedb`, `esbuild`, `ripgrep` **for the host OS/arch**. An x64 Ubuntu job cannot emit a correct linux-arm64 vsix. |
 | Apple notarization | `notarytool` + Developer ID need a macOS keychain. |
 | Authenticode | `signtool` needs a Windows SDK and a PFX. |
-| gulp output | `yarn gulp vscode-<platform>-<arch>` writes `../VSCode-<platform>-<arch>` and pulls the matching Electron binary. |
+| gulp output | `npm run gulp -- vscode-<platform>-<arch>` (or `yarn gulp` locally) writes `../VSCode-<platform>-<arch>` and pulls the matching Electron binary. |
 
 VS Code itself uses a **cloud matrix** (Azure Pipelines), not one VM. This
 workflow does the same with GitHub-hosted runners:
@@ -79,6 +90,11 @@ git push origin v2.0.0
 Tag pushes create a **draft** GitHub Release (maintainers review, then publish).
 `workflow_dispatch` with `dry_run = false` does the same.
 
+CI installs the editor with `npm ci` (same as `.github/workflows/basic.yml`). Do not
+switch the workflow back to `yarn --frozen-lockfile` until someone repairs
+`yarn.lock` on main — Yarn 1.22 currently errors with `Invalid value type 386:0`.
+That lockfile bug is pre-existing and is out of scope for #44.
+
 ## Maintainer secrets
 
 None of these are required to produce usable CI artifacts. If a secret is
@@ -137,21 +153,26 @@ vsix is embedded (those tasks copy `../VSCode-linux-<arch>`).
 
 # 2. Editor (~1 hour). Output is a *sibling* of the repo:
 #    ../VSCode-linux-x64, ../VSCode-darwin-arm64, ../VSCode-win32-x64
-yarn gulp vscode-linux-x64          # or vscode-darwin-arm64 / vscode-win32-x64
+# CI uses npm ci + npm run gulp because Yarn 1.22 cannot parse this repo's
+# yarn.lock (pre-existing `Invalid value type 386:0` on main).
+npm ci
+npm run gulp -- vscode-linux-x64    # or vscode-darwin-arm64 / vscode-win32-x64
 
 # 3. Embed vsix (replaces the GUI install step)
 ./scripts/pearai/embed-vsix.sh --platform linux --arch x64 \
   --vsix extensions/pearai-submodule/extensions/vscode/build/*.vsix
 
 # 4. Optional installers
-yarn gulp vscode-linux-x64-prepare-deb && yarn gulp vscode-linux-x64-build-deb
-yarn gulp vscode-win32-x64-user-setup
+npm run gulp -- vscode-linux-x64-prepare-deb
+npm run gulp -- vscode-linux-x64-build-deb
+npm run gulp -- vscode-win32-x64-user-setup
 ```
 
-Offline check of step 3 (no Electron):
+Offline checks (no Electron):
 
 ```bash
 ./scripts/pearai/embed-vsix-test.sh
+./scripts/pearai/collect-release-artifacts-test.sh
 ```
 
 ## Artifact paths gulp actually uses

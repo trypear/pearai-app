@@ -3,6 +3,12 @@ name: Package & Release
 # Native multi-runner packaging for PearAI. One machine cannot honestly produce
 # signed/notarized Mac + Windows + Linux builds (native modules + Apple notarization
 # + Authenticode). This workflow is the cloud equivalent of "package every OS".
+#
+# Reviewer map:
+#   1. Hard problem (no GUI vsix install): scripts/pearai/embed-vsix.sh
+#   2. Why checkout@submodules is a no-op: scripts/pearai/clone-packaging-extensions.sh
+#   3. gulp output / secrets: .github/RELEASE.md
+#   4. Offline tests (this workflow's "validate" job): scripts/pearai/*-test.sh
 
 on:
   push:
@@ -50,8 +56,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: package-release-${{ github.ref }}
-  cancel-in-progress: true
+  # pull_request uses refs/pull/N/merge; workflow_dispatch uses the branch ref.
+  # Do not cancel a maintainer dry-run when a later docs push re-runs validate.
+  group: package-release-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
@@ -194,9 +202,6 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install Yarn 1
-        run: npm install -g yarn@1.22.22
-
       - name: Linux system packages
         if: matrix.platform == 'linux'
         run: |
@@ -214,8 +219,11 @@ jobs:
           chmod +x scripts/pearai/*.sh .github/scripts/*.sh
           ./scripts/pearai/clone-packaging-extensions.sh
 
+      # Yarn 1.22 cannot parse the repo's yarn.lock (Invalid value type 386:0)
+      # — pre-existing on main, same failure Basic/Lint already hit. Do not
+      # regenerate lockfiles in this PR. Use npm ci like .github/workflows/basic.yml.
       - name: Install editor dependencies
-        run: yarn --frozen-lockfile --network-timeout 180000
+        run: npm ci
 
       - name: Build extension vsix files on this OS/arch
         env:
@@ -244,8 +252,8 @@ jobs:
           if [ "${{ needs.meta.outputs.minify }}" = "true" ]; then
             TARGET="${TARGET}-min"
           fi
-          echo "Running yarn gulp $TARGET"
-          yarn gulp "$TARGET"
+          echo "Running npm run gulp -- $TARGET"
+          npm run gulp -- "$TARGET"
 
       - name: Embed vsix into packaged app (no VS Code GUI install)
         env:
@@ -287,14 +295,14 @@ jobs:
       - name: Linux .deb / .rpm (after embed so packages include PearAI)
         if: matrix.platform == 'linux'
         run: |
-          yarn gulp "vscode-linux-${{ matrix.arch }}-prepare-deb"
-          yarn gulp "vscode-linux-${{ matrix.arch }}-build-deb"
-          yarn gulp "vscode-linux-${{ matrix.arch }}-prepare-rpm"
-          yarn gulp "vscode-linux-${{ matrix.arch }}-build-rpm"
+          npm run gulp -- "vscode-linux-${{ matrix.arch }}-prepare-deb"
+          npm run gulp -- "vscode-linux-${{ matrix.arch }}-build-deb"
+          npm run gulp -- "vscode-linux-${{ matrix.arch }}-prepare-rpm"
+          npm run gulp -- "vscode-linux-${{ matrix.arch }}-build-rpm"
 
       - name: Windows Inno Setup (no --sign; Microsoft ESRP is not used)
         if: matrix.platform == 'win32'
-        run: yarn gulp "vscode-win32-${{ matrix.arch }}-user-setup"
+        run: npm run gulp -- "vscode-win32-${{ matrix.arch }}-user-setup"
 
       - name: Sign Windows binaries
         if: matrix.platform == 'win32' && needs.meta.outputs.windows_sign == 'true'
@@ -362,7 +370,7 @@ jobs:
           Automated packaging from GitHub Actions (see \`.github/RELEASE.md\`).
 
           ### What this build includes
-          - Editor tree from \`yarn gulp vscode-<platform>-<arch>\`
+          - Editor tree from \`npm run gulp -- vscode-<platform>-<arch>\`
           - \`pearai-submodule\` unpacked from its \`.vsix\` into \`resources/app/extensions/publisher.name-version\`
           - PearAI-Roo-Code vsix embed (if enabled)
           - Linux \`.deb\` / \`.rpm\`, macOS \`.zip\` / \`.dmg\`, Windows zip + Inno user setup

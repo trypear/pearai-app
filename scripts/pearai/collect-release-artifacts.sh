@@ -8,7 +8,9 @@
 
 set -euo pipefail
 
-repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+script_repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+# Override so self-tests can seed a fake .build/ tree without touching the real repo.
+repo_root="${PEARAI_REPO_ROOT:-$script_repo_root}"
 platform=""
 arch=""
 version="dev"

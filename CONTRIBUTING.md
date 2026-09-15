@@ -236,7 +236,7 @@ PearAI can be packaged for: `win32-x64 | darwin-x64 | darwin-arm64 | linux-x64 |
 
 Gulp tasks:
 
-- `vscode-<platform>-<arch>`: unpackaged editor tree in a **sibling** folder of this repo (`../VSCode-linux-x64`, `../VSCode-darwin-arm64`, `../VSCode-win32-x64`).
+- `vscode-<platform>-<arch>`: unpackaged editor tree in a **sibling** folder of this repo (`../VSCode-linux-x64`, `../VSCode-darwin-arm64`, `../VSCode-win32-x64`). CI invokes this as `npm run gulp -- vscode-<platform>-<arch>`.
 - `vscode-<platform>-<arch>-min`: same, minified.
 - Linux installers: `vscode-linux-<arch>-prepare-deb` / `-build-deb` / `-prepare-rpm` / `-build-rpm` (run **after** embedding the vsix).
 - Windows installer: `vscode-win32-<arch>-user-setup` or `-system-setup` (there is no `vscode-win32-x64-setup` task).

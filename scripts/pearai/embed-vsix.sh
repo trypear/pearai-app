@@ -163,16 +163,27 @@ PY
 
 	local manifest="$work/extension/package.json"
 	if [[ ! -f "$manifest" ]]; then
+		rm -rf "$work"
 		echo "error: $vsix is not a valid vsix (missing extension/package.json)" >&2
 		exit 1
 	fi
 
 	local publisher name version dest_name
-	publisher="$("$python_bin" -c "import json; print(json.load(open(r'''$manifest''')).get('publisher',''))")"
-	name="$("$python_bin" -c "import json; print(json.load(open(r'''$manifest''')).get('name',''))")"
-	version="$("$python_bin" -c "import json; print(json.load(open(r'''$manifest''')).get('version',''))")"
+	# One process so a path with quotes cannot desync the three fields.
+	{
+		read -r publisher
+		read -r name
+		read -r version
+	} < <("$python_bin" - "$manifest" <<'PY'
+import json, sys
+data = json.load(open(sys.argv[1], encoding="utf-8"))
+for key in ("publisher", "name", "version"):
+    print(data.get(key) or "")
+PY
+	)
 
 	if [[ -z "$publisher" || -z "$name" || -z "$version" ]]; then
+		rm -rf "$work"
 		echo "error: $vsix package.json is missing publisher/name/version" >&2
 		exit 1
 	fi

@@ -3,7 +3,7 @@
 #
 # The parent repo lists these in .gitmodules, but it does not record gitlink
 # SHAs (and pearai-submodule is gitignored). `actions/checkout` with
-# `submodules: recursive` therefore does nothing — both #283 and #286 miss this.
+# `submodules: recursive` therefore clones nothing.
 #
 # Usage:
 #   scripts/pearai/clone-packaging-extensions.sh
