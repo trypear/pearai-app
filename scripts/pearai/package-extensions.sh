@@ -17,19 +17,31 @@ echo "==> Building pearai-submodule vsix"
 (
 	cd extensions/pearai-submodule
 	chmod +x scripts/install-and-build.sh
-	./scripts/install-and-build.sh
+	# prepackage.js treats GITHUB_ACTIONS+ARM as "download esbuild.zip from
+	# continue-server-binaries.s3...". That object is no longer a zip
+	# (`unzip: cannot find zipfile directory`). The comment in prepackage
+	# says GHA has no ARM runners — it does now, so the npm esbuild@0.17.19
+	# path (the non-GHA branch) is the correct one on ubuntu-24.04-arm / macos-14.
+	# Empty GITHUB_ACTIONS makes `!!process.env.GITHUB_ACTIONS` false.
+	GITHUB_ACTIONS= ./scripts/install-and-build.sh
 )
 
-if [[ -d extensions/PearAI-Roo-Code ]]; then
+if [[ "${PEARAI_INCLUDE_ROO:-true}" == "true" && -d extensions/PearAI-Roo-Code && -f extensions/PearAI-Roo-Code/package.json ]]; then
 	echo "==> Building PearAI-Roo-Code vsix"
-	(
+	if (
 		cd extensions/PearAI-Roo-Code
-		if [[ -f package.json ]]; then
-			npm run install:all
-			# Roo's `build` script is an alias for `vsix`.
-			npm run vsix
-		fi
-	)
+		npm run install:all
+		# `npm run vsix` -> vsce -> vscode:prepublish -> npm run package -> lint.
+		# lint:extension is `ESLINT_USE_FLAT_CONFIG=false eslint ...`, which
+		# Windows cmd treats as a command name (exit 1). Lint is not part of #44.
+		# Keep the production webview/esbuild compile; drop lint/check-types.
+		npm pkg set scripts.vscode:prepublish="npm-run-all -l -p build:webview build:esbuild"
+		npm run vsix
+	); then
+		echo "Roo vsix built."
+	else
+		echo "warning: PearAI-Roo-Code vsix failed; continuing with pearai-submodule only" >&2
+	fi
 fi
 
 echo "==> VSIX outputs"

@@ -56,8 +56,17 @@ A `.vsix` is a zip whose `extension/` folder **is** that installed tree.
 GUI installer creates. No editor process is required.
 
 The vsix **must be built on the same OS/arch as the editor** because
-`prepackage.js` copies native bindings for the host (and, on GitHub Actions ARM,
-downloads Continue’s prebuilt ARM binaries).
+`prepackage.js` copies native bindings for the host.
+
+CI packaging workarounds (extension-repo issues, not gulp):
+
+- `package-extensions.sh` clears `GITHUB_ACTIONS` for `pearai-submodule`’s
+  `install-and-build.sh`. On ARM, `prepackage.js` otherwise curls
+  `continue-server-binaries.s3.../<target>/esbuild.zip`, which is no longer a
+  zip. Native ARM runners should use npm’s `esbuild@0.17.19` instead.
+- Roo’s `vscode:prepublish` runs `lint:extension`
+  (`ESLINT_USE_FLAT_CONFIG=false eslint`), which Windows `cmd` cannot parse.
+  CI rewrites that hook to `build:webview` + `build:esbuild` only.
 
 ### Submodules are not gitlinks
 

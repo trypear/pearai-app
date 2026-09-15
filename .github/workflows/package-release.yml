@@ -227,7 +227,7 @@ jobs:
 
       - name: Build extension vsix files on this OS/arch
         env:
-          GITHUB_ACTIONS: "true"
+          PEARAI_INCLUDE_ROO: ${{ needs.meta.outputs.include_roo }}
         run: ./scripts/pearai/package-extensions.sh
 
       - name: Locate vsix files
