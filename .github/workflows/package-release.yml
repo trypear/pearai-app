@@ -1,0 +1,389 @@
+name: Package & Release
+
+# Native multi-runner packaging for PearAI. One machine cannot honestly produce
+# signed/notarized Mac + Windows + Linux builds (native modules + Apple notarization
+# + Authenticode). This workflow is the cloud equivalent of "package every OS".
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (blank = product.json pearAIVersion or tag)"
+        required: false
+        type: string
+      dry_run:
+        description: "Build artifacts only; do not publish a GitHub Release"
+        required: false
+        type: boolean
+        default: true
+      minify:
+        description: "Use gulp vscode-*-min (slower, smaller)"
+        required: false
+        type: boolean
+        default: false
+      include_roo:
+        description: "Also vsix-pack and embed PearAI-Roo-Code"
+        required: false
+        type: boolean
+        default: true
+      pearai_submodule_ref:
+        description: "pearai-submodule git ref (default main)"
+        required: false
+        type: string
+        default: "main"
+      pearai_roo_ref:
+        description: "PearAI-Roo-Code git ref (default main)"
+        required: false
+        type: string
+        default: "main"
+  pull_request:
+    paths:
+      - ".github/workflows/package-release.yml"
+      - ".github/scripts/**"
+      - ".github/RELEASE.md"
+      - "scripts/pearai/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: package-release-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: "1"
+
+jobs:
+  validate:
+    name: Validate packaging scripts
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x scripts/pearai/*.sh .github/scripts/*.sh
+
+      - name: Run packaging script self-tests
+        run: |
+          scripts/pearai/embed-vsix-test.sh
+          scripts/pearai/collect-release-artifacts-test.sh
+
+      - name: Script syntax
+        run: |
+          fail=0
+          for f in scripts/pearai/*.sh .github/scripts/*.sh; do
+            bash -n "$f" || fail=1
+          done
+          python3 -c "from pathlib import Path; t=Path('.github/workflows/package-release.yml').read_text(); assert 'embed-vsix.sh' in t and 'ubuntu-24.04-arm' in t"
+          exit "$fail"
+
+  meta:
+    name: Release metadata
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-22.04
+    needs: validate
+    outputs:
+      version: ${{ steps.ver.outputs.version }}
+      tag: ${{ steps.ver.outputs.tag }}
+      minify: ${{ steps.ver.outputs.minify }}
+      include_roo: ${{ steps.ver.outputs.include_roo }}
+      dry_run: ${{ steps.ver.outputs.dry_run }}
+      macos_sign: ${{ steps.secrets.outputs.macos_sign }}
+      macos_notarize: ${{ steps.secrets.outputs.macos_notarize }}
+      windows_sign: ${{ steps.secrets.outputs.windows_sign }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve version and flags
+        id: ver
+        run: |
+          if [ -n "${{ github.event.inputs.version }}" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF#refs/tags/v}"
+          else
+            VERSION="$(python3 -c "import json; p=json.load(open('product.json')); print(p.get('pearAIVersion') or '')")"
+            if [ -z "$VERSION" ]; then
+              VERSION="$(node -p "require('./package.json').version")"
+            fi
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            echo "minify=true" >> "$GITHUB_OUTPUT"
+            echo "dry_run=false" >> "$GITHUB_OUTPUT"
+            echo "include_roo=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "minify=${{ github.event.inputs.minify || 'false' }}" >> "$GITHUB_OUTPUT"
+            echo "dry_run=${{ github.event.inputs.dry_run || 'true' }}" >> "$GITHUB_OUTPUT"
+            echo "include_roo=${{ github.event.inputs.include_roo || 'true' }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Detect signing secrets (unsigned path is first-class)
+        id: secrets
+        run: |
+          # Compare secrets only inside a run step (do not use env.SECRET in if:).
+          if [ -n "${{ secrets.MACOS_CERT_P12 }}" ]; then
+            echo "macos_sign=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "macos_sign=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${{ secrets.MACOS_CERT_P12 }}" ] && [ -n "${{ secrets.APPLE_ID }}" ] && [ -n "${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}" ] && [ -n "${{ secrets.APPLE_TEAM_ID }}" ]; then
+            echo "macos_notarize=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "macos_notarize=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ -n "${{ secrets.WINDOWS_CERT_P12 }}" ]; then
+            echo "windows_sign=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "windows_sign=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  package:
+    name: Package ${{ matrix.name }}
+    if: github.event_name != 'pull_request'
+    needs: meta
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 180
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux x64
+            runner: ubuntu-22.04
+            platform: linux
+            arch: x64
+            gulp_target: vscode-linux-x64
+          - name: Linux arm64
+            runner: ubuntu-24.04-arm
+            platform: linux
+            arch: arm64
+            gulp_target: vscode-linux-arm64
+          - name: macOS Intel
+            runner: macos-13
+            platform: darwin
+            arch: x64
+            gulp_target: vscode-darwin-x64
+          - name: macOS Apple Silicon
+            runner: macos-14
+            platform: darwin
+            arch: arm64
+            gulp_target: vscode-darwin-arm64
+          - name: Windows x64
+            runner: windows-2022
+            platform: win32
+            arch: x64
+            gulp_target: vscode-win32-x64
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Yarn 1
+        run: npm install -g yarn@1.22.22
+
+      - name: Linux system packages
+        if: matrix.platform == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential pkg-config fakeroot rpm dpkg-dev \
+            libx11-dev libxkbfile-dev libsecret-1-dev libkrb5-dev \
+            libgtk-3-0 libgbm1 libxss1 zip unzip
+
+      - name: Clone packaging extensions (explicit — no gitlinks in this repo)
+        env:
+          PEARAI_SUBMODULE_REF: ${{ github.event.inputs.pearai_submodule_ref || 'main' }}
+          PEARAI_ROO_REF: ${{ github.event.inputs.pearai_roo_ref || 'main' }}
+        run: |
+          chmod +x scripts/pearai/*.sh .github/scripts/*.sh
+          ./scripts/pearai/clone-packaging-extensions.sh
+
+      - name: Install editor dependencies
+        run: yarn --frozen-lockfile --network-timeout 180000
+
+      - name: Build extension vsix files on this OS/arch
+        env:
+          GITHUB_ACTIONS: "true"
+        run: ./scripts/pearai/package-extensions.sh
+
+      - name: Locate vsix files
+        id: vsix
+        run: |
+          PEARAI_VSIX="$(find extensions/pearai-submodule/extensions/vscode/build -name '*.vsix' | head -n 1)"
+          if [ -z "$PEARAI_VSIX" ]; then
+            echo "error: pearai-submodule did not produce a .vsix" >&2
+            exit 1
+          fi
+          echo "pearai=$PEARAI_VSIX" >> "$GITHUB_OUTPUT"
+          ROO_VSIX="$(find extensions/PearAI-Roo-Code -name '*.vsix' | head -n 1 || true)"
+          echo "roo=$ROO_VSIX" >> "$GITHUB_OUTPUT"
+          echo "PearAI vsix: $PEARAI_VSIX"
+          echo "Roo vsix: ${ROO_VSIX:-<none>}"
+
+      - name: Package editor (gulp)
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
+        run: |
+          TARGET="${{ matrix.gulp_target }}"
+          if [ "${{ needs.meta.outputs.minify }}" = "true" ]; then
+            TARGET="${TARGET}-min"
+          fi
+          echo "Running yarn gulp $TARGET"
+          yarn gulp "$TARGET"
+
+      - name: Embed vsix into packaged app (no VS Code GUI install)
+        env:
+          PEARAI_BUILD_DIR: ${{ github.workspace }}/../VSCode-${{ matrix.platform }}-${{ matrix.arch }}
+        run: |
+          args=(
+            --platform "${{ matrix.platform }}"
+            --arch "${{ matrix.arch }}"
+            --vsix "${{ steps.vsix.outputs.pearai }}"
+          )
+          if [ "${{ needs.meta.outputs.include_roo }}" = "true" ] && [ -n "${{ steps.vsix.outputs.roo }}" ]; then
+            args+=(--vsix "${{ steps.vsix.outputs.roo }}")
+          fi
+          ./scripts/pearai/embed-vsix.sh "${args[@]}"
+
+      - name: Import macOS signing certificate
+        if: matrix.platform == 'darwin' && needs.meta.outputs.macos_sign == 'true'
+        env:
+          MACOS_CERT_P12: ${{ secrets.MACOS_CERT_P12 }}
+          MACOS_CERT_PASSWORD: ${{ secrets.MACOS_CERT_PASSWORD }}
+        run: .github/scripts/import-macos-cert.sh
+
+      - name: Sign and notarize macOS app
+        if: matrix.platform == 'darwin' && needs.meta.outputs.macos_sign == 'true'
+        env:
+          PEARAI_BUILD_DIR: ${{ github.workspace }}/../VSCode-${{ matrix.platform }}-${{ matrix.arch }}
+          MACOS_CERT_IDENTITY: ${{ secrets.MACOS_CERT_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: .github/scripts/sign-macos-app.sh "$PEARAI_BUILD_DIR/PearAI.app" "${{ matrix.arch }}"
+
+      - name: Create macOS DMG
+        if: matrix.platform == 'darwin'
+        env:
+          PEARAI_BUILD_DIR: ${{ github.workspace }}/../VSCode-${{ matrix.platform }}-${{ matrix.arch }}
+        run: .github/scripts/create-macos-dmg.sh "${{ matrix.arch }}" "$PEARAI_BUILD_DIR/PearAI.app"
+
+      - name: Linux .deb / .rpm (after embed so packages include PearAI)
+        if: matrix.platform == 'linux'
+        run: |
+          yarn gulp "vscode-linux-${{ matrix.arch }}-prepare-deb"
+          yarn gulp "vscode-linux-${{ matrix.arch }}-build-deb"
+          yarn gulp "vscode-linux-${{ matrix.arch }}-prepare-rpm"
+          yarn gulp "vscode-linux-${{ matrix.arch }}-build-rpm"
+
+      - name: Windows Inno Setup (no --sign; Microsoft ESRP is not used)
+        if: matrix.platform == 'win32'
+        run: yarn gulp "vscode-win32-${{ matrix.arch }}-user-setup"
+
+      - name: Sign Windows binaries
+        if: matrix.platform == 'win32' && needs.meta.outputs.windows_sign == 'true'
+        shell: pwsh
+        env:
+          PEARAI_BUILD_DIR: ${{ github.workspace }}/../VSCode-${{ matrix.platform }}-${{ matrix.arch }}
+          WINDOWS_CERT_P12: ${{ secrets.WINDOWS_CERT_P12 }}
+          WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+        run: .github/scripts/sign-windows.ps1
+
+      - name: Collect artifacts
+        env:
+          PEARAI_BUILD_DIR: ${{ github.workspace }}/../VSCode-${{ matrix.platform }}-${{ matrix.arch }}
+        run: |
+          extra=()
+          if [ "${{ matrix.platform }}" = "darwin" ] && [ "${{ needs.meta.outputs.macos_sign }}" != "true" ]; then
+            extra+=(--unsigned)
+          fi
+          if [ "${{ matrix.platform }}" = "win32" ] && [ "${{ needs.meta.outputs.windows_sign }}" != "true" ]; then
+            extra+=(--unsigned)
+          fi
+          ./scripts/pearai/collect-release-artifacts.sh \
+            --platform "${{ matrix.platform }}" \
+            --arch "${{ matrix.arch }}" \
+            --version "${{ needs.meta.outputs.version }}" \
+            --dest dist-artifacts \
+            "${extra[@]}"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pearai-${{ matrix.platform }}-${{ matrix.arch }}
+          path: dist-artifacts/
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish draft GitHub Release
+    needs: [meta, package]
+    if: github.event_name != 'pull_request' && needs.meta.outputs.dry_run != 'true'
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: all-artifacts
+          pattern: pearai-*
+          merge-multiple: true
+
+      - name: Combined checksums
+        run: |
+          cd all-artifacts
+          rm -f SHA256SUMS
+          sha256sum -- * > SHA256SUMS
+          ls -lh
+
+      - name: Write release notes
+        run: |
+          cat > release_notes.md <<EOF
+          ## PearAI ${{ needs.meta.outputs.version }}
+
+          Automated packaging from GitHub Actions (see \`.github/RELEASE.md\`).
+
+          ### What this build includes
+          - Editor tree from \`yarn gulp vscode-<platform>-<arch>\`
+          - \`pearai-submodule\` unpacked from its \`.vsix\` into \`resources/app/extensions/publisher.name-version\`
+          - PearAI-Roo-Code vsix embed (if enabled)
+          - Linux \`.deb\` / \`.rpm\`, macOS \`.zip\` / \`.dmg\`, Windows zip + Inno user setup
+
+          ### Signing
+          Artifacts tagged \`-unsigned\` were produced because maintainer secrets were not configured on this repository. That is an expected first-class path.
+
+          ### Verify
+          SHA-256 checksums are attached as \`SHA256SUMS\`.
+
+          Related: trypear/pearai-app#44
+          EOF
+
+      - name: Create draft GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.meta.outputs.tag }}
+          name: PearAI ${{ needs.meta.outputs.version }}
+          body_path: release_notes.md
+          draft: true
+          prerelease: ${{ contains(needs.meta.outputs.version, '-') }}
+          files: all-artifacts/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

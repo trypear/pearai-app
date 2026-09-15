@@ -223,45 +223,54 @@ You can also directly ping the maintainers or admins in the [Discord](https://di
 
 ## ⚙️ Packaging
 
-This section outlines how to  the app for a new release/distribution. This process is a bit manual currently.
+**Preferred: GitHub Actions.** Maintainers should use
+[`.github/workflows/package-release.yml`](./.github/workflows/package-release.yml)
+and the setup notes in [`.github/RELEASE.md`](./.github/RELEASE.md). That path
+packages macOS / Windows / Linux on native runners, embeds the PearAI `.vsix`
+without opening VS Code, and publishes a draft GitHub Release. Unsigned artifacts
+are expected until signing secrets are configured.
 
-### Step 1:  PearAI App
+The rest of this section is the **local / manual** fallback.
 
-PearAI can be d for the following platforms: `win32-ia32 | win32-x64 | darwin-x64 | darwin-arm64 | linux-ia32 | linux-x64 | linux-arm`.
+PearAI can be packaged for: `win32-x64 | darwin-x64 | darwin-arm64 | linux-x64 | linux-arm64`.
 
-These `gulp` tasks are available:
+Gulp tasks:
 
-- `vscode-[platform]`: Builds a d version for `[platform]`.
-- `vscode-[platform]-min`: Builds a d and minified version for `[platform]`.
+- `vscode-<platform>-<arch>`: unpackaged editor tree in a **sibling** folder of this repo (`../VSCode-linux-x64`, `../VSCode-darwin-arm64`, `../VSCode-win32-x64`).
+- `vscode-<platform>-<arch>-min`: same, minified.
+- Linux installers: `vscode-linux-<arch>-prepare-deb` / `-build-deb` / `-prepare-rpm` / `-build-rpm` (run **after** embedding the vsix).
+- Windows installer: `vscode-win32-<arch>-user-setup` or `-system-setup` (there is no `vscode-win32-x64-setup` task).
 
-1. If you have not already, run `./scripts/pearai/setup-environment.[sh,ps1]`.
-2. If already ran that upon your first install, run `./scripts/pearai/install-dependencies.[sh,ps1]`.
-3. Run `yarn gulp vscode-[platform]`. For example `yarn gulp vscode-linux-x64`.
+A full gulp package takes around 1 hour.
 
-This will generate the new PearAI app and takes around 1 hour.
+### Local automated path (no VS Code GUI)
 
-### Step 2: Package PearAI Extension
+```bash
+./scripts/pearai/clone-packaging-extensions.sh
+./scripts/pearai/package-extensions.sh
+yarn gulp vscode-linux-x64   # or vscode-darwin-arm64 / vscode-win32-x64
+./scripts/pearai/embed-vsix.sh --platform linux --arch x64 \
+  --vsix extensions/pearai-submodule/extensions/vscode/build/*.vsix
+```
 
-`pearai-submodule` also needs to be packaged and integrated into the overall PearAI app.
+`embed-vsix.sh` unpacks the `.vsix` (it is a zip) into
+`resources/app/extensions/<publisher>.<name>-<version>` and removes the
+`pearai-submodule` stub. That is the same layout as
+“Install vsix as Extension” + copying `~/.vscode/extensions/pearai.pearai-*`.
 
-1. `cd` into `extensions/pearai-submodule`.
-2. Run `./scripts/install-and-build.sh`.
-3. `cd` into `extensions/vscode` (Full path is now `extensions/pearai-submodule/extensions/vscode/`).
-4. Run `npm run package`.
-5. This will create the `.vsix` extension within `extensions/pearai-submodule/extensions/vscode/build`.
-6. Right-click the `.vsix` in VSCode or PearAI and select `Install vsix as Extension`.
+The packaged app path is `.../resources/app/extensions` (plural). Older notes
+that said `app/extension` were a typo.
 
-### Step 3: Integrate the Extension
+### Manual fallback
 
-1. Copy the generated `pearai.pearai-1.x.x` folder under `~/.vscode/extensions` to the `extensions` folder of the packaged PearAI App (right click on packaged app -> Show Package Contents).
-2. Delete any existing `pearai-submodule` folder in the `extensions/` folder of the packaged PearAI app.
-3. Double-click your overall PearAI app, and the extension should be built-in.
- - On MacOS for example (Using VScode for .vsix installation)
-   1. `cp -r ~/.vscode/extensions/pearai.pearai-{PEARAI_VERSION} {PATH_TO_PearAI.app}/Contents/Resources/app/extension`
-   2. `rm -rf {PATH_TO_PearAI.app}/Contents/Resources/app/extensions/pearai-submodule `
-   3. Double-click your overall PearAI app, and the extension should be built-in.
+1. First-time machine: `./scripts/pearai/setup-environment.[sh,ps1]`. Rebuild: `./scripts/pearai/install-dependencies.[sh,ps1]` (Windows: `yarn`).
+2. `yarn gulp vscode-<platform>-<arch>`.
+3. In `extensions/pearai-submodule` run `./scripts/install-and-build.sh` (this already runs `npm run package` for the vscode extension).
+4. Either run `embed-vsix.sh` as above, **or** install the `.vsix` in VS Code / PearAI and copy `~/.vscode/extensions/pearai.pearai-<version>` into the packaged app’s `extensions` folder, then delete `pearai-submodule` from that folder.
 
+### Signing and installers
 
-### Step 4: Signing and Turn Into Installer
-
-Admin must sign the app on certain OS's, like MacOS. Admin should follow these [manuals](https://docs.google.com/document/d/1hZahz2UNrtZOgHZkquqNO7Jfoe0Pd0OA7Ud16ts_AKs).
+Admins still own certificates. Put them in GitHub Actions secrets (see
+[`.github/RELEASE.md`](./.github/RELEASE.md)) or follow the existing
+[manual release notes](https://docs.google.com/document/d/1hZahz2UNrtZOgHZkquqNO7Jfoe0Pd0OA7Ud16ts_AKs).
+CI will publish `-unsigned` artifacts when secrets are absent.

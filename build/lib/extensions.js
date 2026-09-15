@@ -261,6 +261,9 @@ const excludedExtensions = [
     'vscode-test-resolver',
     'ms-vscode.node-debug',
     'ms-vscode.node-debug2',
+    // PearAI: packaged from vsix after gulp (see scripts/pearai/embed-vsix.sh).
+    'pearai-submodule',
+    'PearAI-Roo-Code',
 ];
 const marketplaceWebExtensionsExclude = new Set([
     'ms-vscode.node-debug',
