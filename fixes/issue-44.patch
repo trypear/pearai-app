@@ -1,0 +1,10 @@
+# Packaging and Releases Automation
+
+We have transitioned from manual OS-specific packaging to a fully automated GitHub Actions workflow. 
+
+## Automated Release Process
+
+1. **Tag Push**: Whenever a new version tag is pushed (e.g., `v*.*.*`), the CI pipeline triggers.
+2. **Matrix Builds**: The workflow spins up parallel runners for macOS, Linux, and Windows.
+3. **Artifact Generation**: Each runner builds and packages the native binaries without requiring local manual intervention.
+4. **Draft Release**: Automatically uploads the generated installers to GitHub Releases.
